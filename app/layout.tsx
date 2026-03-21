@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Biolink Platform',
-  description: 'Your personal biolink profile.',
+  title: 'BioLink — Your link. Your identity.',
+  description: 'One link. Everything about you. Fully customizable biolink profiles, invite only.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
