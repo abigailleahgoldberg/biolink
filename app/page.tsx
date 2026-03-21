@@ -31,6 +31,7 @@ export default function Landing() {
 
   return (
     <>
+      <div className="fn-bg-glow" />
       {/* NAV */}
       <nav className="fn-nav">
         <Link href="/" className="fn-logo">fentanyl<span>.best</span></Link>
