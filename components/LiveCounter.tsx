@@ -1,8 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react'
 
-function AnimatedNumber({ target, label }: { target: number; label: string }) {
-  const [count, setCount] = useState(0)
+function Counter({ target, suffix = '' }: { target: number; suffix?: string }) {
+  const [val, setVal] = useState(0)
   useEffect(() => {
     const duration = 2000
     const steps = 60
@@ -10,29 +10,29 @@ function AnimatedNumber({ target, label }: { target: number; label: string }) {
     let current = 0
     const timer = setInterval(() => {
       current += increment
-      if (current >= target) {
-        setCount(target)
-        clearInterval(timer)
-      } else {
-        setCount(Math.floor(current))
-      }
+      if (current >= target) { setVal(target); clearInterval(timer) }
+      else setVal(Math.floor(current))
     }, duration / steps)
     return () => clearInterval(timer)
   }, [target])
-  return (
-    <div className="live-stat">
-      <span className="live-number">{count.toLocaleString()}</span>
-      <span className="live-label">{label}</span>
-    </div>
-  )
+  return <>{val.toLocaleString()}{suffix}</>
 }
 
 export default function LiveCounter() {
   return (
-    <section className="live-counter-section">
-      <AnimatedNumber target={10847} label="Active Profiles" />
-      <AnimatedNumber target={2841956} label="Total Views" />
-      <AnimatedNumber target={947201} label="Links Clicked" />
-    </section>
+    <div className="live-counter">
+      <div className="live-counter-item">
+        <div className="live-counter-num"><Counter target={12847} /></div>
+        <div className="live-counter-label">Active Profiles</div>
+      </div>
+      <div className="live-counter-item">
+        <div className="live-counter-num"><Counter target={4182091} /></div>
+        <div className="live-counter-label">Total Views</div>
+      </div>
+      <div className="live-counter-item">
+        <div className="live-counter-num"><Counter target={891432} /></div>
+        <div className="live-counter-label">Links Clicked</div>
+      </div>
+    </div>
   )
 }
