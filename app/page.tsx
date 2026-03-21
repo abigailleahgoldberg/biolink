@@ -1,119 +1,165 @@
+'use client'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 
+const SECTIONS = ['hero', 'what', 'how', 'cta'] as const
+
 export default function Landing() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [activeIdx, setActiveIdx] = useState(0)
+
+  useEffect(() => {
+    const sections = document.querySelectorAll('.fn-snap')
+    const io = new IntersectionObserver(
+      entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('in-view')
+            setActiveIdx(Array.from(sections).indexOf(e.target))
+          }
+        })
+      },
+      { root: containerRef.current, threshold: 0.5 }
+    )
+    sections.forEach(s => io.observe(s))
+    return () => io.disconnect()
+  }, [])
+
+  const scrollTo = (idx: number) => {
+    document.querySelectorAll('.fn-snap')[idx]?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
-    <main className="page">
-
-      {/* bg */}
-      <div className="bg-glow" />
-
+    <>
       {/* NAV */}
-      <nav className="nav">
-        <div className="nav-wrap">
-          <Link href="/" className="nav-logo">fentanyl<span>.best</span></Link>
-          <div className="nav-links">
-            <Link href="/login" className="nav-a">Sign in</Link>
-            <Link href="/signup" className="nav-btn">Get started</Link>
-          </div>
+      <nav className="fn-nav">
+        <Link href="/" className="fn-logo">fentanyl<span>.best</span></Link>
+        <div className="fn-nav-right">
+          <Link href="/login" className="fn-nav-link">Sign in</Link>
+          <Link href="/signup" className="fn-nav-cta">Get started</Link>
         </div>
       </nav>
 
-      {/* ── SECTION 1 — HERO ── */}
-      <section className="s s-hero">
-        <div className="s-inner">
-          <div className="s-label">Invite only</div>
-          <h1 className="hero-h1">
-            One link.<br />
-            <span className="hero-h1-purple">Everything you are.</span>
-          </h1>
-          <p className="hero-p">Your socials, your music, your vibe — all in one place.</p>
-          <div className="hero-btns">
-            <Link href="/signup" className="btn-primary">Claim your link</Link>
-            <Link href="/login" className="btn-ghost">Sign in</Link>
-          </div>
-        </div>
-      </section>
+      {/* Scroll dots */}
+      <div className="fn-dots">
+        {SECTIONS.map((_, i) => (
+          <button key={i} className={`fn-dot${activeIdx === i ? ' fn-dot-active' : ''}`} onClick={() => scrollTo(i)} />
+        ))}
+      </div>
 
-      {/* ── SECTION 2 — PROFILE PREVIEW ── */}
-      <section className="s s-preview">
-        <div className="s-inner s-inner-split">
-          <div className="split-text">
-            <div className="s-label">Your profile</div>
-            <h2 className="s-h2">One page.<br />Fully yours.</h2>
-            <p className="s-p">Change your background, colors, font, button style, badges, and music player. Every detail is under your control.</p>
-          </div>
-          <div className="split-card">
-            <div className="profile-card">
-              <div className="pc-avatar">Z</div>
-              <div className="pc-name">zj71</div>
-              <div className="pc-bio">creator · gamer · just vibing</div>
-              <div className="pc-badges">
-                <span>🎮 Gamer</span>
-                <span>⭐ OG</span>
-                <span>👑 Founder</span>
-              </div>
-              <div className="pc-links">
-                <div className="pc-link pc-link-fill">Discord</div>
-                <div className="pc-link">TikTok</div>
-                <div className="pc-link">YouTube</div>
-                <div className="pc-link">Spotify</div>
-              </div>
-              <div className="pc-views">1,247 views</div>
+      {/* Snap container */}
+      <div className="fn-container" ref={containerRef}>
+
+        {/* ── 1. HERO ── */}
+        <section className="fn-snap fn-hero">
+          <div className="fn-center fn-anim">
+            <div className="fn-eyebrow">
+              <span className="fn-eyebrow-dot" />
+              Invite only · Now open
+            </div>
+            <h1 className="fn-h1">
+              One link.<br />
+              <em>Everything you are.</em>
+            </h1>
+            <p className="fn-sub">
+              Your socials, your music, your vibe.<br />
+              One clean link. Fully customizable.
+            </p>
+            <div className="fn-actions">
+              <Link href="/signup" className="fn-btn-primary">Claim your link</Link>
+              <button onClick={() => scrollTo(1)} className="fn-btn-ghost">See more</button>
             </div>
           </div>
-        </div>
-      </section>
+          <button className="fn-scroll-hint" onClick={() => scrollTo(1)}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+            Scroll
+          </button>
+        </section>
 
-      {/* ── SECTION 3 — FEATURES ── */}
-      <section className="s s-features">
-        <div className="s-inner">
-          <div className="s-label">Features</div>
-          <h2 className="s-h2">Everything you need.<br />Nothing you don't.</h2>
-          <div className="feat-list">
-            {[
-              { icon: '🔗', title: 'All your socials', desc: 'Discord, TikTok, YouTube, X, Instagram, Twitch, Spotify, GitHub — plus custom links.' },
-              { icon: '🎵', title: 'Music player', desc: 'Embed a Spotify track, YouTube video, or SoundCloud on your profile.' },
-              { icon: '🏅', title: 'Badges', desc: 'OG, Founder, Gamer, Verified — show the world who you are.' },
-              { icon: '📊', title: 'View counter', desc: 'Real-time view tracking on every profile. Always on, zero setup.' },
-              { icon: '🛡️', title: 'Invite only', desc: 'Access controlled by invite codes. Admin tools to manage everything.' },
-            ].map(f => (
-              <div key={f.title} className="feat-item">
-                <div className="feat-icon">{f.icon}</div>
-                <div>
-                  <div className="feat-title">{f.title}</div>
-                  <div className="feat-desc">{f.desc}</div>
+        {/* ── 2. WHAT ── */}
+        <section className="fn-snap fn-what">
+          <div className="fn-inner fn-anim">
+            <span className="fn-label">What it is</span>
+            <h2 className="fn-h2">
+              One page.<br />
+              Your whole<br />
+              <em>presence.</em>
+            </h2>
+            <div className="fn-what-cols">
+              <p className="fn-body">
+                Change your background, colors, button style, font, and music player. Add every platform you're on. Drop in a track. Show off your badges. It's your page — make it look like you actually built it.
+              </p>
+              <div className="fn-what-card">
+                <div className="fn-card-avatar">Z</div>
+                <div className="fn-card-name">zj71</div>
+                <div className="fn-card-bio">creator · gamer · just vibing</div>
+                <div className="fn-card-badges">
+                  <span>🎮 Gamer</span><span>⭐ OG</span><span>👑 Founder</span>
                 </div>
+                <div className="fn-card-links">
+                  <div className="fn-card-link fn-card-link-accent">Discord</div>
+                  <div className="fn-card-link">TikTok</div>
+                  <div className="fn-card-link">YouTube</div>
+                </div>
+                <div className="fn-card-views">1,247 views</div>
               </div>
-            ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── SECTION 4 — CTA ── */}
-      <section className="s s-cta">
-        <div className="s-inner s-inner-center">
-          <div className="s-label">Get started</div>
-          <h2 className="s-h2 s-h2-lg">Your link is waiting.</h2>
-          <p className="s-p s-p-center">Get an invite code and claim your spot on fentanyl.best.</p>
-          <Link href="/signup" className="btn-primary btn-xl">Claim your link →</Link>
-          <div className="cta-url">fentanyl.best/<em>yourname</em></div>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="footer">
-        <div className="footer-wrap">
-          <Link href="/" className="nav-logo">fentanyl<span>.best</span></Link>
-          <div className="footer-links">
-            <Link href="/signup" className="footer-a">Sign up</Link>
-            <Link href="/login" className="footer-a">Sign in</Link>
-            <a href="#" className="footer-a">Terms</a>
-            <a href="#" className="footer-a">Privacy</a>
+        {/* ── 3. HOW ── */}
+        <section className="fn-snap fn-how">
+          <div className="fn-inner fn-anim">
+            <span className="fn-label">How it works</span>
+            <h2 className="fn-h2">Up in minutes.<br /><em>Yours forever.</em></h2>
+            <div className="fn-steps">
+              {[
+                ['01', 'Get an invite', 'Someone vouches for you. That\'s your ticket in.'],
+                ['02', 'Claim your name', 'Pick your username. It\'s yours the second you register it.'],
+                ['03', 'Build your page', 'Links, colors, music, badges. Takes about 3 minutes.'],
+                ['04', 'Share one link', 'Put it everywhere. It stays current. Always live.'],
+              ].map(([n, t, b]) => (
+                <div key={n} className="fn-step">
+                  <div className="fn-step-n">{n}</div>
+                  <div className="fn-step-title">{t}</div>
+                  <div className="fn-step-body">{b}</div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="footer-copy">© 2025 fentanyl.best</div>
-        </div>
-      </footer>
+        </section>
 
-    </main>
+        {/* ── 4. CTA ── */}
+        <section className="fn-snap fn-cta">
+          <div className="fn-center fn-anim">
+            <span className="fn-label">Get started</span>
+            <h2 className="fn-cta-h">
+              Your link<br />
+              is waiting.
+            </h2>
+            <p className="fn-sub fn-sub-sm">
+              Get an invite and claim your spot on fentanyl.best.
+            </p>
+            <Link href="/signup" className="fn-btn-primary fn-btn-xl">Claim your link →</Link>
+            <div className="fn-cta-url">fentanyl.best/<em>yourname</em></div>
+          </div>
+
+          {/* Footer inside last section */}
+          <footer className="fn-footer">
+            <Link href="/" className="fn-logo">fentanyl<span>.best</span></Link>
+            <div className="fn-footer-links">
+              <Link href="/signup" className="fn-footer-a">Sign up</Link>
+              <Link href="/login" className="fn-footer-a">Sign in</Link>
+              <a href="#" className="fn-footer-a">Terms</a>
+              <a href="#" className="fn-footer-a">Privacy</a>
+            </div>
+            <div className="fn-footer-copy">© 2025 fentanyl.best</div>
+          </footer>
+        </section>
+
+      </div>
+    </>
   )
 }
