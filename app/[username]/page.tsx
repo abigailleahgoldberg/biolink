@@ -1,6 +1,7 @@
-import { supabaseAdmin } from '@/lib/supabase'
-import { notFound } from 'next/navigation'
-import type { Metadata } from 'next'
+'use client'
+import { useEffect, useState } from 'react'
+import { useParams, notFound } from 'next/navigation'
+import { supabase, type Profile, type Link as ProfileLink } from '@/lib/supabase'
 
 const FONT_MAP: Record<string, string> = {
   'inter': "'Inter', system-ui, sans-serif",
@@ -20,51 +21,38 @@ const ICON_SVGS: Record<string, string> = {
   link:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
 }
 
-function getBackground(type: string, value: string) {
-  if (type === 'gradient') return `background: ${value};`
-  if (type === 'image') return `background-image: url('${value}'); background-size: cover; background-position: center;`
-  return `background: ${value};`
-}
+export default function ProfilePage() {
+  const params = useParams()
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const [notFoundFlag, setNotFoundFlag] = useState(false)
+  const username = params?.username as string
 
-function getMusicEmbed(type: string | null, url: string) {
-  if (!type || !url) return ''
-  if (type === 'spotify') {
-    const match = url.match(/track\/([a-zA-Z0-9]+)/)
-    if (match) return `<iframe src="https://open.spotify.com/embed/track/${match[1]}" width="100%" height="80" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" style="border-radius:12px;"></iframe>`
-  }
-  if (type === 'youtube') {
-    const match = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]+)/)
-    if (match) return `<iframe width="100%" height="80" src="https://www.youtube.com/embed/${match[1]}?autoplay=0" frameborder="0" style="border-radius:12px;"></iframe>`
-  }
-  return ''
-}
+  useEffect(() => {
+    async function load() {
+      if (!username) return
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('username', username.toLowerCase())
+        .single()
+      
+      if (!data) { setNotFoundFlag(true); return }
+      setProfile(data)
+      // Increment views (fire and forget)
+      void supabase.rpc('increment_views', { profile_id: data.id })
+    }
+    load()
+  }, [username])
 
-export async function generateMetadata({ params }: { params: { username: string } }): Promise<Metadata> {
-  const { data } = await supabaseAdmin.from('profiles').select('display_name,bio,username').eq('username', params.username.toLowerCase()).single()
-  if (!data) return { title: 'Not Found' }
-  return {
-    title: `${data.display_name || data.username} — BioLink`,
-    description: data.bio || `Check out ${data.username}'s profile`,
-  }
-}
+  if (notFoundFlag) notFound()
+  if (!profile) return <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', color:'rgba(255,255,255,0.3)' }}>Loading...</div>
 
-export default async function ProfilePage({ params }: { params: { username: string } }) {
-  const { data: profile } = await supabaseAdmin
-    .from('profiles')
-    .select('*')
-    .eq('username', params.username.toLowerCase())
-    .single()
-
-  if (!profile) notFound()
-
-  // Increment view count
-  await supabaseAdmin.rpc('increment_views', { profile_id: profile.id })
-
-  const bg = getBackground(profile.background_type, profile.background_value)
   const fontFamily = FONT_MAP[profile.font] || FONT_MAP['inter']
   const accentColor = profile.accent_color || '#A397DD'
   const btnStyle = profile.button_style || 'outline'
-  const musicEmbed = getMusicEmbed(profile.music_type, profile.music_url)
+  const bg = profile.background_type === 'gradient' ? `background: ${profile.background_value};`
+    : profile.background_type === 'image' ? `background-image: url('${profile.background_value}'); background-size: cover; background-position: center;`
+    : `background: ${profile.background_value};`
 
   return (
     <>
@@ -112,26 +100,19 @@ export default async function ProfilePage({ params }: { params: { username: stri
             </div>
           )}
 
-          {/* Music */}
-          {musicEmbed && (
-            <div style={{ width:'100%', marginBottom:14 }} dangerouslySetInnerHTML={{ __html: musicEmbed }} />
-          )}
-
           {/* Links */}
           <div style={{ display:'flex', flexDirection:'column', gap:10, width:'100%', marginBottom:20 }}>
-            {(profile.links || []).map((link: { id: string; label: string; url: string; icon: string }) => {
+            {(profile.links || []).map((link: ProfileLink) => {
               const icon = ICON_SVGS[link.icon] || ICON_SVGS['link']
-              const btnStyles = btnStyle === 'filled'
-                ? `background:${accentColor}; color:#0a0910; border:none;`
-                : btnStyle === 'glass'
-                ? `background:rgba(255,255,255,0.08); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.12); color:#fff;`
-                : `background:transparent; border:2px solid ${accentColor}60; color:#fff;`
+              const btnBg = btnStyle === 'filled' ? accentColor : btnStyle === 'glass' ? 'rgba(255,255,255,0.08)' : 'transparent'
+              const btnBorder = btnStyle === 'filled' ? 'none' : btnStyle === 'glass' ? '1px solid rgba(255,255,255,0.12)' : `2px solid ${accentColor}60`
+              const btnColor = btnStyle === 'filled' ? '#0a0910' : '#fff'
+              
               return (
                 <a key={link.id} href={link.url} target="_blank" rel="noreferrer"
-                  style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:'14px 20px', borderRadius:12, fontSize:14, fontWeight:600, cursor:'pointer', transition:'transform 0.18s, opacity 0.18s', textDecoration:'none' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform='translateY(-2px)'; (e.currentTarget as HTMLElement).style.opacity='0.88' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform='none'; (e.currentTarget as HTMLElement).style.opacity='1' }}>
-                  <style>{`a[data-lid="${link.id}"] { ${btnStyles} }`}</style>
+                  style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:'14px 20px', borderRadius:12, fontSize:14, fontWeight:600, cursor:'pointer', background:btnBg, border:btnBorder, color:btnColor, textDecoration:'none', transition:'transform 0.18s, opacity 0.18s' }}
+                  onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.opacity='0.88' }}
+                  onMouseLeave={e => { e.currentTarget.style.transform='none'; e.currentTarget.style.opacity='1' }}>
                   <span dangerouslySetInnerHTML={{ __html: icon }} />
                   {link.label}
                 </a>
