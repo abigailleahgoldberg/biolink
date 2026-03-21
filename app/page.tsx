@@ -1,83 +1,93 @@
 import Link from 'next/link'
-import LiveCounter from '../components/LiveCounter'
+import LiveCounter from '@/components/LiveCounter'
+
+const MARQUEE_ITEMS = [
+  'zj71 · 1.2k views','ariadne · 843 views','kael · 2.1k views','femme · 567 views',
+  'luxe · 3.4k views','nyx · 921 views','void · 1.8k views','aura · 445 views',
+  'frost · 2.3k views','echo · 788 views','solar · 1.1k views','haze · 634 views',
+]
 
 export default function Landing() {
-  const marqueeItems = [
-    'zj71 · 1.2k views', 'ariadne · 843 views', 'kael · 2.1k views',
-    'nova · 1.8k views', 'hex · 956 views', 'drift · 3.2k views',
-    'vale · 1.4k views', 'onyx · 2.7k views', 'sage · 1.1k views',
-    'flux · 4.0k views', 'echo · 1.9k views', 'rune · 2.3k views',
-  ]
-
   return (
     <>
+      {/* Aurora glow */}
       <div className="aurora" />
 
-      {/* NAV */}
+      {/* ── NAV ── */}
       <nav className="nav">
-        <span className="nav-logo">fentanyl</span>
-        <div className="nav-links">
-          <a href="#features">Features</a>
-          <a href="#profiles">Profiles</a>
-          <a href="#stats">Stats</a>
-          <a href="#reviews">Reviews</a>
-        </div>
-        <div className="nav-right">
-          <Link href="/login" className="nav-login">Login</Link>
-          <Link href="/signup" className="btn-primary">Create Your Link →</Link>
+        <div className="nav-inner">
+          <Link href="/" className="nav-logo">fentanyl</Link>
+          <div className="nav-links">
+            <a href="#why" className="nav-link">Features</a>
+            <a href="#profiles" className="nav-link">Profiles</a>
+            <a href="#stats" className="nav-link">Stats</a>
+            <a href="#reviews" className="nav-link">Reviews</a>
+          </div>
+          <div className="nav-actions">
+            <Link href="/login" className="nav-login">Login</Link>
+            <Link href="/signup" className="nav-cta">Create Your Link →</Link>
+          </div>
         </div>
       </nav>
 
-      {/* HERO */}
+      {/* ── HERO ── */}
       <section className="hero">
-        <div className="container">
-          <div className="hero-inner">
-            <div>
-              <h1>Elevate your identity with powerful links.</h1>
-              <p>Take control of your online presence with fully customizable profiles, social links, and engagement tools. Automate the tedious tasks and focus on what matters — your audience.</p>
-              <div className="hero-buttons">
-                <Link href="/signup" className="btn-primary">Create Your Link</Link>
-                <a href="#features" className="btn-outline">View Features</a>
+        <div className="wrap">
+          <div className="hero-grid">
+            {/* Left */}
+            <div className="hero-left">
+              <h1 className="hero-h1">
+                Elevate your identity<br />
+                with <em>powerful links.</em>
+              </h1>
+              <p className="hero-p">
+                Take control of your online presence with fully customizable profiles, social links, and engagement tools. Automate the tedious tasks and focus on what matters — your audience.
+              </p>
+              <div className="hero-btns">
+                <Link href="/signup" className="btn-fill">Create Your Link</Link>
+                <a href="#why" className="btn-outline">View Features</a>
               </div>
             </div>
-            <div className="hero-card">
-              <div className="hero-card-header">
-                <span className="shield">✦</span>
-                Protected Profile
+
+            {/* Right — Discord-style mockup card */}
+            <div className="hero-right">
+              <div className="discord-card">
+                <div className="discord-card-header">
+                  <div className="discord-channel-name">
+                    <span className="discord-hash">#</span> Protected Profile
+                  </div>
+                  <div className="discord-header-icons">
+                    <div className="discord-icon-dot" />
+                    <div className="discord-icon-dot" />
+                    <div className="discord-icon-dot" />
+                  </div>
+                </div>
+                <div className="discord-messages">
+                  {[
+                    { color: '#5865f2', user: 'fentanyl', role: 'BOT', time: 'Today at 2:00 PM', msg: '@zj71: Finished setting up your profile. All links are live.', check: true },
+                    { color: '#3ba55c', user: 'zj71', role: '', time: 'Today at 2:01 PM', msg: '/profile theme --color purple --font inter --bg gradient', check: false },
+                    { color: '#5865f2', user: 'fentanyl', role: 'BOT', time: 'Today at 2:01 PM', msg: '@zj71: Updated profile theme. Accent set to purple, font set to inter.', check: true },
+                  ].map((m, i) => (
+                    <div key={i} className="discord-msg">
+                      <div className="discord-avatar" style={{ background: m.color }}>{m.user[0].toUpperCase()}</div>
+                      <div className="discord-msg-body">
+                        <div className="discord-msg-meta">
+                          <span className="discord-username" style={{ color: m.color }}>{m.user}</span>
+                          {m.role && <span className="discord-role">BOT</span>}
+                          <span className="discord-time">{m.time}</span>
+                        </div>
+                        <div className="discord-msg-text">{m.msg}</div>
+                        {m.check && (
+                          <div className="discord-embed">
+                            <span className="discord-check">✓</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="hero-card-body">
-                <div className="log-entry">
-                  <div className="log-avatar">Z</div>
-                  <span className="log-user">zj71</span>
-                  <span className="log-action">set up their profile</span>
-                  <span className="log-time">Today at 2:00 PM</span>
-                </div>
-                <div className="log-entry">
-                  <div className="log-avatar">A</div>
-                  <span className="log-user">ariadne</span>
-                  <span className="log-action">added 3 new links</span>
-                  <span className="log-time">Today at 2:01 PM</span>
-                </div>
-                <div className="log-entry">
-                  <div className="log-avatar">K</div>
-                  <span className="log-user">kael</span>
-                  <span className="log-action">updated their bio</span>
-                  <span className="log-time">Today at 2:03 PM</span>
-                </div>
-                <div className="log-entry">
-                  <div className="log-avatar">N</div>
-                  <span className="log-user">nova</span>
-                  <span className="log-action">changed theme to midnight</span>
-                  <span className="log-time">Today at 2:05 PM</span>
-                </div>
-                <div className="log-entry">
-                  <div className="log-avatar">H</div>
-                  <span className="log-user">hex</span>
-                  <span className="log-action">connected Spotify</span>
-                  <span className="log-time">Today at 2:07 PM</span>
-                </div>
-              </div>
-              <div className="hero-stat">
+              <div className="hero-trust">
                 Powering <strong>18,417,041</strong> profiles across <strong>127,956</strong> creators
               </div>
             </div>
@@ -85,437 +95,369 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* MARQUEE */}
-      <div className="marquee-section">
+      {/* ── MARQUEE ── */}
+      <div className="marquee-wrap">
         <div className="marquee-track">
-          {[...marqueeItems, ...marqueeItems].map((item, i) => (
-            <span className="marquee-pill" key={i}>{item}</span>
+          {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
+            <div key={i} className="marquee-item">
+              <div className="marquee-dot" />
+              <span>{item}</span>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* WHY CHOOSE */}
-      <section className="section" id="features">
-        <div className="container">
-          <p className="section-label">Why Choose fentanyl?</p>
-          <h2>Why Choose fentanyl?</h2>
-          <p className="section-sub">A powerful biolink platform that combines aesthetic customization with functionality, providing everything you need to showcase your online identity.</p>
+      {/* ── WHY CHOOSE ── */}
+      <section className="section" id="why">
+        <div className="wrap">
+          <div className="section-center-header">
+            <h2 className="section-h2">Why Choose fentanyl?</h2>
+            <p className="section-sub">A powerful biolink platform that combines aesthetic customization with functionality, providing everything you need to showcase your online identity.</p>
+          </div>
 
           <div className="why-grid">
-            {/* Big left card — music player */}
-            <div className="card card-big">
-              <div className="card-title">Now Playing</div>
-              <div className="card-desc">Embed your favorite tracks directly on your profile for visitors to enjoy.</div>
+            {/* Big left card — music player mockup */}
+            <div className="why-card why-big">
               <div className="music-player">
-                <div className="music-now">NOW PLAYING</div>
-                <div className="music-track-main">
+                <div className="music-player-header">
+                  <div className="music-icon">♫</div>
+                  <span className="music-title">Back to Me</span>
+                  <span className="music-badge">Now Playing</span>
+                </div>
+                <div className="music-track-row">
                   <div className="music-art" />
                   <div className="music-info">
-                    <h4>Back to Me</h4>
-                    <p>The Marías</p>
-                    <div className="music-controls">
-                      <span>⏮</span>
-                      <div className="play-btn">▶</div>
-                      <span>⏭</span>
-                    </div>
+                    <div className="music-track-name">Back to Me</div>
+                    <div className="music-artist">The Marías</div>
                   </div>
                 </div>
-                <div className="music-progress">
-                  <div className="music-bar"><div className="music-bar-fill" /></div>
-                  <div className="music-times">
-                    <span>2:14</span>
-                    <span>3:45</span>
-                  </div>
+                <div className="music-progress-wrap">
+                  <span className="music-time">2:14</span>
+                  <div className="music-bar"><div className="music-fill" /></div>
+                  <span className="music-time">3:45</span>
                 </div>
                 <div className="music-queue">
-                  <div className="queue-item">
-                    <div className="queue-art queue-art-1" />
-                    <span className="queue-title">Softly</span>
-                    <span className="queue-artist">· Clairo</span>
-                  </div>
-                  <div className="queue-item">
-                    <div className="queue-art queue-art-2" />
-                    <span className="queue-title">Pink + White</span>
-                    <span className="queue-artist">· Frank Ocean</span>
-                  </div>
-                  <div className="queue-item">
-                    <div className="queue-art queue-art-3" />
-                    <span className="queue-title">Ivy</span>
-                    <span className="queue-artist">· Frank Ocean</span>
-                  </div>
+                  <div className="music-queue-label">Queue</div>
+                  {[
+                    { n: '9', a: 'Drake' },
+                    { n: 'Chanel', a: 'Frank Ocean' },
+                    { n: 'Fourth of July', a: 'Sufjan Stevens' },
+                  ].map(t => (
+                    <div key={t.n} className="music-queue-item">
+                      <div className="music-queue-dot" />
+                      <div>
+                        <div className="music-queue-name">{t.n}</div>
+                        <div className="music-queue-artist">{t.a}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
 
-            {/* Top right card */}
-            <div className="card">
-              <div className="card-title">Advanced Customization</div>
-              <div className="card-desc">Make your profile truly yours with complete control over every visual element.</div>
-              <div className="sub-buttons">
-                <span className="sub-btn">Background</span>
-                <span className="sub-btn">Colors</span>
-                <span className="sub-btn">Fonts</span>
-                <span className="sub-btn">Buttons</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="why-bottom">
-            {/* View Tracking */}
-            <div className="card">
-              <div className="card-title">View Tracking</div>
-              <div className="card-desc">Track who visits your profile. Monitor click counts and view trends.</div>
-              <div className="analytics-bars">
-                <div className="bar" />
-                <div className="bar" />
-                <div className="bar" />
-                <div className="bar" />
-                <div className="bar" />
-                <div className="bar" />
-                <div className="bar" />
+            {/* Right top card */}
+            <div className="why-card">
+              <h3 className="card-title">Advanced Customization</h3>
+              <p className="card-desc">Make your profile truly yours with complete control over every visual element.</p>
+              <div className="card-pills">
+                <span className="pill">Background</span>
+                <span className="pill">Colors</span>
+                <span className="pill">Fonts</span>
+                <span className="pill">Buttons</span>
               </div>
             </div>
 
-            {/* Music Player */}
-            <div className="card">
-              <div className="card-title">Music Player</div>
-              <div className="card-desc">Embed Spotify, YouTube, or SoundCloud on your profile.</div>
-              <div className="card-stats">
-                <div>
-                  <div className="card-stat-val">1.2k</div>
-                  <div className="card-stat-label">Plays</div>
-                </div>
-                <div>
-                  <div className="card-stat-val">4</div>
-                  <div className="card-stat-label">Songs</div>
-                </div>
+            {/* Bottom 3 cards */}
+            <div className="why-card">
+              <h3 className="card-title">View Tracking</h3>
+              <p className="card-desc">Track who visits your profile. Monitor click counts and view trends over time.</p>
+              <div className="bar-chart">
+                {[40, 65, 45, 50, 80, 35, 70].map((h, i) => (
+                  <div key={i} className="bar" style={{ height: `${h}%` }} />
+                ))}
+              </div>
+              <div className="card-meta">Weekly engagement trend</div>
+            </div>
+
+            <div className="why-card">
+              <h3 className="card-title">Music Player</h3>
+              <p className="card-desc">Embed Spotify, YouTube, or SoundCloud directly on your profile for visitors to enjoy.</p>
+              <div className="stat-pair">
+                <div className="stat-mini"><div className="stat-mini-num">1.2k</div><div className="stat-mini-label">Plays</div></div>
+                <div className="stat-mini"><div className="stat-mini-num">4</div><div className="stat-mini-label">Songs</div></div>
               </div>
             </div>
 
-            {/* Username Shield */}
-            <div className="card">
-              <div className="card-title">Username Shield</div>
-              <div className="card-desc">Invite-only with blacklist protection and admin control.</div>
-              <div className="shield-stats">
-                <div className="shield-stat">
-                  <div className="shield-stat-main">24 New Profiles Today</div>
-                  <div className="shield-stat-sub">+12% from yesterday</div>
-                </div>
-                <div className="shield-stat">
-                  <div className="shield-stat-main">98% Approval Rate</div>
-                  <div className="shield-stat-sub">Members welcomed</div>
-                </div>
+            <div className="why-card">
+              <h3 className="card-title">Username Shield</h3>
+              <p className="card-desc">Invite-only access with blacklist protection, reserved names, and admin control.</p>
+              <div className="community-stats">
+                <div className="com-stat-row"><span className="com-num">24</span><div><div className="com-label">New Profiles Today</div><div className="com-sub">+12% from yesterday</div></div></div>
+                <div className="com-stat-row"><span className="com-num">98%</span><div><div className="com-label">Approval Rate</div><div className="com-sub">Members welcomed</div></div></div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* POWERFUL FEATURES */}
-      <section className="section">
-        <div className="container">
-          <p className="section-label">Features</p>
-          <h2>Powerful Features, Simple Interface</h2>
-          <p className="section-sub">Every feature is designed to be powerful yet intuitive, giving you complete control over your profile.</p>
-
-          <div className="features-grid-top">
-            <div className="card">
-              <div className="card-title">Link Manager</div>
-              <div className="card-desc">Organize and manage all your important links in one place with drag-and-drop simplicity.</div>
-              <div className="feature-pills">
-                <span className="feature-pill">Custom URLs</span>
-                <span className="feature-pill">Platform Icons</span>
-                <span className="feature-pill">Reorder</span>
-                <span className="feature-pill">Click Tracking</span>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-title">Appearance Editor</div>
-              <div className="card-desc">Customize every visual detail of your profile with an intuitive design editor.</div>
-              <div className="feature-pills">
-                <span className="feature-pill">Color Picker</span>
-                <span className="feature-pill">Gradient</span>
-                <span className="feature-pill">Image BG</span>
-                <span className="feature-pill">Animated</span>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-title">Music Player</div>
-              <div className="card-desc">Add your favorite tracks to your profile with support for all major platforms.</div>
-              <div className="feature-pills">
-                <span className="feature-pill">Spotify Embed</span>
-                <span className="feature-pill">YouTube</span>
-                <span className="feature-pill">SoundCloud</span>
-                <span className="feature-pill">Auto-play</span>
-              </div>
-            </div>
+      {/* ── POWERFUL FEATURES ── */}
+      <section className="section" id="features">
+        <div className="wrap">
+          <div className="section-center-header">
+            <h2 className="section-h2">Powerful Features, Simple Interface</h2>
+            <p className="section-sub">Every feature is designed to be powerful yet intuitive, helping you manage your identity with ease.</p>
           </div>
 
-          <div className="features-grid-bottom">
-            <div className="card">
-              <div className="card-title">Username Protection</div>
-              <div className="card-desc">Advanced tools to protect and manage username availability across the platform.</div>
-              <div className="feature-pills">
-                <span className="feature-pill">Blacklist</span>
-                <span className="feature-pill">Invite Gate</span>
-                <span className="feature-pill">Admin Panel</span>
-                <span className="feature-pill">Reserved Names</span>
+          <div className="feat-grid-3">
+            {[
+              { title: 'Link Manager', desc: 'Add, reorder, and customize all your social links with platform icons and custom labels.', pills: ['Custom URLs', 'Platform Icons', 'Reorder', 'Click Tracking'] },
+              { title: 'Appearance Editor', desc: 'Change background, accent colors, button styles, and fonts with a live preview dashboard.', pills: ['Color Picker', 'Gradient', 'Image BG', 'Animated'] },
+              { title: 'Music Player', desc: 'High-quality music embedding with Spotify, YouTube, and SoundCloud support built in.', pills: ['Spotify Embed', 'YouTube', 'SoundCloud', 'Auto-play'] },
+            ].map(f => (
+              <div key={f.title} className="feat-card">
+                <h3 className="card-title">{f.title}</h3>
+                <p className="card-desc">{f.desc}</p>
+                <div className="card-pills">
+                  {f.pills.map(p => <span key={p} className="pill">{p}</span>)}
+                </div>
               </div>
-            </div>
-            <div className="card">
-              <div className="card-title">Profile Analytics</div>
-              <div className="card-desc">Deep insights into your profile performance with real-time data visualization.</div>
-              <div className="feature-pills">
-                <span className="feature-pill">View Counter</span>
-                <span className="feature-pill">Real-time</span>
-                <span className="feature-pill">Link Clicks</span>
-                <span className="feature-pill">Growth Metrics</span>
-              </div>
-            </div>
+            ))}
           </div>
-
-          <div className="view-all">
-            <a href="#features">View All Features →</a>
+          <div className="feat-grid-2" style={{ marginTop: 12 }}>
+            {[
+              { title: 'Username Protection', desc: 'Invite-only access with blacklist enforcement, reserved name protection, and full admin moderation tools.', pills: ['Blacklist', 'Invite Gate', 'Admin Panel', 'Reserved Names'] },
+              { title: 'Profile Analytics', desc: 'Detailed profile activity tracking, view analytics, and link performance data in real-time.', pills: ['View Counter', 'Real-time', 'Link Clicks', 'Growth Metrics'] },
+            ].map(f => (
+              <div key={f.title} className="feat-card">
+                <h3 className="card-title">{f.title}</h3>
+                <p className="card-desc">{f.desc}</p>
+                <div className="card-pills">
+                  {f.pills.map(p => <span key={p} className="pill">{p}</span>)}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign: 'center', marginTop: 24 }}>
+            <a href="#profiles" className="view-all-link">View All Features →</a>
           </div>
         </div>
       </section>
 
-      {/* SETTING NEW STANDARDS */}
+      {/* ── STATS ── */}
       <section className="section" id="stats">
-        <div className="container">
-          <p className="section-label">Statistics</p>
-          <h2>Setting New Standards</h2>
-          <p className="section-sub">Experience next-level profile customization and reliability that sets us apart from the competition.</p>
-
-          <div className="stats-grid-top">
+        <div className="wrap">
+          <div className="section-center-header">
+            <h2 className="section-h2">Setting New <em>Standards</em></h2>
+            <p className="section-sub">Experience next-level profile customization and reliability that sets us apart from the competition</p>
+          </div>
+          <div className="stats-grid-3">
             <div className="stat-card">
-              <div className="stat-number">&lt; 2<span className="unit"> sec</span></div>
-              <div className="stat-label">Instant Setup</div>
-              <div className="stat-desc">From invite to live profile in seconds</div>
+              <div className="stat-big">19<span className="stat-unit"> ms</span></div>
+              <h3 className="stat-title">Fastest Load Time</h3>
+              <p className="stat-desc">While others load in 200ms+, fentanyl profiles serve in milliseconds</p>
             </div>
             <div className="stat-card">
-              <div className="stat-number">99.9<span className="unit"> %</span></div>
-              <div className="stat-label">Uptime</div>
-              <div className="stat-desc">Enterprise Vercel hosting always live</div>
+              <div className="stat-big">99.9<span className="stat-unit">%</span></div>
+              <h3 className="stat-title">Highest Uptime</h3>
+              <p className="stat-desc">Enterprise-grade Vercel hosting you can count on</p>
             </div>
             <div className="stat-card">
-              <div className="stat-number">10K<span className="unit">+</span></div>
-              <div className="stat-label">Active Profiles</div>
-              <div className="stat-desc">Creators trust fentanyl</div>
+              <div className="stat-big">98.9<span className="stat-unit">K+</span></div>
+              <h3 className="stat-title">Daily Views</h3>
+              <p className="stat-desc">Trusted by thousands of creators for reliable performance</p>
             </div>
           </div>
-
-          <div className="stats-grid-bottom">
+          <div className="stats-grid-2">
             <div className="stat-card">
-              <div className="stat-number">100<span className="unit"> %</span></div>
-              <div className="stat-label">Customizable</div>
-              <div className="stat-desc">Colors, fonts, backgrounds, music, badges</div>
-              <div className="stat-pills">
-                <span className="feature-pill">Colors</span>
-                <span className="feature-pill">Active</span>
-                <span className="feature-pill">Fonts</span>
-                <span className="feature-pill">24/7</span>
-                <span className="feature-pill">Badges</span>
-                <span className="feature-pill">0</span>
+              <div className="stat-big">100<span className="stat-unit">%</span></div>
+              <h3 className="stat-title">Customizable</h3>
+              <p className="stat-desc">Complete control over colors, fonts, backgrounds, music, and badges</p>
+              <div className="card-pills" style={{ marginTop: 16 }}>
+                <span className="pill">Colors</span><span className="pill">Active</span>
+                <span className="pill">Fonts</span><span className="pill">24/7</span>
+                <span className="pill">Badges</span><span className="pill" style={{ color: 'var(--accent2)' }}>0 Limits</span>
               </div>
             </div>
             <div className="stat-card">
-              <div className="stat-number">30<span className="unit"> sec</span></div>
-              <div className="stat-label">Average Save Time</div>
-              <div className="stat-desc">Dashboard built for speed</div>
-              <div className="stat-pills">
-                <span className="feature-pill">Support Hours 24/7</span>
-                <span className="feature-pill">Team Size 5+</span>
+              <div className="stat-big">30<span className="stat-unit"> sec</span></div>
+              <h3 className="stat-title">Average Save Time</h3>
+              <p className="stat-desc">Dashboard built for speed. Changes save and go live instantly</p>
+              <div className="card-pills" style={{ marginTop: 16 }}>
+                <span className="pill">Instant Save</span>
+                <span className="pill">Always Live</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ADVANCED PROFILE INTELLIGENCE */}
+      {/* ── ADVANCED PROFILE INTELLIGENCE ── */}
       <section className="section" id="profiles">
-        <div className="container">
-          <p className="section-label">Intelligence</p>
-          <h2>Advanced Profile Intelligence</h2>
-          <p className="section-sub">Comprehensive profile monitoring that keeps you in control of your online presence.</p>
+        <div className="wrap">
+          <div className="section-center-header">
+            <h2 className="section-h2">Advanced Profile <em>Intelligence</em></h2>
+            <p className="section-sub">Comprehensive profile monitoring and logging that keeps you in control of every aspect of your online presence</p>
+          </div>
 
-          <div className="intel-grid">
-            {/* Profile Activity */}
+          <div className="intel-grid-top">
+            {/* Panel 1 — Activity Log */}
             <div className="intel-card">
-              <div className="intel-card-header">Profile Activity</div>
-              <div className="intel-card-body">
-                <div className="log-entry">
-                  <div className="log-avatar">Z</div>
-                  <span className="log-user">zj71</span>
-                  <span className="log-action">updated bio</span>
-                  <span className="log-time">2:14 PM</span>
-                </div>
-                <div className="log-entry">
-                  <div className="log-avatar">A</div>
-                  <span className="log-user">ariadne</span>
-                  <span className="log-action">added link</span>
-                  <span className="log-time">2:12 PM</span>
-                </div>
-                <div className="log-entry">
-                  <div className="log-avatar">K</div>
-                  <span className="log-user">kael</span>
-                  <span className="log-action">changed theme</span>
-                  <span className="log-time">2:10 PM</span>
-                </div>
-                <div className="log-entry">
-                  <div className="log-avatar">D</div>
-                  <span className="log-user">drift</span>
-                  <span className="log-action">set avatar</span>
-                  <span className="log-time">2:08 PM</span>
-                </div>
-                <div className="log-entry">
-                  <div className="log-avatar">V</div>
-                  <span className="log-user">vale</span>
-                  <span className="log-action">joined platform</span>
-                  <span className="log-time">2:05 PM</span>
-                </div>
+              <div className="intel-card-header">
+                <div className="intel-icon">📋</div>
+                <h3 className="intel-title">Profile Activity</h3>
+                <p className="intel-subtitle">Track views, clicks, and profile changes in real-time</p>
+              </div>
+              <div className="log-entries">
+                {[
+                  { user: 'fentanyl', color: '#5865f2', time: 'Today at 8:36 PM', action: 'zj71 · Profile Viewed', detail: 'Viewer from United States · 2 minutes ago · Profile ID: 414903717517' },
+                  { user: 'fentanyl', color: '#5865f2', time: 'Today at 8:41 PM', action: 'ariadne · Link Clicked: Discord', detail: 'Link clicked from profile page · 5 minutes ago · Profile ID: 668781824029' },
+                  { user: 'fentanyl', color: '#5865f2', time: 'Today at 8:45 PM', action: 'kael · Profile Theme Updated', detail: 'Changed background to gradient · 9 minutes ago · Profile ID: 117281924301' },
+                ].map((e, i) => (
+                  <div key={i} className="log-entry">
+                    <div className="log-avatar" style={{ background: e.color }}>{e.user[0].toUpperCase()}</div>
+                    <div>
+                      <div className="log-meta"><span className="log-user" style={{ color: e.color }}>{e.user}</span><span className="log-time">{e.time}</span></div>
+                      <div className="log-action">{e.action}</div>
+                      <div className="log-detail">{e.detail}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Profile Themes */}
+            {/* Panel 2 — Profile Themes (Auto PFPs) */}
             <div className="intel-card">
-              <div className="intel-card-header">Profile Themes</div>
+              <div className="intel-card-header">
+                <div className="intel-icon">🎨</div>
+                <h3 className="intel-title">Profile Themes</h3>
+                <p className="intel-subtitle">Automatically apply curated themes to your profile</p>
+              </div>
               <div className="theme-grid">
-                <div className="theme-thumb theme-thumb-1">
-                  <span className="theme-set-btn">Set as Theme</span>
-                </div>
-                <div className="theme-thumb theme-thumb-2">
-                  <span className="theme-set-btn">Set as Theme</span>
-                </div>
-                <div className="theme-thumb theme-thumb-3">
-                  <span className="theme-set-btn">Set as Theme</span>
-                </div>
-                <div className="theme-thumb theme-thumb-4">
-                  <span className="theme-set-btn">Set as Theme</span>
-                </div>
+                {[
+                  { bg: 'linear-gradient(135deg,#1a0a2e,#2d1b69)', label: 'Dark Purple' },
+                  { bg: 'linear-gradient(135deg,#0a1628,#1a3a6e)', label: 'Midnight Blue' },
+                  { bg: 'linear-gradient(135deg,#1a0a14,#6e1a3a)', label: 'Deep Rose' },
+                  { bg: 'linear-gradient(135deg,#0a1a0a,#1a4a2a)', label: 'Forest' },
+                ].map(t => (
+                  <div key={t.label} className="theme-thumb" style={{ background: t.bg }}>
+                    <div className="theme-thumb-btn">Set as Theme</div>
+                  </div>
+                ))}
               </div>
+              <div className="theme-status">Auto-updates every minute · <span style={{ color: '#3ba55c' }}>Active</span></div>
             </div>
+          </div>
 
-            {/* Username & Vanity Tracking */}
-            <div className="intel-card">
-              <div className="intel-card-header">Username &amp; Vanity Tracking</div>
-              <div className="intel-card-body">
-                <div className="alert-item">
-                  <div className="alert-title">Username Alert<span className="alert-badge">NEW</span></div>
-                  <div className="alert-desc">zj71 has been claimed</div>
-                  <div className="alert-meta">Available in 14 days</div>
-                </div>
-                <div className="alert-item">
-                  <div className="alert-title">Vanity Alert<span className="alert-badge">NEW</span></div>
-                  <div className="alert-desc">/kael has been dropped</div>
-                  <div className="alert-meta">Available Now · Invite Only</div>
-                </div>
+          {/* Panel 3 — Username tracking */}
+          <div className="intel-card" style={{ marginTop: 12 }}>
+            <div className="intel-card-header" style={{ marginBottom: 16 }}>
+              <div className="intel-icon">🔍</div>
+              <h3 className="intel-title">Username & Vanity Tracking</h3>
+              <p className="intel-subtitle">Get notified when desired usernames and vanity URLs become available</p>
+            </div>
+            <div className="vanity-grid">
+              <div className="vanity-item">
+                <div className="vanity-badge">Username Alert <span className="badge-new">NEW</span></div>
+                <div className="vanity-name">femurs has been dropped</div>
+                <div className="vanity-time">Available in 14 days</div>
+              </div>
+              <div className="vanity-item">
+                <div className="vanity-badge">Vanity Alert <span className="badge-new">NEW</span></div>
+                <div className="vanity-name">greed has been dropped</div>
+                <div className="vanity-time">Available in 14 days · <span style={{ color: 'var(--accent2)' }}>Exclusive Partnership</span></div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* ── TESTIMONIALS ── */}
       <section className="section" id="reviews">
-        <div className="container">
-          <p className="section-label">Reviews</p>
-          <h2>Trusted by Thousands of Creators</h2>
-          <p className="section-sub">See what creators are saying about their experience with fentanyl.</p>
+        <div className="wrap">
+          <div className="section-center-header">
+            <h2 className="section-h2">Trusted by Thousands of Creators</h2>
+            <p className="section-sub">Join the growing community of creators who trust fentanyl to showcase their identity</p>
+          </div>
 
-          <div className="testimonials-grid">
-            <div className="testimonial-card">
-              <div className="testimonial-header">
-                <div className="testimonial-avatar">S</div>
-                <div>
-                  <div className="testimonial-name">Sam</div>
-                  <div className="testimonial-role">Creator</div>
-                </div>
-              </div>
-              <div className="testimonial-quote">
-                &ldquo;I&apos;ve tried every biolink platform out there and nothing comes close to fentanyl. The customization options are insane — I can match my profile to my brand perfectly. The music player is a game changer for my audience, and the analytics help me understand exactly who&apos;s visiting. Best decision I made for my online presence.&rdquo;
-              </div>
-            </div>
-            <div className="testimonial-card">
-              <div className="testimonial-header">
-                <div className="testimonial-avatar">K</div>
-                <div>
-                  <div className="testimonial-name">keron</div>
-                  <div className="testimonial-role">Creator · 80k followers</div>
-                </div>
-              </div>
-              <div className="testimonial-quote">
-                &ldquo;The invite-only system keeps the platform exclusive and the username protection means my brand is always safe. Highly recommend for serious creators.&rdquo;
-              </div>
+          {/* Featured testimonial */}
+          <div className="testi-featured">
+            <div className="testi-avatar" style={{ background: 'linear-gradient(135deg,#7857ff,#4f8aff)' }}>S</div>
+            <div>
+              <h3 className="testi-name">Sam</h3>
+              <div className="testi-role">Creator</div>
+              <p className="testi-quote">&ldquo;fentanyl is truly unlike any other biolink. With it my life has become so much easier without constantly updating multiple platforms. Everything is packed nicely with their modern dashboard making setup 10x easier. Without fentanyl I would put incredible amounts of effort in for a quarter of the results it provides me. This platform is the future of personal branding and I can&apos;t wait to see what&apos;s ahead.&rdquo;</p>
             </div>
           </div>
 
-          <div className="testimonials-row">
-            <div className="testimonial-card">
-              <div className="testimonial-header">
-                <div className="testimonial-avatar">P</div>
-                <div>
-                  <div className="testimonial-name">parelite</div>
-                  <div className="testimonial-role">12k+ followers</div>
+          {/* 3-column testimonials */}
+          <div className="testi-grid">
+            {[
+              { init: 'K', bg: 'linear-gradient(135deg,#5865f2,#9b7dd4)', name: 'keron', role: 'Creator · 80k followers', quote: "i rlly love fentanyl sm, i've recently found it hard to find a trustable & reliable link page but once i stumbled upon fentanyl, i was finally relieved to know that my audience always lands exactly where i want them :3" },
+              { init: 'P', bg: 'linear-gradient(135deg,#f472b6,#c084fc)', name: 'parelite', role: '12k+ followers', quote: 'The profile always loads fast, while having all the features I could possibly ask for. Perfect for our growing community.' },
+              { init: 'C', bg: 'linear-gradient(135deg,#34d399,#3b82f6)', name: 'cosints', role: 'Creator', quote: 'It has been hands down the best biolink I have used. Helps me showcase everything, make custom profiles, do basically anything one can need — FOR FREE. The best platform offering what nobody else does.' },
+            ].map(t => (
+              <div key={t.name} className="testi-card">
+                <div className="testi-card-top">
+                  <div className="testi-avatar-sm" style={{ background: t.bg }}>{t.init}</div>
+                  <div>
+                    <h3 className="testi-name">{t.name}</h3>
+                    <div className="testi-role">{t.role}</div>
+                  </div>
                 </div>
+                <p className="testi-quote">&ldquo;{t.quote}&rdquo;</p>
               </div>
-              <div className="testimonial-quote">
-                &ldquo;Clean design, fast setup, great analytics. Everything I need in one link.&rdquo;
-              </div>
-            </div>
-            <div className="testimonial-card">
-              <div className="testimonial-header">
-                <div className="testimonial-avatar">C</div>
-                <div>
-                  <div className="testimonial-name">cosints</div>
-                  <div className="testimonial-role">Creator</div>
-                </div>
-              </div>
-              <div className="testimonial-quote">
-                &ldquo;Switched from Linktree and never looked back. The theme customization and embedded music player make my profile actually stand out. Plus the real-time analytics are genuinely useful.&rdquo;
-              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── LIVE COUNTER ── */}
+      <section className="section">
+        <div className="wrap">
+          <LiveCounter />
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section className="section cta-section">
+        <div className="wrap">
+          <div className="cta-box">
+            <h2 className="cta-h2">Ready to Get Your Link?</h2>
+            <p className="cta-sub">Join thousands of creators already using fentanyl to showcase their identity. Get started in seconds.</p>
+            <div className="hero-btns" style={{ justifyContent: 'center' }}>
+              <Link href="/signup" className="btn-fill">Create Your Link</Link>
+              <a href="#why" className="btn-outline">View Features</a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* LIVE COUNTER */}
-      <LiveCounter />
-
-      {/* CTA */}
-      <section className="cta-section">
-        <div className="container">
-          <h2>Ready to Get Your Link?</h2>
-          <p>Join thousands of creators who trust fentanyl for their online identity.</p>
-          <div className="cta-buttons">
-            <Link href="/signup" className="btn-primary">Create Your Link →</Link>
-            <a href="#features" className="btn-outline">Learn More</a>
-          </div>
-        </div>
-      </section>
-
-      {/* FOOTER */}
+      {/* ── FOOTER ── */}
       <footer className="footer">
-        <div className="container">
+        <div className="wrap">
           <div className="footer-grid">
-            <div className="footer-brand">
-              <h3>fentanyl</h3>
-              <p>The most powerful biolink platform for creators who demand complete control over their online identity.</p>
+            <div>
+              <div className="footer-logo">fentanyl</div>
+              <div className="footer-tagline">Invite only. Built different.</div>
             </div>
-            <div className="footer-col">
-              <h4>Platform</h4>
-              <a href="/signup">Create Profile</a>
-              <a href="/login">Sign In</a>
-              <a href="#features">Features</a>
+            <div>
+              <div className="footer-col-title">Platform</div>
+              <div className="footer-col-links">
+                <Link href="/signup" className="footer-link">Create Profile</Link>
+                <Link href="/login" className="footer-link">Sign In</Link>
+                <a href="#why" className="footer-link">Features</a>
+              </div>
             </div>
-            <div className="footer-col">
-              <h4>Legal</h4>
-              <a href="#">Terms</a>
-              <a href="#">Privacy</a>
+            <div>
+              <div className="footer-col-title">Legal</div>
+              <div className="footer-col-links">
+                <a href="#" className="footer-link">Terms</a>
+                <a href="#" className="footer-link">Privacy</a>
+              </div>
             </div>
           </div>
-          <div className="footer-copy">
-            © 2026 fentanyl. All rights reserved.
+          <div className="footer-bottom">
+            <span>Copyright © 2025 fentanyl.best. All rights reserved.</span>
           </div>
         </div>
       </footer>
