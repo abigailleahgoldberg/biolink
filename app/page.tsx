@@ -3,201 +3,177 @@ import Link from 'next/link'
 export default function Landing() {
   return (
     <>
+      {/* ambient glows */}
+      <div className="g-glow g-glow-1" />
+      <div className="g-glow g-glow-2" />
+      <div className="g-glow g-glow-3" />
+
       {/* NAV */}
-      <nav className="fn-nav">
-        <div className="fn-nav-wrap">
-          <Link href="/" className="fn-logo">fentanyl<span>.best</span></Link>
-          <div className="fn-nav-right">
-            <Link href="/login" className="fn-nav-ghost">Sign in</Link>
-            <Link href="/signup" className="fn-nav-pill">Claim your link →</Link>
+      <nav className="g-nav">
+        <div className="g-nav-inner">
+          <Link href="/" className="g-logo">fentanyl</Link>
+          <div className="g-nav-center">
+            <a href="#features" className="g-navlink">Features</a>
+            <a href="#how" className="g-navlink">How it works</a>
+          </div>
+          <div className="g-nav-end">
+            <Link href="/login" className="g-navlink">Sign in</Link>
+            <Link href="/signup" className="g-nav-cta">Get started</Link>
           </div>
         </div>
       </nav>
 
       {/* HERO */}
-      <section className="fn-hero">
-        <div className="fn-hero-wrap">
-          <div className="fn-hero-eyebrow">
-            <span className="fn-dot" />
+      <section className="g-hero">
+        <div className="g-hero-inner">
+          <div className="g-hero-badge">
+            <span className="g-pulse" />
             Invite only · Now open
           </div>
-          <h1 className="fn-hero-h1">
-            Your link.<br />
-            <em>Your rules.</em>
+          <h1 className="g-h1">
+            One link.<br />
+            <span className="g-h1-accent">Everything you are.</span>
           </h1>
-          <p className="fn-hero-body">
-            One URL. Every platform. Fully customizable.
-            No ads, no noise, no limits. Just you.
+          <p className="g-hero-sub">
+            Your socials, your music, your vibe — one clean link.<br />
+            Fully customizable. Exclusively yours.
           </p>
-          <div className="fn-hero-cta">
-            <Link href="/signup" className="fn-cta-main">Get your link</Link>
-            <Link href="/login" className="fn-cta-sub">Already have one?</Link>
+          <div className="g-hero-actions">
+            <Link href="/signup" className="g-btn-primary">
+              Claim your link
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </Link>
+            <Link href="/login" className="g-btn-glass">Sign in</Link>
           </div>
-          <div className="fn-url-preview">
-            fentanyl.best/<em>yourname</em>
-          </div>
+          <p className="g-hero-url">fentanyl.best/<em>yourname</em></p>
         </div>
 
-        {/* Floating profile preview */}
-        <div className="fn-hero-preview">
-          <div className="fn-preview-card">
-            <div className="fn-preview-avatar">
-              <div className="fn-preview-av-inner">Z</div>
+        {/* Glass profile card */}
+        <div className="g-hero-card-wrap">
+          <div className="g-profile-glass">
+            <div className="g-pg-header">
+              <div className="g-pg-avatar">Z</div>
+              <div>
+                <div className="g-pg-name">zj71</div>
+                <div className="g-pg-handle">fentanyl.best/zj71</div>
+              </div>
+              <div className="g-pg-views">1.2k views</div>
             </div>
-            <div className="fn-preview-name">zj71</div>
-            <div className="fn-preview-bio">creator. gamer. just vibing.</div>
-            <div className="fn-preview-badges">
+            <p className="g-pg-bio">creator. gamer. just vibing.</p>
+            <div className="g-pg-badges">
               <span>🎮 Gamer</span>
               <span>⭐ OG</span>
               <span>👑 Founder</span>
             </div>
-            <div className="fn-preview-links">
-              <div className="fn-preview-link fn-link-accent">Discord</div>
-              <div className="fn-preview-link">TikTok</div>
-              <div className="fn-preview-link">YouTube</div>
-            </div>
-            <div className="fn-preview-views">1,247 views</div>
-          </div>
-        </div>
-      </section>
-
-      {/* MARQUEE */}
-      <div className="fn-marquee-wrap">
-        <div className="fn-marquee">
-          {Array.from({ length: 2 }, (_, outer) => (
-            [
-              'ariadne · 843 views', 'kael · 2.1k views', 'void · 1.8k views',
-              'nyx · 921 views', 'luxe · 3.4k views', 'echo · 788 views',
-              'frost · 2.3k views', 'haze · 634 views', 'solar · 1.1k views',
-              'zj71 · 1.2k views', 'femme · 567 views', 'aura · 445 views',
-            ].map((item, i) => (
-              <span key={`${outer}-${i}`} className="fn-marquee-item">
-                <span className="fn-marquee-dot" />{item}
-              </span>
-            ))
-          ))}
-        </div>
-      </div>
-
-      {/* HOW IT WORKS */}
-      <section className="fn-how">
-        <div className="fn-section-wrap">
-          <div className="fn-how-grid">
-            <div className="fn-how-step">
-              <div className="fn-step-num">01</div>
-              <div className="fn-step-title">Get an invite</div>
-              <div className="fn-step-desc">fentanyl.best is invite only. Get a code from a member or the team and you're in.</div>
-            </div>
-            <div className="fn-how-step">
-              <div className="fn-step-num">02</div>
-              <div className="fn-step-title">Claim your username</div>
-              <div className="fn-step-desc">Pick a username. It's yours forever. Short, clean, and locked to you the moment you register.</div>
-            </div>
-            <div className="fn-how-step">
-              <div className="fn-step-num">03</div>
-              <div className="fn-step-title">Make it yours</div>
-              <div className="fn-step-desc">Customize everything — background, colors, links, music, fonts, badges. Your profile looks like you built it.</div>
-            </div>
-            <div className="fn-how-step">
-              <div className="fn-step-num">04</div>
-              <div className="fn-step-title">Share one link</div>
-              <div className="fn-step-desc">Put it in every bio. One URL. Everything about you — always up to date.</div>
+            <div className="g-pg-links">
+              <div className="g-pg-link g-pg-link-accent">
+                <span>Discord</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+              </div>
+              <div className="g-pg-link">
+                <span>TikTok</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+              </div>
+              <div className="g-pg-link">
+                <span>YouTube</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+              </div>
+              <div className="g-pg-link">
+                <span>Spotify</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FEATURES BENTO */}
-      <section className="fn-bento">
-        <div className="fn-section-wrap">
-          <div className="fn-bento-label">What you get</div>
-          <div className="fn-bento-grid">
+      {/* DIVIDER */}
+      <div className="g-divider-fade" />
 
-            {/* 1 — customize */}
-            <div className="fn-bento-card fn-bento-tall">
-              <div className="fn-bento-head">
-                <div className="fn-bento-icon">✦</div>
-                <h3>Fully customizable</h3>
-              </div>
-              <p>Every detail — your way. Colors, backgrounds, fonts, button styles. Build something that actually looks like you.</p>
-              <div className="fn-color-swatches">
-                {['#e8ff47','#7857ff','#f472b6','#34d399','#f97316','#60a5fa'].map(c => (
-                  <div key={c} className="fn-swatch" style={{ background: c }} />
-                ))}
-              </div>
-              <div className="fn-btn-styles">
-                <div className="fn-btn-demo fn-btn-filled">Filled</div>
-                <div className="fn-btn-demo fn-btn-outlined">Outline</div>
-                <div className="fn-btn-demo fn-btn-glassy">Glass</div>
-              </div>
-            </div>
+      {/* FEATURES */}
+      <section className="g-features" id="features">
+        <div className="g-section-wrap">
+          <div className="g-section-head">
+            <h2 className="g-section-h2">Built for how you actually live online.</h2>
+            <p className="g-section-sub">One page. Every link. Fully yours.</p>
+          </div>
 
-            {/* 2 — links */}
-            <div className="fn-bento-card">
-              <div className="fn-bento-head">
-                <div className="fn-bento-icon">⊕</div>
-                <h3>All your socials</h3>
-              </div>
-              <p>Every platform. One place. Add Discord, TikTok, YouTube, X, Instagram, Twitch, Spotify, GitHub — or any custom URL.</p>
-              <div className="fn-platforms">
-                {['D','T','▶','X','♪','Gh'].map((s, i) => (
-                  <div key={i} className="fn-platform-chip">{s}</div>
-                ))}
-              </div>
-            </div>
+          <div className="g-cards">
 
-            {/* 3 — music */}
-            <div className="fn-bento-card">
-              <div className="fn-bento-head">
-                <div className="fn-bento-icon">♫</div>
-                <h3>Music player</h3>
-              </div>
-              <p>Embed a Spotify track, YouTube video, or SoundCloud right on your profile.</p>
-              <div className="fn-mini-player">
-                <div className="fn-mini-art" />
-                <div className="fn-mini-info">
-                  <div className="fn-mini-track">Back to Me</div>
-                  <div className="fn-mini-artist">The Marías</div>
-                  <div className="fn-mini-bar"><div className="fn-mini-fill" /></div>
+            {/* Card 1 — Customize */}
+            <div className="g-card g-card-lg">
+              <div className="g-card-label">Appearance</div>
+              <h3 className="g-card-title">Make it look exactly like you</h3>
+              <p className="g-card-body">Background type, accent color, button style, font, music player — every pixel under your control.</p>
+              <div className="g-customize-demo">
+                <div className="g-demo-colors">
+                  {['#a78bfa','#60a5fa','#f472b6','#34d399','#fbbf24','#f87171'].map(c => (
+                    <div key={c} className="g-demo-dot" style={{ background: c }} />
+                  ))}
+                </div>
+                <div className="g-demo-btns">
+                  <div className="g-demo-btn" style={{ background: '#a78bfa', color: '#fff', border: 'none' }}>Filled</div>
+                  <div className="g-demo-btn" style={{ border: '1.5px solid rgba(167,139,250,0.5)', color: 'rgba(167,139,250,0.9)' }}>Outline</div>
+                  <div className="g-demo-btn" style={{ background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.12)' }}>Glass</div>
                 </div>
               </div>
             </div>
 
-            {/* 4 — badges */}
-            <div className="fn-bento-card">
-              <div className="fn-bento-head">
-                <div className="fn-bento-icon">◈</div>
-                <h3>Badges</h3>
-              </div>
-              <p>Show off who you are. OG, Founder, Gamer, Verified — pick the ones that fit.</p>
-              <div className="fn-badge-row">
-                {['🔥 OG', '👑 Founder', '🎮 Gamer', '⭐ Star', '💜 Donor', '🏆 Legend'].map(b => (
-                  <span key={b} className="fn-badge-chip">{b}</span>
+            {/* Card 2 — Links */}
+            <div className="g-card">
+              <div className="g-card-label">Links</div>
+              <h3 className="g-card-title">All your platforms, one place</h3>
+              <p className="g-card-body">Discord, TikTok, YouTube, X, Instagram, Twitch, Spotify, GitHub — plus custom URLs.</p>
+              <div className="g-link-chips">
+                {['Discord','TikTok','YouTube','X','Instagram','Spotify','Twitch','GitHub'].map(p => (
+                  <span key={p} className="g-chip">{p}</span>
                 ))}
               </div>
             </div>
 
-            {/* 5 — views */}
-            <div className="fn-bento-card fn-bento-accent">
-              <div className="fn-bento-head">
-                <div className="fn-bento-icon">↗</div>
-                <h3>View counter</h3>
+            {/* Card 3 — Music */}
+            <div className="g-card">
+              <div className="g-card-label">Music</div>
+              <h3 className="g-card-title">Let them hear what you're about</h3>
+              <p className="g-card-body">Embed Spotify, YouTube, or SoundCloud directly on your profile.</p>
+              <div className="g-player">
+                <div className="g-player-art" />
+                <div className="g-player-info">
+                  <div className="g-player-track">Back to Me</div>
+                  <div className="g-player-artist">The Marías</div>
+                  <div className="g-player-bar"><div className="g-player-prog" /></div>
+                </div>
+                <div className="g-player-play">▶</div>
               </div>
-              <p>Real-time view count on every profile. Always on, zero setup.</p>
-              <div className="fn-views-big">1,247</div>
-              <div className="fn-views-sub">profile views this week</div>
             </div>
 
-            {/* 6 — invite only */}
-            <div className="fn-bento-card fn-bento-wide">
-              <div className="fn-bento-head">
-                <div className="fn-bento-icon">⊘</div>
-                <h3>Invite only — by design</h3>
+            {/* Card 4 — Badges */}
+            <div className="g-card">
+              <div className="g-card-label">Identity</div>
+              <h3 className="g-card-title">Badges that mean something</h3>
+              <p className="g-card-body">OG, Founder, Gamer, Verified — show the world who you are.</p>
+              <div className="g-badges">
+                {['🔥 OG','👑 Founder','🎮 Gamer','⭐ Star','💜 Donor','🏆 Legend'].map(b => (
+                  <span key={b} className="g-badge">{b}</span>
+                ))}
               </div>
-              <p>We keep it exclusive on purpose. An invite code gets you in. Admin tools let you generate codes, blacklist usernames, and manage who's here.</p>
-              <div className="fn-invite-box">
-                <span className="fn-invite-code">XXXX-XXXX-XXXX</span>
-                <span className="fn-invite-tag">Invite code</span>
+            </div>
+
+            {/* Card 5 — Views + Invite */}
+            <div className="g-card g-card-accent">
+              <div className="g-card-label">Analytics</div>
+              <h3 className="g-card-title">See who's showing up</h3>
+              <p className="g-card-body">Real-time view counter, always on.</p>
+              <div className="g-views-number">1,247</div>
+              <div className="g-views-sub">views this week</div>
+            </div>
+
+            <div className="g-card">
+              <div className="g-card-label">Access</div>
+              <h3 className="g-card-title">Invite only — by design</h3>
+              <p className="g-card-body">Every member is here because someone vouched for them. It keeps the community worth being part of.</p>
+              <div className="g-invite-display">
+                <span className="g-invite-code">XXXX-XXXX-XXXX</span>
               </div>
             </div>
 
@@ -205,57 +181,83 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* NUMBERS */}
-      <section className="fn-numbers">
-        <div className="fn-section-wrap">
-          <div className="fn-numbers-grid">
-            <div className="fn-number">
-              <div className="fn-number-val">10<span>+</span></div>
-              <div className="fn-number-label">Platforms supported</div>
-            </div>
-            <div className="fn-number">
-              <div className="fn-number-val">99.9<span>%</span></div>
-              <div className="fn-number-label">Uptime guaranteed</div>
-            </div>
-            <div className="fn-number">
-              <div className="fn-number-val">&lt;2<span>min</span></div>
-              <div className="fn-number-label">From invite to live</div>
-            </div>
-            <div className="fn-number">
-              <div className="fn-number-val">∞</div>
-              <div className="fn-number-label">Customization options</div>
-            </div>
+      {/* HOW */}
+      <section className="g-how" id="how">
+        <div className="g-section-wrap">
+          <div className="g-section-head">
+            <h2 className="g-section-h2">Up in minutes.</h2>
+            <p className="g-section-sub">No friction. No setup hell. Just your link, live.</p>
+          </div>
+          <div className="g-steps">
+            {[
+              { n:'01', title:'Get an invite', body:'Someone sends you a code. That\'s your ticket in.' },
+              { n:'02', title:'Pick your name', body:'Your username is yours forever the moment you register it.' },
+              { n:'03', title:'Build your profile', body:'Drop in your links, pick your colors, add your music. Takes 3 minutes.' },
+              { n:'04', title:'Share one link', body:'Put it in every bio. It\'s always current. Always live.' },
+            ].map((s, i) => (
+              <div key={s.n} className="g-step">
+                <div className="g-step-num">{s.n}</div>
+                <div className="g-step-line" style={{ opacity: i === 3 ? 0 : 1 }} />
+                <div className="g-step-content">
+                  <div className="g-step-title">{s.title}</div>
+                  <div className="g-step-body">{s.body}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="fn-final-cta">
-        <div className="fn-section-wrap">
-          <div className="fn-final-box">
-            <div className="fn-final-glow" />
-            <h2 className="fn-final-h2">
-              One link.<br />
-              Make it count.
-            </h2>
-            <p className="fn-final-sub">Grab an invite code and claim your spot on fentanyl.best.</p>
-            <Link href="/signup" className="fn-cta-main fn-cta-xl">Get your link →</Link>
+      {/* STATS */}
+      <section className="g-stats">
+        <div className="g-section-wrap">
+          <div className="g-stats-glass">
+            {[
+              { v: '10+',    l: 'Social platforms' },
+              { v: '99.9%',  l: 'Uptime' },
+              { v: '<2min',  l: 'Setup time' },
+              { v: 'Free',   l: 'Always' },
+            ].map((s, i, arr) => (
+              <>
+                <div key={s.v} className="g-stat">
+                  <div className="g-stat-val">{s.v}</div>
+                  <div className="g-stat-label">{s.l}</div>
+                </div>
+                {i < arr.length - 1 && <div key={`d${i}`} className="g-stat-sep" />}
+              </>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="g-cta">
+        <div className="g-section-wrap">
+          <div className="g-cta-glass">
+            <div className="g-cta-glow" />
+            <h2 className="g-cta-h2">Your link is waiting.</h2>
+            <p className="g-cta-sub">Get an invite and claim your spot on fentanyl.best.</p>
+            <Link href="/signup" className="g-btn-primary g-btn-lg">
+              Get started
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </Link>
+            <p className="g-cta-note">Invite only — it stays that way.</p>
           </div>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="fn-footer">
-        <div className="fn-section-wrap">
-          <div className="fn-footer-row">
-            <Link href="/" className="fn-logo fn-footer-logo">fentanyl<span>.best</span></Link>
-            <div className="fn-footer-links">
-              <Link href="/signup" className="fn-footer-link">Sign up</Link>
-              <Link href="/login" className="fn-footer-link">Sign in</Link>
-              <a href="#" className="fn-footer-link">Terms</a>
-              <a href="#" className="fn-footer-link">Privacy</a>
+      <footer className="g-footer">
+        <div className="g-section-wrap">
+          <div className="g-footer-row">
+            <Link href="/" className="g-logo g-footer-logo">fentanyl</Link>
+            <div className="g-footer-links">
+              <Link href="/signup" className="g-footer-link">Sign up</Link>
+              <Link href="/login" className="g-footer-link">Sign in</Link>
+              <a href="#" className="g-footer-link">Terms</a>
+              <a href="#" className="g-footer-link">Privacy</a>
             </div>
-            <div className="fn-footer-copy">© 2025 fentanyl.best</div>
+            <span className="g-footer-copy">© 2025 fentanyl.best</span>
           </div>
         </div>
       </footer>
