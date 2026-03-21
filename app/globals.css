@@ -163,7 +163,7 @@ input, textarea { font-family: inherit; }
   background: radial-gradient(ellipse 80% 50% at 50% 30%, rgba(163,151,221,0.1) 0%, transparent 70%);
 }
 .landing-grid {
-  position: absolute; inset: 0;
+  position: absolute; inset: 0; pointer-events: none;
   background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
   background-size: 48px 48px;
