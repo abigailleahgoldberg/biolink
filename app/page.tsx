@@ -35,7 +35,7 @@ export default function Landing() {
         </div>
 
         <div className="land-examples">
-          {['fentanyl.best/zj71', 'fentanyl.best/ariadne', 'fentanyl.best/yourname'].map(u => (
+          {['yourdomain.gg/zj71', 'yourdomain.gg/starglaze', 'yourdomain.gg/username'].map(u => (
             <span key={u} className="land-example">{u}</span>
           ))}
         </div>

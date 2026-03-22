@@ -29,7 +29,8 @@ button { font-family:inherit; cursor:pointer; border:none; background:none; }
 /* ── Landing page ── */
 .land {
   min-height: 100vh;
-  background: #0a090f;
+  background: #0d0c14;
+  background-image: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(100,70,200,0.12) 0%, transparent 65%);
   display: flex;
   flex-direction: column;
 }
@@ -74,7 +75,7 @@ button { font-family:inherit; cursor:pointer; border:none; background:none; }
   color: #f0eeff;
 }
 .land-h1-purple {
-  color: #b09ff0;
+  color: #c4b5fd;
 }
 .land-p {
   font-size: 17px; color: rgba(220,215,255,0.5); font-weight: 300; line-height: 1.7;
