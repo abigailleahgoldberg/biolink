@@ -52,9 +52,12 @@ export default function Signup() {
     })
     if (profileErr) { setLoading(false); return setErr('Failed to create profile.') }
 
-    await supabase.from('invite_codes')
-      .update({ used_by: auth.user.id, used_at: new Date().toISOString() })
-      .eq('code', invite.trim().toUpperCase())
+    // Mark invite used — atomic server-side, strictly one-time
+    await fetch('/api/use-invite', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: invite.trim().toUpperCase(), userId: auth.user.id }),
+    })
 
     setLoading(false)
     router.push('/dashboard')

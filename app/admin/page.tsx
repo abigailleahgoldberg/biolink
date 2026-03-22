@@ -39,9 +39,15 @@ export default function Admin() {
   async function generateInvite() {
     setGenerating(true)
     const { data: { user } } = await supabase.auth.getUser()
-    const code = Array.from({ length: 12 }, () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'[Math.floor(Math.random() * 36)]).join('')
-    const formatted = `${code.slice(0,4)}-${code.slice(4,8)}-${code.slice(8,12)}`
-    await supabase.from('invite_codes').insert({ code: formatted, created_by: user?.id })
+    const res = await fetch('/api/admin/generate-invite', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: user?.id }),
+    })
+    if (!res.ok) {
+      const { error } = await res.json()
+      alert(error || 'Failed to generate invite')
+    }
     await loadAll()
     setGenerating(false)
   }
