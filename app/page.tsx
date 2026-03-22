@@ -31,7 +31,7 @@ export default function Landing() {
         <div className="landing-grid" />
 
         <div className="landing-logo-hero">
-          <Image src="/needle-logo.png" alt="fentanyl.best logo" width={120} height={120} style={{ objectFit: 'contain' }} />
+          <Image src="/needle-logo.png" alt="fentanyl.best logo" width={220} height={220} style={{ objectFit: 'contain' }} />
         </div>
 
         <div className="landing-badge">
