@@ -21,6 +21,7 @@ export type Profile = {
   music_url: string
   music_type: 'spotify' | 'youtube' | 'soundcloud' | null
   views: number
+  view_count: number
   is_admin: boolean
   created_at: string
 }
