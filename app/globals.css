@@ -29,7 +29,69 @@ a { color: inherit; text-decoration: none; }
 button { font-family: inherit; }
 input, textarea { font-family: inherit; }
 
-/* ── Frosted glass nav ── */
+/* ── greed.best-style nav ── */
+.gn {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  height: 50px; display: flex; align-items: center;
+  /* Pure transparent — no background, no blur, just floating text */
+  background: transparent;
+}
+.gn-inner {
+  width: 100%; padding: 0 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.gn-left, .gn-right { display: flex; align-items: center; gap: 2px; }
+
+/* Avatar logo */
+.gn-avatar { display: flex; align-items: center; margin-right: 6px; }
+.gn-av-img {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: linear-gradient(135deg, #6d4fc2, #a78bfa);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; color: #fff;
+}
+
+/* Nav items — floating text, exactly like greed.best */
+.gn-item {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 12px; border-radius: 6px;
+  font-size: 13px; font-weight: 500;
+  color: rgba(240,238,255,0.65);
+  transition: color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+.gn-item:hover { color: rgba(240,238,255,0.92); background: rgba(255,255,255,0.05); }
+.gn-item svg { opacity: 0.55; flex-shrink: 0; }
+
+/* User chip */
+.gn-user {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 4px 10px; border-radius: 8px;
+  font-size: 13px; font-weight: 500; color: rgba(240,238,255,0.75);
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+  transition: all 0.15s;
+}
+.gn-user:hover { background: rgba(255,255,255,0.09); }
+.gn-user-av {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: linear-gradient(135deg, #7c5cfa, #c4b5fd);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; color: #fff; flex-shrink: 0;
+}
+
+/* Discord icon chip */
+.gn-discord {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 8px;
+  background: rgba(88,101,242,0.2); border: 1px solid rgba(88,101,242,0.25);
+  color: rgba(200,195,255,0.8); transition: all 0.15s;
+}
+.gn-discord:hover { background: rgba(88,101,242,0.3); border-color: rgba(88,101,242,0.4); }
+
+/* Push hero below nav */
+.landing-hero { padding-top: 50px !important; }
+
+/* Frosted glass nav ── */
 .glass-nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
   height: 52px;
