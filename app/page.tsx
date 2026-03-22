@@ -2,7 +2,29 @@ import Link from 'next/link'
 
 export default function Landing() {
   return (
-    <main className="landing-hero">
+    <>
+      {/* ── CENTERED GLASS NAV ── */}
+      <header className="cnav-host">
+        <nav className="cnav">
+          <Link href="/" className="cnav-logo">
+            <div className="cnav-logo-mark">f</div>
+            <span>fentanyl<em>.best</em></span>
+          </Link>
+
+          <div className="cnav-links">
+            <Link href="#" className="cnav-link">Features</Link>
+            <Link href="#" className="cnav-link">Profiles</Link>
+            <Link href="#" className="cnav-link">Premium</Link>
+          </div>
+
+          <div className="cnav-actions">
+            <Link href="/login" className="cnav-signin">Sign in</Link>
+            <Link href="/signup" className="cnav-cta">Get started</Link>
+          </div>
+        </nav>
+      </header>
+
+    <main className="landing-hero" style={{ paddingTop: '72px' }}>
       <div className="landing-bg" />
       <div className="landing-grid" />
 
@@ -35,5 +57,6 @@ export default function Landing() {
         ))}
       </div>
     </main>
+    </>
   )
 }
