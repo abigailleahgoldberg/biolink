@@ -63,8 +63,8 @@ input,textarea,select { font-family:inherit; }
   font-size:12px; font-weight:900; color:#fff;
   box-shadow:0 0 12px rgba(163,151,221,0.4);
 }
-.cnav-logo span { font-size:14px; font-weight:700; letter-spacing:-.4px; color:var(--mid); }
-.cnav-logo em { font-style:normal; color:var(--light); }
+.cnav-logo-text { font-size:14px; font-weight:700; letter-spacing:-.4px; color:#FEFEFF; }
+.cnav-logo-text em { font-style:normal; color:var(--light); }
 .cnav-links {
   display:flex; align-items:center; gap:2px;
   position:absolute; left:50%; transform:translateX(-50%);

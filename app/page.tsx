@@ -8,7 +8,7 @@ export default function Landing() {
         <nav className="cnav">
           <Link href="/" className="cnav-logo">
             <div className="cnav-logo-mark">f</div>
-            <span>fentanyl<em>.best</em></span>
+            <span className="cnav-logo-text">fentanyl<em>.best</em></span>
           </Link>
           <div className="cnav-links">
             <Link href="#" className="cnav-link">Features</Link>
@@ -29,24 +29,24 @@ export default function Landing() {
 
         <div className="landing-badge">
           <span className="landing-badge-dot" />
-          Invite Only · Now Open
+          Invite only · now open
         </div>
 
         <h1 className="landing-h1">
           Your link.<br />
-          <em>Your identity.</em>
+          <em>Your vibe.</em>
         </h1>
 
         <p className="landing-p">
-          One link. Everything about you — your socials, your music, your vibe. Fully yours.
+          Stop sending five links. One URL, everything about you — socials, music, whatever you're into. Make it look like you actually built it.
         </p>
 
         <div className="landing-actions">
           <Link href="/signup" className="btn btn-primary" style={{ padding: '14px 36px', fontSize: 15 }}>
-            Get Started
+            Claim your link
           </Link>
           <Link href="/login" className="btn btn-ghost" style={{ padding: '14px 28px', fontSize: 15 }}>
-            Sign In
+            Sign in
           </Link>
         </div>
 
