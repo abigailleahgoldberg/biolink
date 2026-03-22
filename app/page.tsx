@@ -8,9 +8,7 @@ export default function Landing() {
       <header className="cnav-host">
         <nav className="cnav">
           <Link href="/" className="cnav-logo">
-            <div className="cnav-logo-mark">
-              <Image src="/needle-logo.png" alt="fentanyl.best" width={18} height={18} style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
-            </div>
+            <Image src="/needle-logo.png" alt="fentanyl.best" width={28} height={28} style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 6px rgba(163,151,221,0.6))' }} />
             <span className="cnav-logo-text">fentanyl<em>.best</em></span>
           </Link>
           <div className="cnav-links">
@@ -29,10 +27,6 @@ export default function Landing() {
       <main className="landing-hero">
         <div className="landing-bg" />
         <div className="landing-grid" />
-
-        <div className="landing-logo-hero">
-          <Image src="/needle-logo.png" alt="fentanyl.best logo" width={220} height={220} style={{ objectFit: 'contain' }} />
-        </div>
 
         <div className="landing-badge">
           <span className="landing-badge-dot" />
