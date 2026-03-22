@@ -26,12 +26,78 @@ body {
 a { color:inherit; text-decoration:none; }
 button { font-family:inherit; cursor:pointer; border:none; background:none; }
 
-/* ── Background (landing only — applied via .fn-bg-glow) ── */
-.fn-bg-glow {
-  position:fixed; inset:0; pointer-events:none; z-index:0;
-  background:
-    radial-gradient(ellipse 100% 60% at 50% 0%, rgba(120,80,240,0.13) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(90,60,200,0.07) 0%, transparent 55%);
+/* ── Landing page ── */
+.land {
+  min-height: 100vh;
+  background: #0a090f;
+  display: flex;
+  flex-direction: column;
+}
+.land-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 58px; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px;
+  background: transparent;
+}
+.land-logo { font-size: 15px; font-weight: 800; letter-spacing: -.5px; color: #f0eeff; }
+.land-logo span { color: #9575e0; }
+.land-nav-right { display: flex; align-items: center; gap: 6px; }
+.land-nav-a {
+  font-size: 13px; font-weight: 500; color: rgba(220,215,255,0.5);
+  padding: 7px 14px; border-radius: 8px; transition: color .15s;
+}
+.land-nav-a:hover { color: #f0eeff; }
+
+.land-hero {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 120px 32px 80px;
+}
+.land-badge {
+  display: inline-flex; align-items: center; gap: 8px; margin-bottom: 36px;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(200,185,255,0.7);
+  background: rgba(120,90,220,0.12);
+  border: 1px solid rgba(140,110,240,0.2);
+  padding: 6px 16px; border-radius: 100px;
+}
+.land-badge-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(180,160,255,0.8);
+  animation: lpulse 2s ease-in-out infinite;
+}
+@keyframes lpulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.land-h1 {
+  font-size: clamp(64px, 10vw, 120px); font-weight: 900;
+  letter-spacing: -4px; line-height: .93; margin-bottom: 24px;
+  color: #f0eeff;
+}
+.land-h1-purple {
+  color: #b09ff0;
+}
+.land-p {
+  font-size: 17px; color: rgba(220,215,255,0.5); font-weight: 300; line-height: 1.7;
+  margin-bottom: 40px;
+}
+.land-btns { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
+.land-btn-primary {
+  padding: 13px 32px; border-radius: 10px; font-size: 14px; font-weight: 600;
+  background: rgba(120,90,210,0.6); color: #f0eeff; border: 1px solid rgba(140,110,240,0.4);
+  transition: all .18s; backdrop-filter: blur(12px);
+}
+.land-btn-primary:hover { background: rgba(130,100,220,0.75); transform: translateY(-1px); }
+.land-btn-outline {
+  padding: 13px 28px; border-radius: 10px; font-size: 14px; font-weight: 500;
+  background: rgba(255,255,255,0.04); color: rgba(220,215,255,0.6);
+  border: 1px solid rgba(255,255,255,0.1); transition: all .18s;
+}
+.land-btn-outline:hover { color: #f0eeff; border-color: rgba(255,255,255,0.18); }
+.land-examples { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.land-example {
+  font-size: 12px; color: rgba(200,195,255,0.3); padding: 5px 14px;
+  border-radius: 7px; background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
 }
 
 /* ── Nav ── */
