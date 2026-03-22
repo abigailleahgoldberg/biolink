@@ -33,12 +33,11 @@ export default function Landing() {
         </div>
 
         <h1 className="landing-h1">
-          Your link.<br />
-          <em>Your vibe.</em>
+          <em>fentanyl.best</em>
         </h1>
 
         <p className="landing-p">
-          Stop sending five links. One URL, everything about you — socials, music, whatever you're into. Make it look like you actually built it.
+          guns.lol had a good run. this is what comes next.
         </p>
 
         <div className="landing-actions">
