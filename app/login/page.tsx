@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
@@ -15,32 +16,55 @@ export default function Login() {
     setErr(''); setLoading(true)
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     setLoading(false)
-    if (error) return setErr('Invalid email or password.')
+    if (error) return setErr('Wrong email or password.')
     router.push('/dashboard')
   }
 
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="auth-logo">
-          <div className="auth-logo-text">Bio<span>Link</span></div>
-        </div>
+        <Link href="/" className="auth-brand">
+          <Image src="/needle-logo.png" alt="" width={28} height={28} style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 6px rgba(163,151,221,0.5))' }} />
+          <span>fentanyl<em>.best</em></span>
+        </Link>
+
         <h1 className="auth-title">Welcome back.</h1>
-        <p className="auth-sub">Sign in to manage your profile.</p>
+        <p className="auth-sub">Sign in to your profile.</p>
+
         <div className="auth-form">
           <div className="field">
             <label>Email</label>
-            <input className="input" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" onKeyDown={e => e.key === 'Enter' && login()} />
+            <input
+              className="input"
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              onKeyDown={e => e.key === 'Enter' && login()}
+            />
           </div>
           <div className="field">
             <label>Password</label>
-            <input className="input" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" onKeyDown={e => e.key === 'Enter' && login()} />
+            <input
+              className="input"
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              placeholder="••••••••"
+              onKeyDown={e => e.key === 'Enter' && login()}
+            />
           </div>
           {err && <div className="err-msg">{err}</div>}
-          <button className="btn btn-primary btn-full" onClick={login} disabled={loading || !email || !password}>
-            {loading ? 'Signing in...' : 'Sign In'}
+          <button
+            className="btn btn-primary btn-full"
+            style={{ padding: '13px', fontSize: 14 }}
+            onClick={login}
+            disabled={loading || !email || !password}
+          >
+            {loading ? 'Signing in...' : 'Sign in'}
           </button>
         </div>
+
         <div className="auth-footer">
           Don&apos;t have an account? <Link href="/signup">Get an invite</Link>
         </div>

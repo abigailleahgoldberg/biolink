@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { validateUsername } from '@/lib/blacklist'
@@ -24,30 +25,26 @@ export default function Signup() {
       .is('used_by', null)
       .single()
     setLoading(false)
-    if (!data) return setErr('Invalid or already-used invite code.')
+    if (!data) return setErr('That code is invalid or already used.')
     setStep('account')
   }
 
   async function createAccount() {
     setErr(''); setLoading(true)
 
-    // Validate username
     const usernameErr = validateUsername(username)
     if (usernameErr) { setLoading(false); return setErr(usernameErr) }
 
-    // Check username taken
     const { data: existing } = await supabase
       .from('profiles')
       .select('id')
       .eq('username', username.toLowerCase())
       .single()
-    if (existing) { setLoading(false); return setErr('Username already taken.') }
+    if (existing) { setLoading(false); return setErr('That username is taken.') }
 
-    // Create auth account
     const { data: auth, error: authErr } = await supabase.auth.signUp({ email, password })
     if (authErr || !auth.user) { setLoading(false); return setErr(authErr?.message || 'Signup failed.') }
 
-    // Create profile
     const { error: profileErr } = await supabase.from('profiles').insert({
       id: auth.user.id,
       username: username.toLowerCase(),
@@ -55,7 +52,6 @@ export default function Signup() {
     })
     if (profileErr) { setLoading(false); return setErr('Failed to create profile.') }
 
-    // Mark invite as used
     await supabase.from('invite_codes')
       .update({ used_by: auth.user.id, used_at: new Date().toISOString() })
       .eq('code', invite.trim().toUpperCase())
@@ -67,14 +63,15 @@ export default function Signup() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="auth-logo">
-          <div className="auth-logo-text">Bio<span>Link</span></div>
-        </div>
+        <Link href="/" className="auth-brand">
+          <Image src="/needle-logo.png" alt="" width={28} height={28} style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 6px rgba(163,151,221,0.5))' }} />
+          <span>fentanyl<em>.best</em></span>
+        </Link>
 
         {step === 'invite' ? (
           <>
-            <h1 className="auth-title">You need an invite.</h1>
-            <p className="auth-sub">This platform is invite-only. Enter your code to continue.</p>
+            <h1 className="auth-title">Got an invite?</h1>
+            <p className="auth-sub">This is invite-only. Drop your code below.</p>
             <div className="auth-form">
               <div className="field">
                 <label>Invite Code</label>
@@ -82,21 +79,26 @@ export default function Signup() {
                   className="input"
                   value={invite}
                   onChange={e => setInvite(e.target.value.toUpperCase())}
-                  placeholder="XXXX-XXXX-XXXX"
-                  style={{ textTransform: 'uppercase', letterSpacing: 2, fontFamily: 'monospace', fontSize: 16, textAlign: 'center' }}
+                  placeholder="FENT-XXXX-0000"
+                  style={{ textTransform: 'uppercase', letterSpacing: 3, fontFamily: 'monospace', fontSize: 15, textAlign: 'center' }}
                   onKeyDown={e => e.key === 'Enter' && checkInvite()}
                 />
               </div>
               {err && <div className="err-msg">{err}</div>}
-              <button className="btn btn-primary btn-full" onClick={checkInvite} disabled={loading || !invite.trim()}>
+              <button
+                className="btn btn-primary btn-full"
+                style={{ padding: '13px', fontSize: 14 }}
+                onClick={checkInvite}
+                disabled={loading || !invite.trim()}
+              >
                 {loading ? 'Checking...' : 'Continue'}
               </button>
             </div>
           </>
         ) : (
           <>
-            <h1 className="auth-title">Create your profile.</h1>
-            <p className="auth-sub">Pick your username and set up your account.</p>
+            <h1 className="auth-title">Claim your link.</h1>
+            <p className="auth-sub">Pick your username. This is your identity.</p>
             <div className="auth-form">
               <div className="field">
                 <label>Username</label>
@@ -107,21 +109,40 @@ export default function Signup() {
                   placeholder="yourname"
                   maxLength={20}
                 />
-                {username && <span style={{ fontSize: 11, color: 'var(--muted)' }}>
-                  yourdomain.gg/{username.toLowerCase()}
-                </span>}
+                {username && (
+                  <span style={{ fontSize: 11, color: 'var(--accent)', marginTop: 2 }}>
+                    fentanyl.best/{username.toLowerCase()}
+                  </span>
+                )}
               </div>
               <div className="field">
                 <label>Email</label>
-                <input className="input" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" />
+                <input
+                  className="input"
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                />
               </div>
               <div className="field">
                 <label>Password</label>
-                <input className="input" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="8+ characters" />
+                <input
+                  className="input"
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder="8+ characters"
+                />
               </div>
               {err && <div className="err-msg">{err}</div>}
-              <button className="btn btn-primary btn-full" onClick={createAccount} disabled={loading || !username || !email || !password}>
-                {loading ? 'Creating account...' : 'Create Account'}
+              <button
+                className="btn btn-primary btn-full"
+                style={{ padding: '13px', fontSize: 14 }}
+                onClick={createAccount}
+                disabled={loading || !username || !email || !password}
+              >
+                {loading ? 'Creating...' : 'Create account'}
               </button>
             </div>
           </>
