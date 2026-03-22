@@ -42,59 +42,74 @@ input, textarea { font-family: inherit; }
   pointer-events: auto;
 }
 
-/* Glow behind the card — from greed.best */
+/* Glow behind the card */
 .gn-outer-glow {
-  position: absolute; inset: 0;
-  background: linear-gradient(90deg, rgba(163,151,221,0.08) 0%, transparent 40%, transparent 60%, rgba(163,151,221,0.08) 100%);
-  filter: blur(24px); border-radius: 18px; pointer-events: none;
+  position: absolute; inset: -2px;
+  background: linear-gradient(90deg,
+    rgba(163,151,221,0.12) 0%,
+    rgba(124,92,250,0.06) 30%,
+    rgba(124,92,250,0.06) 70%,
+    rgba(163,151,221,0.12) 100%
+  );
+  filter: blur(20px); border-radius: 20px; pointer-events: none;
 }
 
-/* The floating card itself */
+/* The floating card — deep glass */
 .gn-card {
   position: relative;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 12px;
-  background: rgba(0,0,0,0.2);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255,255,255,0.05);
+  padding: 7px 10px;
+  /* True glass: very transparent, strong blur */
+  background: rgba(10, 8, 22, 0.45);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  /* Layered borders: top highlight + subtle accent glow */
+  border: 1px solid rgba(255,255,255,0.07);
+  border-top: 1px solid rgba(255,255,255,0.12);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.04) inset;
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.5),
+    0 1px 0 rgba(255,255,255,0.06) inset,
+    0 0 0 1px rgba(163,151,221,0.06);
 }
 
 .gn-left, .gn-right { display: flex; align-items: center; gap: 2px; }
 
 /* Logo */
 .gn-logo-wrap {
-  position: relative; flex-shrink: 0; margin-right: 6px; display: flex;
+  position: relative; flex-shrink: 0; margin-right: 8px; display: flex;
 }
 .gn-logo-glow {
   position: absolute; inset: 0; border-radius: 10px;
-  background: rgba(163,151,221,0.2); filter: blur(8px);
+  background: rgba(163,151,221,0.25); filter: blur(10px);
   transition: background 0.4s; pointer-events: none;
 }
-.gn-logo-wrap:hover .gn-logo-glow { background: rgba(163,151,221,0.35); }
+.gn-logo-wrap:hover .gn-logo-glow { background: rgba(163,151,221,0.45); }
 .gn-logo {
   position: relative; width: 28px; height: 28px; border-radius: 10px;
-  background: linear-gradient(135deg, #6d4fc2, #a78bfa);
+  background: linear-gradient(135deg, #5c3db5, #9d7dff);
   display: flex; align-items: center; justify-content: center;
-  font-size: 14px; font-weight: 800; color: #fff;
-  transition: opacity 0.2s;
+  font-size: 13px; font-weight: 900; color: #fff; letter-spacing: -0.5px;
+  box-shadow: 0 0 12px rgba(157,125,255,0.3);
+  transition: all 0.2s;
 }
-.gn-logo-wrap:hover .gn-logo { opacity: 0.9; }
+.gn-logo-wrap:hover .gn-logo { opacity: 0.88; transform: scale(0.97); }
 
-/* Nav links — exact greed style */
+/* Nav links */
 .gn-links { display: flex; align-items: center; gap: 0; }
 .gn-link {
-  position: relative; display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 14px; margin: -4px 0;
+  position: relative; display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 12px; margin: -3px 0;
   font-size: 13px; font-weight: 500;
-  color: rgba(255,255,255,0.7);
-  border-radius: 8px; transition: color 0.2s, background 0.2s;
+  color: rgba(220,215,255,0.55);
+  border-radius: 8px; transition: color 0.15s, background 0.15s;
   white-space: nowrap;
 }
-.gn-link:hover { color: var(--light); background: rgba(255,255,255,0.08); }
-.gn-icon { color: rgba(163,151,221,0.8); flex-shrink: 0; }
+.gn-link:hover {
+  color: rgba(220,215,255,0.95);
+  background: rgba(163,151,221,0.08);
+}
+.gn-icon { color: rgba(163,151,221,0.65); flex-shrink: 0; }
 
 /* Divider — thin gradient like greed */
 .gn-divider {
@@ -105,30 +120,39 @@ input, textarea { font-family: inherit; }
 /* User chip */
 .gn-user {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 10px; margin: -4px 0;
-  border-radius: 8px; transition: background 0.2s;
+  padding: 5px 10px; margin: -2px 0;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.07);
+  transition: all 0.15s;
 }
-.gn-user:hover { background: rgba(255,255,255,0.08); }
+.gn-user:hover { background: rgba(163,151,221,0.1); border-color: rgba(163,151,221,0.18); }
 .gn-user-av {
-  width: 20px; height: 20px; border-radius: 6px;
-  background: linear-gradient(135deg, #7c5cfa, #c4b5fd);
+  width: 20px; height: 20px; border-radius: 5px;
+  background: linear-gradient(135deg, #6d4fc2, #c4b5fd);
   display: flex; align-items: center; justify-content: center;
   font-size: 10px; font-weight: 800; color: #fff; flex-shrink: 0;
 }
-.gn-user span { font-size: 13px; font-weight: 500; color: #fff; }
+.gn-user span { font-size: 13px; font-weight: 500; color: rgba(220,215,255,0.85); }
 
-/* Discord button — dark with accent border, like greed */
+/* Discord / invite button */
 .gn-discord-btn {
   position: relative; display: inline-flex; align-items: center; justify-content: center;
-  padding: 8px 10px; margin: -4px 0;
-  background: rgba(0,0,0,0.2); border-radius: 8px;
-  border: 1px solid rgba(163,151,221,0.2);
-  color: rgba(255,255,255,0.85);
-  transition: all 0.2s;
+  padding: 5px 10px; margin: -2px 0;
+  background: rgba(163,151,221,0.1);
+  border: 1px solid rgba(163,151,221,0.18);
+  border-radius: 8px;
+  color: rgba(220,215,255,0.8);
+  transition: all 0.18s;
 }
-.gn-discord-btn:hover { background: rgba(0,0,0,0.3); border-color: rgba(163,151,221,0.35); }
+.gn-discord-btn:hover {
+  background: rgba(163,151,221,0.18);
+  border-color: rgba(163,151,221,0.32);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(163,151,221,0.15);
+}
 .gn-discord-btn svg { transition: transform 0.2s; }
-.gn-discord-btn:hover svg { transform: scale(1.1); }
+.gn-discord-btn:hover svg { transform: scale(1.08); }
 
 /* Mobile */
 @media (max-width: 768px) {
