@@ -2,43 +2,37 @@ import Link from 'next/link'
 
 export default function Landing() {
   return (
-    <main className="land">
-      {/* NAV */}
-      <nav className="land-nav">
-        <Link href="/" className="land-logo">fentanyl<span>.best</span></Link>
-        <div className="land-nav-right">
-          <Link href="/login" className="land-nav-a">Sign In</Link>
-          <Link href="/signup" className="land-nav-a">Get Started</Link>
-        </div>
-      </nav>
+    <main className="landing-hero">
+      <div className="landing-bg" />
+      <div className="landing-grid" />
 
-      {/* HERO */}
-      <div className="land-hero">
-        <div className="land-badge">
-          <span className="land-badge-dot" />
-          Invite Only · Now Open
-        </div>
+      <div className="landing-badge">
+        <span className="landing-badge-dot" />
+        Invite Only · Now Open
+      </div>
 
-        <h1 className="land-h1">
-          Your link.<br />
-          <span className="land-h1-purple">Your identity.</span>
-        </h1>
+      <h1 className="landing-h1">
+        Your link.<br />
+        <em>Your identity.</em>
+      </h1>
 
-        <p className="land-p">
-          One link. Everything about you — your socials, your<br />
-          music, your vibe. Fully yours.
-        </p>
+      <p className="landing-p">
+        One link. Everything about you — your socials, your music, your vibe. Fully yours.
+      </p>
 
-        <div className="land-btns">
-          <Link href="/signup" className="land-btn-primary">Get Started</Link>
-          <Link href="/login" className="land-btn-outline">Sign In</Link>
-        </div>
+      <div className="landing-actions">
+        <Link href="/signup" className="btn btn-primary" style={{ padding: '14px 36px', fontSize: 15 }}>
+          Get Started
+        </Link>
+        <Link href="/login" className="btn btn-ghost" style={{ padding: '14px 28px', fontSize: 15 }}>
+          Sign In
+        </Link>
+      </div>
 
-        <div className="land-examples">
-          {['yourdomain.gg/zj71', 'yourdomain.gg/starglaze', 'yourdomain.gg/username'].map(u => (
-            <span key={u} className="land-example">{u}</span>
-          ))}
-        </div>
+      <div className="landing-examples" style={{ marginTop: 48 }}>
+        {['yourdomain.gg/zj71', 'yourdomain.gg/starglaze', 'yourdomain.gg/username'].map(ex => (
+          <span key={ex} className="landing-example">{ex}</span>
+        ))}
       </div>
     </main>
   )
