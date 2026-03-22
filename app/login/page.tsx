@@ -24,8 +24,7 @@ export default function Login() {
     <div className="auth-page">
       <div className="auth-card">
         <Link href="/" className="auth-brand">
-          <Image src="/needle-logo.png" alt="" width={28} height={28} style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 6px rgba(163,151,221,0.5))' }} />
-          <span>fentanyl<em>.best</em></span>
+          <Image src="/needle-logo.png" alt="fentanyl.best" width={52} height={52} style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 14px rgba(163,151,221,0.55))' }} />
         </Link>
 
         <h1 className="auth-title">Welcome back.</h1>
