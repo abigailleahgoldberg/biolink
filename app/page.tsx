@@ -3,8 +3,17 @@ import Link from 'next/link'
 export default function Landing() {
   return (
     <main className="land">
-      <div className="land-hero">
+      {/* NAV */}
+      <nav className="land-nav">
+        <Link href="/" className="land-logo">fentanyl<span>.best</span></Link>
+        <div className="land-nav-right">
+          <Link href="/login" className="land-nav-a">Sign In</Link>
+          <Link href="/signup" className="land-nav-a">Get Started</Link>
+        </div>
+      </nav>
 
+      {/* HERO */}
+      <div className="land-hero">
         <div className="land-badge">
           <span className="land-badge-dot" />
           Invite Only · Now Open
@@ -16,20 +25,20 @@ export default function Landing() {
         </h1>
 
         <p className="land-p">
-          One link. Everything about you — your socials, your music, your vibe. Fully yours.
+          One link. Everything about you — your socials, your<br />
+          music, your vibe. Fully yours.
         </p>
 
         <div className="land-btns">
           <Link href="/signup" className="land-btn-primary">Get Started</Link>
-          <Link href="/login" className="land-btn-secondary">Sign In</Link>
+          <Link href="/login" className="land-btn-outline">Sign In</Link>
         </div>
 
-        <div className="land-urls">
+        <div className="land-examples">
           {['yourdomain.gg/zj71', 'yourdomain.gg/starglaze', 'yourdomain.gg/username'].map(u => (
-            <span key={u} className="land-url">{u}</span>
+            <span key={u} className="land-example">{u}</span>
           ))}
         </div>
-
       </div>
     </main>
   )
