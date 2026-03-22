@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Landing() {
   return (
@@ -7,7 +8,9 @@ export default function Landing() {
       <header className="cnav-host">
         <nav className="cnav">
           <Link href="/" className="cnav-logo">
-            <div className="cnav-logo-mark">f</div>
+            <div className="cnav-logo-mark">
+              <Image src="/needle-logo.png" alt="fentanyl.best" width={18} height={18} style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+            </div>
             <span className="cnav-logo-text">fentanyl<em>.best</em></span>
           </Link>
           <div className="cnav-links">
@@ -26,6 +29,10 @@ export default function Landing() {
       <main className="landing-hero">
         <div className="landing-bg" />
         <div className="landing-grid" />
+
+        <div className="landing-logo-hero">
+          <Image src="/needle-logo.png" alt="fentanyl.best logo" width={120} height={120} style={{ objectFit: 'contain' }} />
+        </div>
 
         <div className="landing-badge">
           <span className="landing-badge-dot" />

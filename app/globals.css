@@ -107,6 +107,17 @@ input,textarea,select { font-family:inherit; }
   background-size:48px 48px;
   mask-image:radial-gradient(ellipse 70% 60% at 50% 35%, black, transparent);
 }
+.landing-logo-hero {
+  margin-bottom: 24px;
+  position: relative; z-index: 1;
+  filter: drop-shadow(0 0 32px rgba(163,151,221,0.5)) drop-shadow(0 0 8px rgba(201,189,254,0.3));
+  animation: needle-float 4s ease-in-out infinite;
+}
+@keyframes needle-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
 .landing-badge {
   display:inline-flex; align-items:center; gap:8px; margin-bottom:32px;
   font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
