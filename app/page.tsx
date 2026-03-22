@@ -51,8 +51,12 @@ export default function Landing() {
         </div>
 
         <div className="landing-examples" style={{ marginTop: 48 }}>
-          {['yourdomain.gg/zj71', 'yourdomain.gg/starglaze', 'yourdomain.gg/username'].map(ex => (
-            <span key={ex} className="landing-example">{ex}</span>
+          {[
+            { label: 'fentanyl.best/zj71', href: '/zj71' },
+            { label: 'fentanyl.best/sawyer', href: '/sawyer' },
+            { label: 'fentanyl.best/example', href: '/example' },
+          ].map(({ label, href }) => (
+            <Link key={href} href={href} className="landing-example">{label}</Link>
           ))}
         </div>
       </main>
