@@ -33,11 +33,11 @@ export default function Landing() {
         </div>
 
         <h1 className="landing-h1">
-          <em>fentanyl.best</em>
+          fentanyl<em>.best</em>
         </h1>
 
         <p className="landing-p">
-          guns.lol had a good run. this is what comes next.
+          the cleanest biolink out. your socials, your music, your whole thing — one link, no noise.
         </p>
 
         <div className="landing-actions">
