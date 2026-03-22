@@ -3,45 +3,58 @@ import Link from 'next/link'
 export default function Landing() {
   return (
     <>
-      {/* ── NAV ── */}
-      <nav className="gn">
-        <div className="gn-inner">
-          <div className="gn-left">
-            <Link href="/" className="gn-avatar">
-              <div className="gn-av-img">f</div>
-            </Link>
-            <Link href="#" className="gn-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-              Features
-            </Link>
-            <Link href="#" className="gn-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-              Profiles
-            </Link>
-            <Link href="#" className="gn-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              Premium
-            </Link>
-          </div>
+      {/* ── FLOATING NAV — exact greed.best structure ── */}
+      <div className="gn-wrap">
+        <div className="gn-container">
+          {/* glow behind the card */}
+          <div className="gn-outer-glow" />
 
-          <div className="gn-right">
-            <Link href="#" className="gn-item">Documentation</Link>
-            <Link href="#" className="gn-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-              Status
-            </Link>
-            <Link href="/login" className="gn-user">
-              <div className="gn-user-av">Z</div>
-              zj71
-            </Link>
-            <Link href="/login" className="gn-discord">
-              <svg width="16" height="12" viewBox="0 0 20 15" fill="currentColor">
-                <path d="M16.93 1.24A16.38 16.38 0 0 0 12.82 0c-.18.32-.39.76-.53 1.1a15.18 15.18 0 0 0-4.57 0A11.6 11.6 0 0 0 7.18 0a16.43 16.43 0 0 0-4.12 1.25C.44 4.77-.27 8.2.08 11.58a16.49 16.49 0 0 0 5.04 2.55c.41-.55.77-1.14 1.08-1.76a10.7 10.7 0 0 1-1.7-.81c.14-.1.28-.21.41-.32a11.75 11.75 0 0 0 10.18 0c.13.11.27.22.41.32-.54.32-1.11.59-1.71.82.31.62.67 1.2 1.08 1.75a16.43 16.43 0 0 0 5.05-2.55c.42-4-.72-7.39-2.99-10.34Z"/>
-              </svg>
-            </Link>
+          <div className="gn-card">
+            {/* Left — logo + links */}
+            <div className="gn-left">
+              <Link href="/" className="gn-logo-wrap">
+                <div className="gn-logo-glow" />
+                <div className="gn-logo">f</div>
+              </Link>
+
+              <div className="gn-links">
+                <Link href="#" className="gn-link">
+                  <svg className="gn-icon" stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="14" width="14"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                  Commands
+                </Link>
+                <Link href="#" className="gn-link">
+                  <svg className="gn-icon" stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="14" width="14"><path fill="none" d="M0 0h24v24H0V0z"/><path d="m14.06 9.02.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83a.996.996 0 0 0 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"/></svg>
+                  Profiles
+                </Link>
+                <Link href="#" className="gn-link">
+                  <svg className="gn-icon" stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="14" width="14"><path d="m208 512-52.38-139.62L16 320l139.62-52.38L208 128l52.38 139.62L400 320l-139.62 52.38zM88 176l-23.57-64.43L0 88l64.43-23.57L88 0l23.57 64.43L176 88l-64.43 23.57zm312 80-31.11-80.89L288 144l80.89-31.11L400 32l31.11 80.89L512 144l-80.89 31.11z"/></svg>
+                  Premium
+                </Link>
+              </div>
+            </div>
+
+            {/* Right — docs, status, divider, user, discord */}
+            <div className="gn-right">
+              <Link href="#" className="gn-link">Documentation</Link>
+              <Link href="#" className="gn-link">
+                <svg className="gn-icon" stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="14" width="14"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
+                Status
+              </Link>
+
+              <div className="gn-divider" />
+
+              <Link href="/login" className="gn-user">
+                <div className="gn-user-av">Z</div>
+                <span>zj71</span>
+              </Link>
+
+              <Link href="/signup" className="gn-discord-btn">
+                <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="16" width="16"><path d="M19.3034 5.33716C17.9344 4.71103 16.4805 4.2547 14.9629 4C14.7719 4.32899 14.5596 4.77471 14.411 5.12492C12.7969 4.89144 11.1944 4.89144 9.60255 5.12492C9.45397 4.77471 9.2311 4.32899 9.05068 4C7.52251 4.2547 6.06861 4.71103 4.70915 5.33716C1.96053 9.39111 1.21766 13.3495 1.5891 17.2549C3.41443 18.5815 5.17612 19.388 6.90701 19.9187C7.33151 19.3456 7.71356 18.73 8.04255 18.0827C7.41641 17.8492 6.82211 17.5627 6.24904 17.2231C6.39762 17.117 6.5462 17.0003 6.68416 16.8835C10.1438 18.4648 13.8911 18.4648 17.3082 16.8835C17.4568 17.0003 17.5948 17.117 17.7434 17.2231C17.1703 17.5627 16.576 17.8492 15.9499 18.0827C16.2789 18.73 16.6609 19.3456 17.0854 19.9187C18.8152 19.388 20.5875 18.5815 22.4033 17.2549C22.8596 12.7341 21.6806 8.80747 19.3034 5.33716Z"/></svg>
+              </Link>
+            </div>
           </div>
         </div>
-      </nav>
+      </div>
 
       {/* ── HERO ── */}
       <main className="landing-hero">
