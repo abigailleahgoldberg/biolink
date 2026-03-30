@@ -124,43 +124,14 @@ const Icons = {
 }
 
 const TRUST = [
-  { icon: Icons.cpu,      label: 'External AI Process — No Injection' },
-  { icon: Icons.shield,   label: 'Bypasses EAC, BattlEye & VAC'       },
-  { icon: Icons.zap,      label: 'Instant Key Delivery'                },
-  { icon: Icons.lock,     label: 'Anonymous Checkout'                  },
-  { icon: Icons.refresh,  label: 'Model Updates Included'              },
+  { icon: Icons.cpu,      label: 'External AI Process — No Injection'       },
+  { icon: Icons.shield,   label: 'Bypasses Era AC, Nova AC & Reload AC'     },
+  { icon: Icons.zap,      label: 'Instant Key Delivery'                     },
+  { icon: Icons.lock,     label: 'Anonymous Checkout'                       },
+  { icon: Icons.refresh,  label: 'Model Updates Included'                   },
 ]
 
 const PRODUCTS = [
-  {
-    id: 'fortnite',
-    game: 'Fortnite',
-    season: 'Chapter 6 · Current Season',
-    badge: 'Most Popular',
-    status: 'undetected' as const,
-    updated: '2h ago',
-    users: 1482,
-    desc: 'Pure screen-capture AI for Fortnite. YOLOv8 detects enemies from your display, moves your mouse, clicks your trigger — zero game interaction. EAC and BattlEye see absolutely nothing.',
-    features: [
-      'AI Aimbot — YOLOv8 detects enemies on-screen, moves mouse only',
-      'Aim Assist — subtle AI correction, looks fully human',
-      'Movement prediction — leads moving targets based on visual velocity',
-      'Triggerbot — auto-clicks when enemy overlaps crosshair region',
-      'Silent Aim — frame-perfect micro-correction, no visible snap',
-      'Mouse recoil compensation — counters weapon kick via mouse movement',
-      'Adjustable FOV radius — control how wide the AI scans',
-      'Confidence threshold — tune how certain the model must be before acting',
-      'Bone targeting — aim head, chest, or pelvis',
-      'Humanized smoothing — organic curves, not robotic snaps',
-      'Stream-proof overlay — config UI hidden from OBS & recordings',
-      'Config profiles — save & hotswap legit / full-send setups',
-    ],
-    tiers: [
-      { label: 'Day',   price: '$10', sub: '24 hours' },
-      { label: 'Week',  price: '$30', sub: '7 days'   },
-      { label: 'Month', price: '$65', sub: '30 days'  },
-    ],
-  },
   {
     id: 'fortnite-og',
     game: 'Fortnite OG',
@@ -169,7 +140,7 @@ const PRODUCTS = [
     status: 'undetected' as const,
     updated: '1d ago',
     users: 634,
-    desc: 'Same AI engine, retrained on OG character models and classic skin datasets. Recoil compensation tuned for OG weapon bloom. Screen capture only — reads your display, moves your mouse, nothing else.',
+    desc: 'Built specifically for OG Fortnite private servers — Era, Nova, EZFN, Reload. Retrained on OG character models and classic skin datasets. Recoil comp tuned for OG weapon bloom. 100% external — reads your screen, moves your mouse, their custom ACs have nothing to scan.',
     features: [
       'AI Aimbot — model retrained on OG skins & character shapes',
       'Aim Assist — smooth AI correction tuned for OG sensitivity',
@@ -190,35 +161,6 @@ const PRODUCTS = [
       { label: 'Month', price: '$55', sub: '30 days'  },
     ],
   },
-  {
-    id: 'cs2',
-    game: 'Counter-Strike 2',
-    season: 'CS2 · Current Build',
-    badge: 'High Demand',
-    status: 'undetected' as const,
-    updated: '5h ago',
-    users: 2109,
-    desc: 'Neural net reads your screen and moves your mouse — indistinguishable from real aim. No VAC-triggering memory reads, no injection. The AI sees what you see, acts through your mouse, nothing more.',
-    features: [
-      'Neural Aimbot — screen-only detection, rage & legit mouse profiles',
-      'Aim Assist — human-curve correction toward on-screen enemies',
-      'Per-weapon tuning — AK, M4, AWP, pistol sensitivity presets',
-      'Triggerbot — auto-click on enemy detection, randomized human delay',
-      'Silent Aim — frame-level micro-snap, no visible cursor jump',
-      'Mouse spray control — CS2 recoil patterns compensated via mouse',
-      'Movement prediction — leads peeking enemies on visual detection',
-      'Scope detection — auto-adjusts sensitivity when scope zoom detected',
-      'Adjustable FOV circle, confidence filter & bone selection',
-      'Humanized smoothing — organic movement curves, not robotic locks',
-      'Stream-proof overlay — clean on OBS, Twitch, and recordings',
-      'Config profiles — save, share & hotswap mid-game',
-    ],
-    tiers: [
-      { label: 'Day',   price: '$10', sub: '24 hours' },
-      { label: 'Week',  price: '$32', sub: '7 days'   },
-      { label: 'Month', price: '$68', sub: '30 days'  },
-    ],
-  },
 ]
 
 const STATUS = {
@@ -236,7 +178,7 @@ const FAQ = [
   {
     icon: Icons.shield,
     q: 'Will I get banned?',
-    a: 'EAC, BattlEye, and VAC all work by scanning what\'s running inside or alongside your game process. Our software never enters that space — it runs separately, sees only your screen pixels, and acts only through your mouse. There is no footprint to detect.',
+    a: 'OG Fortnite private server ACs (Era, Nova, EZFN, Reload) scan your game files, memory, and running processes. Our software does none of that — it runs completely separately, reads only your screen pixels, and acts only through your mouse. There is no footprint for their AC to find.',
   },
   {
     icon: Icons.package,
@@ -274,7 +216,7 @@ function ScrollDots({ total, current }: { total: number; current: number }) {
 export default function ShopPage() {
   const [tiers, setTiers] = useState<Record<string, number>>({ fortnite: 1, 'fortnite-og': 1, cs2: 1 })
   const [activeSection, setActiveSection] = useState(0)
-  const totalSections = PRODUCTS.length + 2 // hero + products + faq
+  const totalSections = PRODUCTS.length + 2 // hero + product + faq
   const totalUsers = PRODUCTS.reduce((a, p) => a + p.users, 0)
 
   const handleScroll = (e: React.UIEvent<HTMLElement>) => {
@@ -356,8 +298,8 @@ export default function ShopPage() {
             AI cheats.<br /><em>No injection.</em>
           </h1>
           <p className="landing-p" style={{ margin: '0 auto 20px', position: 'relative', zIndex: 1, maxWidth: 500, textAlign: 'center' }}>
-            Computer vision-powered external cheats for Fortnite and CS2.<br />
-            Runs outside your game process. EAC, BattlEye, and VAC see nothing.
+            Computer vision-powered external cheat built for OG Fortnite private servers.<br />
+            Era, Nova, EZFN, Reload — their custom ACs see nothing.
           </p>
 
           {/* tech pills */}
