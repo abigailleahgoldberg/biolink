@@ -3,36 +3,31 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
 
-// ─── SVG ICON LIBRARY (hand-picked, mixed Lucide / Heroicons / Phosphor styles) ───
+// ─── ICONS ───────────────────────────────────────────────────────────────────
 const Icons = {
-  // Phosphor-style — shield with check
   shield: (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
       <polyline points="9 12 11 14 15 10"/>
     </svg>
   ),
-  // Lucide — zap / instant
   zap: (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
     </svg>
   ),
-  // Heroicons-style — lock closed
   lock: (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
       <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
     </svg>
   ),
-  // Phosphor-style — arrows clockwise
   refresh: (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="23 4 23 10 17 10"/>
       <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
     </svg>
   ),
-  // Lucide — key
   key: (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="7.5" cy="15.5" r="5.5"/>
@@ -40,21 +35,18 @@ const Icons = {
       <path d="M15.5 7.5l3 3L22 7l-3-3"/>
     </svg>
   ),
-  // Heroicons-style — check circle
   checkCircle: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
       <polyline points="22 4 12 14.01 9 11.01"/>
     </svg>
   ),
-  // Lucide — timer / clock
   clock: (
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="10"/>
       <polyline points="12 6 12 12 16 14"/>
     </svg>
   ),
-  // Phosphor-style — users
   users: (
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -63,20 +55,56 @@ const Icons = {
       <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
     </svg>
   ),
-  // Heroicons-style — arrow right
   arrowRight: (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <line x1="5" y1="12" x2="19" y2="12"/>
       <polyline points="12 5 19 12 12 19"/>
     </svg>
   ),
-  // Lucide — activity / pulse
-  activity: (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+  // Phosphor-style — eye / computer vision
+  eye: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+      <circle cx="12" cy="12" r="3"/>
     </svg>
   ),
-  // Phosphor-style — question mark circle
+  // Lucide — cpu chip / AI inference
+  cpu: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="4" y="4" width="16" height="16" rx="2"/>
+      <rect x="9" y="9" width="6" height="6"/>
+      <line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/>
+      <line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/>
+      <line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/>
+      <line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>
+    </svg>
+  ),
+  // Heroicons — no injection / external process
+  externalLink: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+      <polyline points="15 3 21 3 21 9"/>
+      <line x1="10" y1="14" x2="21" y2="3"/>
+    </svg>
+  ),
+  // Phosphor — target / crosshair
+  target: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <circle cx="12" cy="12" r="6"/>
+      <circle cx="12" cy="12" r="2"/>
+    </svg>
+  ),
+  // Lucide — sliders / config
+  sliders: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/>
+      <line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/>
+      <line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/>
+      <line x1="17" y1="16" x2="23" y2="16"/>
+    </svg>
+  ),
   question: (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="10"/>
@@ -84,7 +112,6 @@ const Icons = {
       <line x1="12" y1="17" x2="12.01" y2="17"/>
     </svg>
   ),
-  // Lucide — package
   package: (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/>
@@ -93,21 +120,14 @@ const Icons = {
       <line x1="12" y1="22.08" x2="12" y2="12"/>
     </svg>
   ),
-  // Heroicons-style — ban / slash
-  ban: (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10"/>
-      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
-    </svg>
-  ),
 }
 
 const TRUST = [
-  { icon: Icons.shield,  label: 'HWID Spoofer Included'   },
-  { icon: Icons.zap,     label: 'Instant Key Delivery'     },
-  { icon: Icons.lock,    label: 'Anonymous Checkout'       },
-  { icon: Icons.key,     label: 'License Key in Dashboard' },
-  { icon: Icons.refresh, label: 'Free Updates'             },
+  { icon: Icons.cpu,      label: 'External AI Process — No Injection' },
+  { icon: Icons.shield,   label: 'Bypasses EAC, BattlEye & VAC'       },
+  { icon: Icons.zap,      label: 'Instant Key Delivery'                },
+  { icon: Icons.lock,     label: 'Anonymous Checkout'                  },
+  { icon: Icons.refresh,  label: 'Model Updates Included'              },
 ]
 
 const PRODUCTS = [
@@ -115,19 +135,45 @@ const PRODUCTS = [
     id: 'fortnite',
     game: 'Fortnite',
     season: 'Chapter 6 · Current Season',
+    badge: 'Most Popular',
     status: 'undetected' as const,
     updated: '2h ago',
     users: 1482,
-    desc: 'Full cheat menu for current Fortnite. Silent aimbot, player & item ESP, no recoil — one clean injection.',
+    desc: 'AI-powered external cheat for current Fortnite. Our computer vision model runs outside the game process entirely — no DLL, no memory reads, undetectable by kernel-level anti-cheat.',
     features: [
-      'Silent Aimbot — bone select, FOV, smooth',
-      'Player ESP — box, skeleton, health, distance',
-      'Item ESP — chests, floor loot, ammo, vehicles',
-      'Build ESP + Material Counter',
-      'No Recoil / No Spread / No Sway',
-      'Trigger Bot w/ configurable delay',
-      'Radar Hack overlay',
-      'HWID Spoofer included',
+      'AI Aimbot — YOLOv8 enemy detection model',
+      'Configurable FOV, confidence & smoothing',
+      'Player ESP — rendered via external overlay',
+      'Item ESP — chests, floor loot, ammo',
+      'Build ESP + Material Counter overlay',
+      'No Recoil / No Spread config',
+      'Radar overlay — real-time positions',
+      'Zero game memory access — fully external',
+    ],
+    tiers: [
+      { label: 'Day',   price: '$10', sub: '24 hours' },
+      { label: 'Week',  price: '$30', sub: '7 days'   },
+      { label: 'Month', price: '$65', sub: '30 days'  },
+    ],
+  },
+  {
+    id: 'fortnite-og',
+    game: 'Fortnite OG',
+    season: 'Legacy Season · Classic Map',
+    badge: 'Legacy Build',
+    status: 'undetected' as const,
+    updated: '1d ago',
+    users: 634,
+    desc: 'Same AI engine, tuned and retrained for OG Fortnite character models and season-accurate loot. External process, zero injection risk.',
+    features: [
+      'AI Aimbot — model trained on OG skins',
+      'Legacy bullet physics compensation',
+      'Player ESP via external overlay',
+      'Season-accurate Loot & Chest ESP',
+      'No Recoil + Bloom Compensation',
+      'Radar + Mini Map external overlay',
+      'Low GPU footprint inference mode',
+      'Zero game memory access — fully external',
     ],
     tiers: [
       { label: 'Day',   price: '$8',  sub: '24 hours' },
@@ -136,51 +182,28 @@ const PRODUCTS = [
     ],
   },
   {
-    id: 'fortnite-og',
-    game: 'Fortnite OG',
-    season: 'Legacy Season · Classic Map',
-    status: 'undetected' as const,
-    updated: '1d ago',
-    users: 634,
-    desc: "Tuned for OG Fortnite's old engine. Season-accurate loot ESP, legacy bullet physics, same clean results.",
-    features: [
-      'OG-tuned Silent Aimbot',
-      'Player ESP — OG character models',
-      'Season-accurate Loot & Chest ESP',
-      'No Recoil + Bloom Compensation',
-      'Radar + Mini Map Overlay',
-      'Legacy Skin Changer',
-      'Low-footprint injection',
-      'HWID Spoofer included',
-    ],
-    tiers: [
-      { label: 'Day',   price: '$7',  sub: '24 hours' },
-      { label: 'Week',  price: '$22', sub: '7 days'   },
-      { label: 'Month', price: '$48', sub: '30 days'  },
-    ],
-  },
-  {
     id: 'cs2',
     game: 'Counter-Strike 2',
     season: 'CS2 · Current Build',
+    badge: 'High Demand',
     status: 'undetected' as const,
     updated: '5h ago',
     users: 2109,
-    desc: 'Rage and legit configs. Separate profiles, wallhack, skin changer, bunny hop. Undetected since launch.',
+    desc: 'AI-driven external cheat for CS2. Computer vision model identifies enemy silhouettes through walls — no VAC-triggering memory reads, no injection. Rage and legit configs included.',
     features: [
-      'Rage Aimbot — head lock, auto-fire, RCS',
-      'Legit Aimbot — smooth, humanized, FOV',
-      'Wallhack / Glow / Chams ESP',
+      'AI Aimbot — rage & legit inference profiles',
+      'Wallhack via AI silhouette detection',
+      'External Glow ESP overlay',
       'Radar Hack — full map positions',
-      'Bunny Hop + Auto Strafe',
-      'Skin Changer — all weapon skins',
+      'Bunny Hop + Auto Strafe config',
+      'Skin Changer — client-side only',
       'Knife + Glove Changer',
-      'HWID Spoofer + Anti-ban layer',
+      'Zero game memory access — fully external',
     ],
     tiers: [
-      { label: 'Day',   price: '$9',  sub: '24 hours' },
-      { label: 'Week',  price: '$28', sub: '7 days'   },
-      { label: 'Month', price: '$60', sub: '30 days'  },
+      { label: 'Day',   price: '$10', sub: '24 hours' },
+      { label: 'Week',  price: '$32', sub: '7 days'   },
+      { label: 'Month', price: '$68', sub: '30 days'  },
     ],
   },
 ]
@@ -193,24 +216,24 @@ const STATUS = {
 
 const FAQ = [
   {
-    icon: Icons.ban,
+    icon: Icons.cpu,
+    q: 'What makes these AI cheats?',
+    a: 'Our software runs a computer vision model (YOLOv8) that detects enemies directly from your screen — entirely outside the game process. No DLL injection, no memory reading. Traditional anti-cheat has no footprint to scan.',
+  },
+  {
+    icon: Icons.shield,
     q: 'Will I get banned?',
-    a: 'All products are currently undetected. HWID spoofer is included in every purchase. We push updates immediately when any detection risk appears.',
+    a: 'Because we never touch game memory or inject code, EAC, BattlEye, and VAC have nothing to detect. Our models are continuously retrained and have maintained an undetected record since launch.',
   },
   {
     icon: Icons.package,
-    q: 'How do I receive my cheat?',
-    a: 'A license key is delivered instantly to your fentanyl.best dashboard after purchase. Download link and injection guide included.',
+    q: 'How do I receive and run it?',
+    a: 'A license key is delivered to your fentanyl.best dashboard instantly after purchase. Download the external client, enter your key, and the AI overlay runs alongside your game — no setup beyond that.',
   },
   {
-    icon: Icons.question,
-    q: 'What games are supported?',
-    a: 'Fortnite (current season), Fortnite OG, and CS2. Warzone and Valorant are in testing and coming soon.',
-  },
-  {
-    icon: Icons.refresh,
-    q: 'Refund policy?',
-    a: 'If a product is detected during your subscription, you get a free extension equal to the downtime. No questions asked.',
+    icon: Icons.sliders,
+    q: 'Can I configure the AI behavior?',
+    a: 'Yes. FOV radius, confidence threshold, smoothing curve, and targeting bone are all adjustable. Rage and legit presets are included — or build your own profile from scratch.',
   },
 ]
 
@@ -220,18 +243,16 @@ export default function ShopPage() {
 
   return (
     <>
-      {/* ── NAV — exact biolink nav ── */}
+      {/* ── NAV ── */}
       <header className="cnav-host">
         <nav className="cnav">
           <Link href="/" className="cnav-logo">
-            <Image
-              src="/needle-logo.png" alt="fentanyl.best" width={28} height={28}
-              style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 6px rgba(163,151,221,0.6))' }}
-            />
+            <Image src="/needle-logo.png" alt="fentanyl.best" width={28} height={28}
+              style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 6px rgba(163,151,221,0.6))' }} />
             <span className="cnav-logo-text">fentanyl<em>.best</em></span>
           </Link>
           <div className="cnav-links">
-            <Link href="/" className="cnav-link">Home</Link>
+            <Link href="/"     className="cnav-link">Home</Link>
             <Link href="/shop" className="cnav-link" style={{ color: 'var(--light)' }}>Shop</Link>
           </div>
           <div className="cnav-actions">
@@ -258,16 +279,38 @@ export default function ShopPage() {
 
           <div className="landing-badge" style={{ position: 'relative', zIndex: 1, marginBottom: 32 }}>
             <span className="landing-badge-dot" style={{ background: '#4ade80', boxShadow: '0 0 8px rgba(74,222,128,0.5)' }} />
-            {totalUsers.toLocaleString()} users active &nbsp;·&nbsp; all products undetected
+            {totalUsers.toLocaleString()} users active &nbsp;·&nbsp; all models undetected
           </div>
 
           <h1 className="landing-h1" style={{ position: 'relative', zIndex: 1 }}>
-            The cheat shop<br /><em>built clean.</em>
+            AI cheats.<br /><em>No injection.</em>
           </h1>
-          <p className="landing-p" style={{ margin: '0 auto 40px', position: 'relative', zIndex: 1 }}>
-            Premium cheats for Fortnite and CS2.<br />
-            No sketchy menus. No neon nonsense. Just results.
+          <p className="landing-p" style={{ margin: '0 auto 16px', position: 'relative', zIndex: 1 }}>
+            Computer vision-powered external cheats for Fortnite and CS2.<br />
+            Runs outside your game process. EAC, BattlEye, and VAC see nothing.
           </p>
+
+          {/* AI tech pill */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 36, position: 'relative', zIndex: 1 }}>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: 7,
+              fontSize: 12, fontWeight: 600, color: 'var(--mid)',
+              background: 'rgba(163,151,221,0.08)', border: '1px solid rgba(163,151,221,0.2)',
+              padding: '7px 16px', borderRadius: 100,
+            }}>
+              <span style={{ color: 'var(--accent)', display: 'flex' }}>{Icons.cpu}</span>
+              Powered by YOLOv8 computer vision
+            </span>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: 7,
+              fontSize: 12, fontWeight: 600, color: 'var(--mid)',
+              background: 'rgba(163,151,221,0.08)', border: '1px solid rgba(163,151,221,0.2)',
+              padding: '7px 16px', borderRadius: 100,
+            }}>
+              <span style={{ color: 'var(--accent)', display: 'flex' }}>{Icons.externalLink}</span>
+              Fully external — zero injection
+            </span>
+          </div>
 
           <div className="landing-examples" style={{ position: 'relative', zIndex: 1 }}>
             {PRODUCTS.map(p => (
@@ -304,20 +347,22 @@ export default function ShopPage() {
             return (
               <div key={p.id} id={p.id} className="card" style={{ padding: 0, overflow: 'hidden' }}>
 
-                {/* Header bar */}
+                {/* Header */}
                 <div style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  padding: '16px 22px',
-                  borderBottom: '1px solid var(--border)',
-                  background: 'rgba(163,151,221,0.025)',
-                  flexWrap: 'wrap', gap: 10,
+                  padding: '16px 22px', borderBottom: '1px solid var(--border)',
+                  background: 'rgba(163,151,221,0.025)', flexWrap: 'wrap', gap: 10,
                 }}>
-                  <div>
-                    <span style={{ fontSize: 17, fontWeight: 800, color: '#fff', letterSpacing: '-.4px', marginRight: 10 }}>{p.game}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 17, fontWeight: 800, color: '#fff', letterSpacing: '-.4px' }}>{p.game}</span>
+                    <span style={{
+                      fontSize: 10, fontWeight: 700, letterSpacing: '.5px', textTransform: 'uppercase',
+                      color: 'var(--mid)', background: 'rgba(163,151,221,0.1)',
+                      border: '1px solid rgba(163,151,221,0.2)', padding: '3px 9px', borderRadius: 100,
+                    }}>{p.badge}</span>
                     <span style={{ fontSize: 11, color: 'var(--faint)', fontWeight: 500 }}>{p.season}</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                    {/* active users */}
                     <span style={{
                       display: 'inline-flex', alignItems: 'center', gap: 5,
                       fontSize: 11, fontWeight: 600, color: 'var(--muted)',
@@ -327,7 +372,6 @@ export default function ShopPage() {
                       <span style={{ color: 'var(--accent)', display: 'flex' }}>{Icons.users}</span>
                       {p.users.toLocaleString()} active
                     </span>
-                    {/* status */}
                     <span style={{
                       display: 'inline-flex', alignItems: 'center', gap: 6,
                       fontSize: 11, fontWeight: 700, padding: '5px 12px', borderRadius: 100,
@@ -335,15 +379,12 @@ export default function ShopPage() {
                     }}>
                       <span style={{
                         width: 6, height: 6, borderRadius: '50%', background: st.color,
-                        boxShadow: `0 0 6px ${st.color}80`,
-                        animation: 'bdot 2s ease-in-out infinite',
-                        flexShrink: 0,
+                        boxShadow: `0 0 6px ${st.color}80`, animation: 'bdot 2s ease-in-out infinite', flexShrink: 0,
                       }} />
                       {st.label}
                     </span>
-                    {/* updated */}
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'var(--faint)' }}>
-                      <span style={{ display: 'flex', color: 'var(--faint)' }}>{Icons.clock}</span>
+                      <span style={{ display: 'flex' }}>{Icons.clock}</span>
                       {p.updated}
                     </span>
                   </div>
@@ -352,8 +393,30 @@ export default function ShopPage() {
                 {/* Body */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px' }}>
 
-                  {/* Left — desc + features */}
+                  {/* Left */}
                   <div style={{ padding: '22px 24px', borderRight: '1px solid var(--border)' }}>
+                    {/* AI badge inline */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
+                      <span style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                        fontSize: 11, fontWeight: 700, color: 'var(--light)',
+                        background: 'rgba(163,151,221,0.08)', border: '1px solid rgba(163,151,221,0.18)',
+                        padding: '4px 10px', borderRadius: 100,
+                      }}>
+                        <span style={{ display: 'flex', color: 'var(--accent)' }}>{Icons.cpu}</span>
+                        AI-Powered · External Process
+                      </span>
+                      <span style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                        fontSize: 11, fontWeight: 700, color: 'rgba(74,222,128,0.8)',
+                        background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.15)',
+                        padding: '4px 10px', borderRadius: 100,
+                      }}>
+                        <span style={{ display: 'flex' }}>{Icons.shield}</span>
+                        No DLL Injection
+                      </span>
+                    </div>
+
                     <p style={{ fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.75, marginBottom: 20 }}>{p.desc}</p>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '7px 18px' }}>
                       {p.features.map(f => (
@@ -364,8 +427,7 @@ export default function ShopPage() {
                           <span style={{
                             width: 16, height: 16, borderRadius: '50%', flexShrink: 0,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            marginTop: 1,
-                            background: 'rgba(163,151,221,0.1)', color: 'var(--light)',
+                            marginTop: 1, background: 'rgba(163,151,221,0.1)', color: 'var(--light)',
                           }}>
                             {Icons.checkCircle}
                           </span>
@@ -375,12 +437,12 @@ export default function ShopPage() {
                     </div>
                   </div>
 
-                  {/* Right — tier + buy */}
+                  {/* Right */}
                   <div style={{ padding: '22px 20px', display: 'flex', flexDirection: 'column', gap: 0 }}>
                     <span style={{
-                      fontSize: 10, fontWeight: 700, letterSpacing: '1.2px',
-                      textTransform: 'uppercase', color: 'var(--faint)',
-                      marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6,
+                      fontSize: 10, fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase',
+                      color: 'var(--faint)', marginBottom: 10,
+                      display: 'flex', alignItems: 'center', gap: 6,
                     }}>
                       <span style={{ color: 'var(--accent)', display: 'flex' }}>{Icons.clock}</span>
                       Select Duration
@@ -428,7 +490,7 @@ export default function ShopPage() {
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
                       fontSize: 11, color: 'var(--faint)', marginTop: 10, lineHeight: 1.6,
                     }}>
-                      <span style={{ display: 'flex', color: 'var(--faint)' }}>{Icons.lock}</span>
+                      <span style={{ display: 'flex' }}>{Icons.lock}</span>
                       Anonymous · Key in your dashboard
                     </p>
                   </div>
@@ -456,32 +518,25 @@ export default function ShopPage() {
           </div>
         </section>
 
-        {/* ── FOOTER — exact biolink footer structure ── */}
+        {/* ── FOOTER ── */}
         <footer style={{
-          borderTop: '1px solid var(--border)',
-          padding: '28px 40px',
+          borderTop: '1px solid var(--border)', padding: '28px 40px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           gap: 16, flexWrap: 'wrap',
         }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-            <Image
-              src="/needle-logo.png" alt="" width={22} height={22}
-              style={{ objectFit: 'contain', opacity: .55, filter: 'drop-shadow(0 0 4px rgba(163,151,221,0.4))' }}
-            />
+            <Image src="/needle-logo.png" alt="" width={22} height={22}
+              style={{ objectFit: 'contain', opacity: .55, filter: 'drop-shadow(0 0 4px rgba(163,151,221,0.4))' }} />
             <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: '-.3px', color: 'rgba(254,254,255,0.35)' }}>
               fentanyl<em style={{ fontStyle: 'normal', color: 'rgba(163,151,221,0.45)' }}>.best</em>
             </span>
           </Link>
-
           <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
             <Link href="/"      style={{ fontSize: 13, color: 'var(--faint)', textDecoration: 'none' }}>Home</Link>
             <Link href="/shop"  style={{ fontSize: 13, color: 'var(--muted)', textDecoration: 'none' }}>Shop</Link>
             <Link href="/login" style={{ fontSize: 13, color: 'var(--faint)', textDecoration: 'none' }}>Sign in</Link>
           </div>
-
-          <span style={{ fontSize: 12, color: 'var(--faint)' }}>
-            © 2025 fentanyl.best
-          </span>
+          <span style={{ fontSize: 12, color: 'var(--faint)' }}>© 2025 fentanyl.best</span>
         </footer>
 
       </div>
