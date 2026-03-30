@@ -453,11 +453,12 @@ export default function ShopPage() {
               <div style={{
                 position: 'relative', zIndex: 1,
                 display: 'grid',
-                gridTemplateColumns: '1fr 320px',
-                gap: 32,
-                maxWidth: 1000,
+                gridTemplateColumns: '1fr 300px',
+                gap: 48,
+                maxWidth: 1040,
                 margin: '0 auto',
                 width: '100%',
+                alignItems: 'center',
               }}>
 
                 {/* ── LEFT: product info ── */}
@@ -494,16 +495,16 @@ export default function ShopPage() {
 
                   {/* big game name */}
                   <h2 style={{
-                    fontSize: 'clamp(42px, 6vw, 72px)',
+                    fontSize: 'clamp(52px, 7vw, 88px)',
                     fontWeight: 900,
-                    letterSpacing: '-2px',
+                    letterSpacing: '-3px',
                     color: '#fff',
                     lineHeight: 1,
-                    marginBottom: 18,
+                    marginBottom: 20,
                   }}>{p.game}</h2>
 
                   {/* AI badges */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
                     <span style={{
                       display: 'inline-flex', alignItems: 'center', gap: 6,
                       fontSize: 11, fontWeight: 700, color: 'var(--light)',
@@ -524,14 +525,14 @@ export default function ShopPage() {
                     </span>
                   </div>
 
-                  <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.75, marginBottom: 24, maxWidth: 520 }}>{p.desc}</p>
+                  <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 28, maxWidth: 520 }}>{p.desc}</p>
 
                   {/* features grid */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 24px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '11px 28px' }}>
                     {p.features.map(f => (
                       <div key={f} style={{
-                        display: 'flex', alignItems: 'flex-start', gap: 8,
-                        fontSize: 12.5, color: 'rgba(254,254,255,0.52)', lineHeight: 1.45,
+                        display: 'flex', alignItems: 'flex-start', gap: 9,
+                        fontSize: 13, color: 'rgba(254,254,255,0.58)', lineHeight: 1.5,
                       }}>
                         <span style={{
                           width: 16, height: 16, borderRadius: '50%', flexShrink: 0,
@@ -547,7 +548,7 @@ export default function ShopPage() {
                 </div>
 
                 {/* ── RIGHT: purchase panel ── */}
-                <div className="card" style={{ padding: '28px 22px', display: 'flex', flexDirection: 'column', gap: 0 }}>
+                <div className="card" style={{ padding: '28px 22px', display: 'flex', flexDirection: 'column', gap: 0, alignSelf: 'center' }}>
                   <span style={{
                     fontSize: 10, fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase',
                     color: 'var(--faint)', marginBottom: 12,
