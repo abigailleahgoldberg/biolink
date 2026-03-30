@@ -24,7 +24,7 @@
 }
 
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { font-size:16px; background:var(--bg); color:var(--text); }
+html { font-size:16px; background:var(--bg); color:var(--text); scroll-behavior:smooth; }
 body { font-family:'Inter',system-ui,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
 ::-webkit-scrollbar { width:3px; }
 ::-webkit-scrollbar-track { background:var(--bg); }
@@ -192,7 +192,7 @@ input,textarea,select { font-family:inherit; }
 .input:focus { border-color:rgba(163,151,221,0.5); }
 .input::placeholder { color:var(--faint); }
 textarea.input { resize:none; }
-.card { background:rgba(18,15,34,0.8); border:1px solid var(--border); border-radius:16px; padding:24px; backdrop-filter:blur(12px); }
+.card { background:rgba(18,15,34,0.8); border:1px solid var(--border); border-radius:16px; padding:24px; backdrop-filter:blur(12px); scroll-margin-top:96px; }
 .err-msg { font-size:12px; color:#f87171; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.15); border-radius:8px; padding:10px 14px; }
 
 /* ══════════════════════════════════════
