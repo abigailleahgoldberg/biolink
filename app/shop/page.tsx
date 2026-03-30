@@ -61,14 +61,18 @@ const Icons = {
       <polyline points="12 5 19 12 12 19"/>
     </svg>
   ),
-  // Phosphor-style — eye / computer vision
+  arrowDown: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19"/>
+      <polyline points="19 12 12 19 5 12"/>
+    </svg>
+  ),
   eye: (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
       <circle cx="12" cy="12" r="3"/>
     </svg>
   ),
-  // Lucide — cpu chip / AI inference
   cpu: (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <rect x="4" y="4" width="16" height="16" rx="2"/>
@@ -79,7 +83,6 @@ const Icons = {
       <line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>
     </svg>
   ),
-  // Heroicons — no injection / external process
   externalLink: (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
@@ -87,7 +90,6 @@ const Icons = {
       <line x1="10" y1="14" x2="21" y2="3"/>
     </svg>
   ),
-  // Phosphor — target / crosshair
   target: (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="10"/>
@@ -95,7 +97,6 @@ const Icons = {
       <circle cx="12" cy="12" r="2"/>
     </svg>
   ),
-  // Lucide — sliders / config
   sliders: (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/>
@@ -237,9 +238,39 @@ const FAQ = [
   },
 ]
 
+// ─── SCROLL DOT INDICATOR ────────────────────────────────────────────────────
+function ScrollDots({ total, current }: { total: number; current: number }) {
+  return (
+    <div style={{
+      position: 'fixed', right: 24, top: '50%', transform: 'translateY(-50%)',
+      display: 'flex', flexDirection: 'column', gap: 8, zIndex: 50,
+    }}>
+      {Array.from({ length: total }).map((_, i) => (
+        <div key={i} style={{
+          width: i === current ? 8 : 5,
+          height: i === current ? 8 : 5,
+          borderRadius: '50%',
+          background: i === current ? 'var(--accent)' : 'rgba(163,151,221,0.25)',
+          boxShadow: i === current ? '0 0 8px rgba(163,151,221,0.6)' : 'none',
+          transition: 'all .25s',
+        }} />
+      ))}
+    </div>
+  )
+}
+
 export default function ShopPage() {
   const [tiers, setTiers] = useState<Record<string, number>>({ fortnite: 1, 'fortnite-og': 1, cs2: 1 })
+  const [activeSection, setActiveSection] = useState(0)
+  const totalSections = PRODUCTS.length + 2 // hero + products + faq
   const totalUsers = PRODUCTS.reduce((a, p) => a + p.users, 0)
+
+  const handleScroll = (e: React.UIEvent<HTMLElement>) => {
+    const el = e.currentTarget
+    const sectionHeight = el.clientHeight
+    const idx = Math.round(el.scrollTop / sectionHeight)
+    setActiveSection(idx)
+  }
 
   return (
     <>
@@ -262,36 +293,63 @@ export default function ShopPage() {
         </nav>
       </header>
 
-      <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: 80 }}>
+      {/* ── SIDE DOTS ── */}
+      <ScrollDots total={totalSections} current={activeSection} />
 
-        {/* ── HERO ── */}
-        <section style={{ textAlign: 'center', padding: '80px 24px 60px', position: 'relative', overflow: 'hidden' }}>
+      {/* ── SNAP SCROLL CONTAINER ── */}
+      <main
+        onScroll={handleScroll}
+        style={{
+          position: 'fixed',
+          top: 80,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          overflowY: 'scroll',
+          scrollSnapType: 'y mandatory',
+          scrollBehavior: 'smooth',
+        }}
+      >
+
+        {/* ══ SECTION 0 — HERO ══ */}
+        <section style={{
+          height: '100%',
+          scrollSnapAlign: 'start',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+          padding: '40px 24px',
+        }}>
+          {/* bg glow */}
           <div style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
-            background: 'radial-gradient(ellipse 75% 55% at 50% 30%, rgba(163,151,221,0.1) 0%, transparent 65%)',
+            background: 'radial-gradient(ellipse 75% 55% at 50% 40%, rgba(163,151,221,0.12) 0%, transparent 65%)',
           }} />
           <div style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
             backgroundImage: 'linear-gradient(rgba(163,151,221,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(163,151,221,0.035) 1px, transparent 1px)',
             backgroundSize: '48px 48px',
-            maskImage: 'radial-gradient(ellipse 70% 60% at 50% 35%, black, transparent)',
+            maskImage: 'radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent)',
           }} />
 
-          <div className="landing-badge" style={{ position: 'relative', zIndex: 1, marginBottom: 32 }}>
+          <div className="landing-badge" style={{ position: 'relative', zIndex: 1, marginBottom: 28 }}>
             <span className="landing-badge-dot" style={{ background: '#4ade80', boxShadow: '0 0 8px rgba(74,222,128,0.5)' }} />
             {totalUsers.toLocaleString()} users active &nbsp;·&nbsp; all models undetected
           </div>
 
-          <h1 className="landing-h1" style={{ position: 'relative', zIndex: 1 }}>
+          <h1 className="landing-h1" style={{ position: 'relative', zIndex: 1, marginBottom: 16 }}>
             AI cheats.<br /><em>No injection.</em>
           </h1>
-          <p className="landing-p" style={{ margin: '0 auto 16px', position: 'relative', zIndex: 1 }}>
+          <p className="landing-p" style={{ margin: '0 auto 20px', position: 'relative', zIndex: 1, maxWidth: 500, textAlign: 'center' }}>
             Computer vision-powered external cheats for Fortnite and CS2.<br />
             Runs outside your game process. EAC, BattlEye, and VAC see nothing.
           </p>
 
-          {/* AI tech pill */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 36, position: 'relative', zIndex: 1 }}>
+          {/* tech pills */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 40, position: 'relative', zIndex: 1, flexWrap: 'wrap' }}>
             <span style={{
               display: 'inline-flex', alignItems: 'center', gap: 7,
               fontSize: 12, fontWeight: 600, color: 'var(--mid)',
@@ -312,69 +370,98 @@ export default function ShopPage() {
             </span>
           </div>
 
-          <div className="landing-examples" style={{ position: 'relative', zIndex: 1 }}>
+          {/* product jump links */}
+          <div className="landing-examples" style={{ position: 'relative', zIndex: 1, marginBottom: 48 }}>
             {PRODUCTS.map(p => (
               <a key={p.id} href={`#${p.id}`} className="landing-example">{p.game}</a>
             ))}
           </div>
+
+          {/* trust strip */}
+          <div style={{
+            position: 'relative', zIndex: 1,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap',
+            gap: 0,
+            border: '1px solid var(--border)', borderRadius: 14,
+            background: 'rgba(163,151,221,0.02)', overflow: 'hidden',
+          }}>
+            {TRUST.map((t, i) => (
+              <div key={t.label} style={{
+                display: 'flex', alignItems: 'center', gap: 7,
+                padding: '11px 20px',
+                borderRight: i < TRUST.length - 1 ? '1px solid var(--border)' : 'none',
+                fontSize: 11, fontWeight: 600, color: 'var(--muted)', letterSpacing: '.3px',
+              }}>
+                <span style={{ color: 'var(--accent)', display: 'flex' }}>{t.icon}</span>
+                {t.label}
+              </div>
+            ))}
+          </div>
+
+          {/* scroll hint */}
+          <div style={{
+            position: 'absolute', bottom: 28, left: '50%', transform: 'translateX(-50%)',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+            color: 'var(--faint)', fontSize: 11, fontWeight: 500, letterSpacing: '.5px',
+            animation: 'fadeUpDown 2s ease-in-out infinite',
+          }}>
+            <span>scroll to browse</span>
+            <span style={{ color: 'var(--accent)', display: 'flex' }}>{Icons.arrowDown}</span>
+          </div>
         </section>
 
-        {/* ── TRUST STRIP ── */}
-        <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap',
-          borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)',
-          background: 'rgba(163,151,221,0.02)',
-        }}>
-          {TRUST.map((t, i) => (
-            <div key={t.label} style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              padding: '13px 28px',
-              borderRight: i < TRUST.length - 1 ? '1px solid var(--border)' : 'none',
-              fontSize: 12, fontWeight: 600, color: 'var(--muted)', letterSpacing: '.3px',
-            }}>
-              <span style={{ color: 'var(--accent)', display: 'flex' }}>{t.icon}</span>
-              {t.label}
-            </div>
-          ))}
-        </div>
+        {/* ══ PRODUCT SECTIONS ══ */}
+        {PRODUCTS.map((p, pi) => {
+          const st = STATUS[p.status]
+          const ti = tiers[p.id] ?? 1
+          const tier = p.tiers[ti]
+          const isLast = pi === PRODUCTS.length - 1
 
-        {/* ── PRODUCTS ── */}
-        <section style={{ maxWidth: 860, margin: '0 auto', padding: '60px 24px 80px', display: 'flex', flexDirection: 'column', gap: 18 }}>
-          {PRODUCTS.map(p => {
-            const st = STATUS[p.status]
-            const ti = tiers[p.id] ?? 1
-            const tier = p.tiers[ti]
-            return (
-              <div key={p.id} id={p.id} className="card" style={{ padding: 0, overflow: 'hidden' }}>
+          return (
+            <section
+              key={p.id}
+              id={p.id}
+              style={{
+                height: '100%',
+                scrollSnapAlign: 'start',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                position: 'relative',
+                overflow: 'hidden',
+                padding: '0 48px',
+              }}
+            >
+              {/* ambient glow per product */}
+              <div style={{
+                position: 'absolute', inset: 0, pointerEvents: 'none',
+                background: `radial-gradient(ellipse 60% 50% at ${pi === 0 ? '30%' : pi === 1 ? '70%' : '50%'} 50%, rgba(163,151,221,0.07) 0%, transparent 65%)`,
+              }} />
 
-                {/* Header */}
-                <div style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  padding: '16px 22px', borderBottom: '1px solid var(--border)',
-                  background: 'rgba(163,151,221,0.025)', flexWrap: 'wrap', gap: 10,
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ fontSize: 17, fontWeight: 800, color: '#fff', letterSpacing: '-.4px' }}>{p.game}</span>
+              <div style={{
+                position: 'relative', zIndex: 1,
+                display: 'grid',
+                gridTemplateColumns: '1fr 320px',
+                gap: 32,
+                maxWidth: 1000,
+                margin: '0 auto',
+                width: '100%',
+              }}>
+
+                {/* ── LEFT: product info ── */}
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+
+                  {/* top meta row */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
                     <span style={{
                       fontSize: 10, fontWeight: 700, letterSpacing: '.5px', textTransform: 'uppercase',
                       color: 'var(--mid)', background: 'rgba(163,151,221,0.1)',
                       border: '1px solid rgba(163,151,221,0.2)', padding: '3px 9px', borderRadius: 100,
                     }}>{p.badge}</span>
-                    <span style={{ fontSize: 11, color: 'var(--faint)', fontWeight: 500 }}>{p.season}</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                    <span style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 5,
-                      fontSize: 11, fontWeight: 600, color: 'var(--muted)',
-                      background: 'rgba(163,151,221,0.06)', border: '1px solid var(--border)',
-                      padding: '4px 12px', borderRadius: 100,
-                    }}>
-                      <span style={{ color: 'var(--accent)', display: 'flex' }}>{Icons.users}</span>
-                      {p.users.toLocaleString()} active
-                    </span>
+                    <span style={{ fontSize: 12, color: 'var(--faint)', fontWeight: 500 }}>{p.season}</span>
                     <span style={{
                       display: 'inline-flex', alignItems: 'center', gap: 6,
-                      fontSize: 11, fontWeight: 700, padding: '5px 12px', borderRadius: 100,
+                      fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 100,
                       color: st.color, background: st.bg, border: `1px solid ${st.border}`,
                     }}>
                       <span style={{
@@ -384,162 +471,200 @@ export default function ShopPage() {
                       {st.label}
                     </span>
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'var(--faint)' }}>
+                      <span style={{ display: 'flex' }}>{Icons.users}</span>
+                      {p.users.toLocaleString()} active
+                    </span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'var(--faint)' }}>
                       <span style={{ display: 'flex' }}>{Icons.clock}</span>
-                      {p.updated}
+                      updated {p.updated}
                     </span>
                   </div>
-                </div>
 
-                {/* Body */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px' }}>
+                  {/* big game name */}
+                  <h2 style={{
+                    fontSize: 'clamp(42px, 6vw, 72px)',
+                    fontWeight: 900,
+                    letterSpacing: '-2px',
+                    color: '#fff',
+                    lineHeight: 1,
+                    marginBottom: 18,
+                  }}>{p.game}</h2>
 
-                  {/* Left */}
-                  <div style={{ padding: '22px 24px', borderRight: '1px solid var(--border)' }}>
-                    {/* AI badge inline */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
-                      <span style={{
-                        display: 'inline-flex', alignItems: 'center', gap: 6,
-                        fontSize: 11, fontWeight: 700, color: 'var(--light)',
-                        background: 'rgba(163,151,221,0.08)', border: '1px solid rgba(163,151,221,0.18)',
-                        padding: '4px 10px', borderRadius: 100,
-                      }}>
-                        <span style={{ display: 'flex', color: 'var(--accent)' }}>{Icons.cpu}</span>
-                        AI-Powered · External Process
-                      </span>
-                      <span style={{
-                        display: 'inline-flex', alignItems: 'center', gap: 6,
-                        fontSize: 11, fontWeight: 700, color: 'rgba(74,222,128,0.8)',
-                        background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.15)',
-                        padding: '4px 10px', borderRadius: 100,
-                      }}>
-                        <span style={{ display: 'flex' }}>{Icons.shield}</span>
-                        No DLL Injection
-                      </span>
-                    </div>
-
-                    <p style={{ fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.75, marginBottom: 20 }}>{p.desc}</p>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '7px 18px' }}>
-                      {p.features.map(f => (
-                        <div key={f} style={{
-                          display: 'flex', alignItems: 'flex-start', gap: 8,
-                          fontSize: 12.5, color: 'rgba(254,254,255,0.52)', lineHeight: 1.45,
-                        }}>
-                          <span style={{
-                            width: 16, height: 16, borderRadius: '50%', flexShrink: 0,
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            marginTop: 1, background: 'rgba(163,151,221,0.1)', color: 'var(--light)',
-                          }}>
-                            {Icons.checkCircle}
-                          </span>
-                          {f}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Right */}
-                  <div style={{ padding: '22px 20px', display: 'flex', flexDirection: 'column', gap: 0 }}>
+                  {/* AI badges */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
                     <span style={{
-                      fontSize: 10, fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase',
-                      color: 'var(--faint)', marginBottom: 10,
-                      display: 'flex', alignItems: 'center', gap: 6,
+                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                      fontSize: 11, fontWeight: 700, color: 'var(--light)',
+                      background: 'rgba(163,151,221,0.08)', border: '1px solid rgba(163,151,221,0.18)',
+                      padding: '4px 10px', borderRadius: 100,
                     }}>
-                      <span style={{ color: 'var(--accent)', display: 'flex' }}>{Icons.clock}</span>
-                      Select Duration
+                      <span style={{ display: 'flex', color: 'var(--accent)' }}>{Icons.cpu}</span>
+                      AI-Powered · External Process
                     </span>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginBottom: 14 }}>
-                      {p.tiers.map((t, i) => (
-                        <button key={t.label}
-                          onClick={() => setTiers(s => ({ ...s, [p.id]: i }))}
-                          style={{
-                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                            padding: '11px 14px', borderRadius: 10, cursor: 'pointer',
-                            background: ti === i ? 'rgba(163,151,221,0.12)' : 'rgba(163,151,221,0.03)',
-                            border: ti === i ? '1px solid rgba(163,151,221,0.32)' : '1px solid var(--border)',
-                            color: ti === i ? 'var(--light)' : 'var(--muted)',
-                            transition: 'all .15s', fontFamily: 'inherit',
-                          }}
-                        >
-                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1 }}>
-                            <span style={{ fontSize: 13, fontWeight: 700 }}>{t.label}</span>
-                            <span style={{ fontSize: 10, opacity: .55 }}>{t.sub}</span>
-                          </div>
-                          <span style={{ fontSize: 19, fontWeight: 900, letterSpacing: '-.5px' }}>{t.price}</span>
-                        </button>
-                      ))}
-                    </div>
-
-                    <div style={{ height: 1, background: 'var(--border)', marginBottom: 14 }} />
-
-                    <button
-                      className="btn btn-primary btn-full"
-                      style={{ padding: '13px 16px', fontSize: 14, borderRadius: 11, justifyContent: 'space-between', display: 'flex', alignItems: 'center' }}
-                    >
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                        <span style={{ display: 'flex', opacity: .9 }}>{Icons.zap}</span>
-                        Purchase {tier.sub}
-                      </span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <strong style={{ fontSize: 17, fontWeight: 900 }}>{tier.price}</strong>
-                        <span style={{ display: 'flex', opacity: .8 }}>{Icons.arrowRight}</span>
-                      </span>
-                    </button>
-
-                    <p style={{
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
-                      fontSize: 11, color: 'var(--faint)', marginTop: 10, lineHeight: 1.6,
+                    <span style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                      fontSize: 11, fontWeight: 700, color: 'rgba(74,222,128,0.8)',
+                      background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.15)',
+                      padding: '4px 10px', borderRadius: 100,
                     }}>
-                      <span style={{ display: 'flex' }}>{Icons.lock}</span>
-                      Anonymous · Key in your dashboard
-                    </p>
+                      <span style={{ display: 'flex' }}>{Icons.shield}</span>
+                      No DLL Injection
+                    </span>
+                  </div>
+
+                  <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.75, marginBottom: 24, maxWidth: 520 }}>{p.desc}</p>
+
+                  {/* features grid */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 24px' }}>
+                    {p.features.map(f => (
+                      <div key={f} style={{
+                        display: 'flex', alignItems: 'flex-start', gap: 8,
+                        fontSize: 12.5, color: 'rgba(254,254,255,0.52)', lineHeight: 1.45,
+                      }}>
+                        <span style={{
+                          width: 16, height: 16, borderRadius: '50%', flexShrink: 0,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          marginTop: 1, background: 'rgba(163,151,221,0.1)', color: 'var(--light)',
+                        }}>
+                          {Icons.checkCircle}
+                        </span>
+                        {f}
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
-            )
-          })}
-        </section>
 
-        {/* ── FAQ ── */}
-        <section style={{ maxWidth: 860, margin: '0 auto', padding: '0 24px 80px' }}>
-          <h2 style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-.5px', color: '#fff', marginBottom: 18 }}>
-            Common questions
-          </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-            {FAQ.map(f => (
-              <div key={f.q} className="card" style={{ padding: '20px 22px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 10 }}>
-                  <span style={{ color: 'var(--accent)', display: 'flex' }}>{f.icon}</span>
-                  <span style={{ fontSize: 14, fontWeight: 700, color: '#fff' }}>{f.q}</span>
+                {/* ── RIGHT: purchase panel ── */}
+                <div className="card" style={{ padding: '28px 22px', display: 'flex', flexDirection: 'column', gap: 0 }}>
+                  <span style={{
+                    fontSize: 10, fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase',
+                    color: 'var(--faint)', marginBottom: 12,
+                    display: 'flex', alignItems: 'center', gap: 6,
+                  }}>
+                    <span style={{ color: 'var(--accent)', display: 'flex' }}>{Icons.clock}</span>
+                    Select Duration
+                  </span>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+                    {p.tiers.map((t, i) => (
+                      <button key={t.label}
+                        onClick={() => setTiers(s => ({ ...s, [p.id]: i }))}
+                        style={{
+                          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                          padding: '12px 16px', borderRadius: 10, cursor: 'pointer',
+                          background: ti === i ? 'rgba(163,151,221,0.12)' : 'rgba(163,151,221,0.03)',
+                          border: ti === i ? '1px solid rgba(163,151,221,0.32)' : '1px solid var(--border)',
+                          color: ti === i ? 'var(--light)' : 'var(--muted)',
+                          transition: 'all .15s', fontFamily: 'inherit',
+                        }}
+                      >
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1 }}>
+                          <span style={{ fontSize: 13, fontWeight: 700 }}>{t.label}</span>
+                          <span style={{ fontSize: 10, opacity: .55 }}>{t.sub}</span>
+                        </div>
+                        <span style={{ fontSize: 20, fontWeight: 900, letterSpacing: '-.5px' }}>{t.price}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  <div style={{ height: 1, background: 'var(--border)', marginBottom: 16 }} />
+
+                  <button
+                    className="btn btn-primary btn-full"
+                    style={{ padding: '14px 16px', fontSize: 14, borderRadius: 11, justifyContent: 'space-between', display: 'flex', alignItems: 'center' }}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                      <span style={{ display: 'flex', opacity: .9 }}>{Icons.zap}</span>
+                      Purchase {tier.sub}
+                    </span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <strong style={{ fontSize: 18, fontWeight: 900 }}>{tier.price}</strong>
+                      <span style={{ display: 'flex', opacity: .8 }}>{Icons.arrowRight}</span>
+                    </span>
+                  </button>
+
+                  <p style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
+                    fontSize: 11, color: 'var(--faint)', marginTop: 12, lineHeight: 1.6,
+                  }}>
+                    <span style={{ display: 'flex' }}>{Icons.lock}</span>
+                    Anonymous · Key in your dashboard
+                  </p>
                 </div>
-                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, margin: 0 }}>{f.a}</p>
               </div>
-            ))}
+
+              {/* scroll hint */}
+              <div style={{
+                position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5,
+                color: 'var(--faint)', fontSize: 10, fontWeight: 500, letterSpacing: '.5px',
+                animation: 'fadeUpDown 2s ease-in-out infinite',
+              }}>
+                <span>{isLast ? 'scroll for FAQ' : 'next product'}</span>
+                <span style={{ color: 'var(--accent)', display: 'flex' }}>{Icons.arrowDown}</span>
+              </div>
+            </section>
+          )
+        })}
+
+        {/* ══ SECTION LAST — FAQ + FOOTER ══ */}
+        <section style={{
+          height: '100%',
+          scrollSnapAlign: 'start',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+          padding: '0 48px',
+        }}>
+          <div style={{ maxWidth: 860, margin: '0 auto', width: '100%' }}>
+            <h2 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-.5px', color: '#fff', marginBottom: 24 }}>
+              Common questions
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 48 }}>
+              {FAQ.map(f => (
+                <div key={f.q} className="card" style={{ padding: '20px 22px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 10 }}>
+                    <span style={{ color: 'var(--accent)', display: 'flex' }}>{f.icon}</span>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: '#fff' }}>{f.q}</span>
+                  </div>
+                  <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, margin: 0 }}>{f.a}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* footer inline */}
+            <div style={{
+              borderTop: '1px solid var(--border)', paddingTop: 24,
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              gap: 16, flexWrap: 'wrap',
+            }}>
+              <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+                <Image src="/needle-logo.png" alt="" width={22} height={22}
+                  style={{ objectFit: 'contain', opacity: .55, filter: 'drop-shadow(0 0 4px rgba(163,151,221,0.4))' }} />
+                <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: '-.3px', color: 'rgba(254,254,255,0.35)' }}>
+                  fentanyl<em style={{ fontStyle: 'normal', color: 'rgba(163,151,221,0.45)' }}>.best</em>
+                </span>
+              </Link>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+                <Link href="/"      style={{ fontSize: 13, color: 'var(--faint)', textDecoration: 'none' }}>Home</Link>
+                <Link href="/shop"  style={{ fontSize: 13, color: 'var(--muted)', textDecoration: 'none' }}>Shop</Link>
+                <Link href="/login" style={{ fontSize: 13, color: 'var(--faint)', textDecoration: 'none' }}>Sign in</Link>
+              </div>
+              <span style={{ fontSize: 12, color: 'var(--faint)' }}>© 2025 fentanyl.best</span>
+            </div>
           </div>
         </section>
 
-        {/* ── FOOTER ── */}
-        <footer style={{
-          borderTop: '1px solid var(--border)', padding: '28px 40px',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          gap: 16, flexWrap: 'wrap',
-        }}>
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-            <Image src="/needle-logo.png" alt="" width={22} height={22}
-              style={{ objectFit: 'contain', opacity: .55, filter: 'drop-shadow(0 0 4px rgba(163,151,221,0.4))' }} />
-            <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: '-.3px', color: 'rgba(254,254,255,0.35)' }}>
-              fentanyl<em style={{ fontStyle: 'normal', color: 'rgba(163,151,221,0.45)' }}>.best</em>
-            </span>
-          </Link>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-            <Link href="/"      style={{ fontSize: 13, color: 'var(--faint)', textDecoration: 'none' }}>Home</Link>
-            <Link href="/shop"  style={{ fontSize: 13, color: 'var(--muted)', textDecoration: 'none' }}>Shop</Link>
-            <Link href="/login" style={{ fontSize: 13, color: 'var(--faint)', textDecoration: 'none' }}>Sign in</Link>
-          </div>
-          <span style={{ fontSize: 12, color: 'var(--faint)' }}>© 2025 fentanyl.best</span>
-        </footer>
+      </main>
 
-      </div>
+      <style>{`
+        @keyframes fadeUpDown {
+          0%, 100% { opacity: .3; transform: translateX(-50%) translateY(0); }
+          50%       { opacity: .7; transform: translateX(-50%) translateY(5px); }
+        }
+      `}</style>
     </>
   )
 }
