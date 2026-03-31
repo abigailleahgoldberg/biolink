@@ -295,11 +295,11 @@ export default function ShopPage() {
           </div>
 
           <h1 className="landing-h1" style={{ position: 'relative', zIndex: 1, marginBottom: 16 }}>
-            AI cheats.<br /><em>No injection.</em>
+            fentanyl<em>.best</em>
           </h1>
           <p className="landing-p" style={{ margin: '0 auto 20px', position: 'relative', zIndex: 1, maxWidth: 500, textAlign: 'center' }}>
-            Computer vision-powered external cheat built for OG Fortnite private servers.<br />
-            EAC, Arcsenic, Zyron, and Vortex see nothing.
+            AI powered external cheat built for OG Fortnite emulators.<br />
+            We have the capability to bypass EAC, Arcsenic, Zyron, and Vortex.
           </p>
 
           {/* tech pills */}
