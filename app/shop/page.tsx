@@ -300,8 +300,8 @@ export default function ShopPage() {
           <div className="landing-badge" style={{ position: 'relative', zIndex: 1, marginBottom: 28 }}>
             <span className="landing-badge-dot" style={{ background: '#4ade80', boxShadow: '0 0 8px rgba(74,222,128,0.5)' }} />
             {discordCount != null
-              ? <>{discordCount.toLocaleString()} members in our Discord &nbsp;·&nbsp; all models undetected</>
-              : <>join our Discord &nbsp;·&nbsp; all models undetected</>
+              ? <>{discordCount.toLocaleString()} members in our Discord</>
+              : <>join our Discord</>
             }
           </div>
 
