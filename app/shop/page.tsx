@@ -270,7 +270,9 @@ export default function ShopPage() {
           overflowY: 'scroll',
           scrollSnapType: 'y mandatory',
           scrollBehavior: 'smooth',
-        }}
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+        } as React.CSSProperties}
       >
 
         {/* ══ SECTION 0 — HERO ══ */}
@@ -630,6 +632,7 @@ export default function ShopPage() {
           0%, 100% { opacity: .3; transform: translateX(-50%) translateY(0); }
           50%       { opacity: .7; transform: translateX(-50%) translateY(5px); }
         }
+        main::-webkit-scrollbar { display: none; }
       `}</style>
     </>
   )
