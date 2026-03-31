@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // ─── ICONS ───────────────────────────────────────────────────────────────────
 const Icons = {
@@ -216,8 +216,16 @@ function ScrollDots({ total, current }: { total: number; current: number }) {
 export default function ShopPage() {
   const [tiers, setTiers] = useState<Record<string, number>>({ fortnite: 1, 'fortnite-og': 1, cs2: 1 })
   const [activeSection, setActiveSection] = useState(0)
+  const [discordCount, setDiscordCount] = useState<number | null>(null)
   const totalSections = PRODUCTS.length + 2 // hero + product + faq
   const totalUsers = PRODUCTS.reduce((a, p) => a + p.users, 0)
+
+  useEffect(() => {
+    fetch('/api/discord-members')
+      .then(r => r.json())
+      .then(d => { if (d.count != null) setDiscordCount(d.count) })
+      .catch(() => {})
+  }, [])
 
   const handleScroll = (e: React.UIEvent<HTMLElement>) => {
     const el = e.currentTarget
@@ -291,7 +299,10 @@ export default function ShopPage() {
 
           <div className="landing-badge" style={{ position: 'relative', zIndex: 1, marginBottom: 28 }}>
             <span className="landing-badge-dot" style={{ background: '#4ade80', boxShadow: '0 0 8px rgba(74,222,128,0.5)' }} />
-            {totalUsers.toLocaleString()} users active &nbsp;·&nbsp; all models undetected
+            {discordCount != null
+              ? <>{discordCount.toLocaleString()} members in our Discord &nbsp;·&nbsp; all models undetected</>
+              : <>join our Discord &nbsp;·&nbsp; all models undetected</>
+            }
           </div>
 
           <h1 className="landing-h1" style={{ position: 'relative', zIndex: 1, marginBottom: 16 }}>
