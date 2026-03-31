@@ -125,7 +125,7 @@ const Icons = {
 
 const TRUST = [
   { icon: Icons.cpu,      label: 'External AI Process — No Injection'       },
-  { icon: Icons.shield,   label: 'Bypasses Era AC, Nova AC & Reload AC'     },
+  { icon: Icons.shield,   label: 'Bypasses EAC, Arcsenic, Zyron & Vortex'   },
   { icon: Icons.zap,      label: 'Instant Key Delivery'                     },
   { icon: Icons.lock,     label: 'Anonymous Checkout'                       },
   { icon: Icons.refresh,  label: 'Model Updates Included'                   },
@@ -140,7 +140,7 @@ const PRODUCTS = [
     status: 'undetected' as const,
     updated: '1d ago',
     users: 634,
-    desc: 'Built specifically for OG Fortnite private servers — Era, Nova, EZFN, Reload. Retrained on OG character models and classic skin datasets. Recoil comp tuned for OG weapon bloom. 100% external — reads your screen, moves your mouse, their custom ACs have nothing to scan.',
+    desc: 'Built specifically for OG Fortnite private servers. Retrained on OG character models and classic skin datasets. Recoil comp tuned for OG weapon bloom. 100% external — reads your screen, moves your mouse. EAC, Arcsenic, Zyron, and Vortex have nothing to scan.',
     features: [
       'AI Aimbot — model retrained on OG skins & character shapes',
       'Aim Assist — smooth AI correction tuned for OG sensitivity',
@@ -178,7 +178,7 @@ const FAQ = [
   {
     icon: Icons.shield,
     q: 'Will I get banned?',
-    a: 'OG Fortnite private server ACs (Era, Nova, EZFN, Reload) scan your game files, memory, and running processes. Our software does none of that — it runs completely separately, reads only your screen pixels, and acts only through your mouse. There is no footprint for their AC to find.',
+    a: 'EAC, Arcsenic, Zyron, and Vortex all scan game files, memory, and running processes. Our software does none of that — it runs completely separately, reads only your screen pixels, and acts only through your mouse. There is no footprint for any of them to find.',
   },
   {
     icon: Icons.package,
@@ -299,7 +299,7 @@ export default function ShopPage() {
           </h1>
           <p className="landing-p" style={{ margin: '0 auto 20px', position: 'relative', zIndex: 1, maxWidth: 500, textAlign: 'center' }}>
             Computer vision-powered external cheat built for OG Fortnite private servers.<br />
-            Era, Nova, EZFN, Reload — their custom ACs see nothing.
+            EAC, Arcsenic, Zyron, and Vortex see nothing.
           </p>
 
           {/* tech pills */}
