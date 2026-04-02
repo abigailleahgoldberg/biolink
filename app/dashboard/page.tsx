@@ -6,10 +6,10 @@ import Image from 'next/image'
 import { supabase, type Profile, type Link as ProfileLink } from '@/lib/supabase'
 
 // Lucide icons for UI/navigation
-import { Home, User, Palette, Link2, Music, LayoutGrid, Users, BarChart3, Shield, Settings, Crown, Share2, ChevronUp, ChevronDown, Eye, EyeOff, Pencil, HelpCircle, ExternalLink, LogOut, Trash2, Copy, Plus, Minus, GripVertical, Check, X, Calendar, ArrowUp, ArrowDown, Info, AlertTriangle, Megaphone, Star as StarIcon, Image as ImageIcon, Type, Sparkles, Monitor, Smartphone, Tablet, Globe, MapPin } from 'lucide-react'
+import { Home, User, Palette, Link2, Music, LayoutGrid, Users, BarChart3, Shield, Settings, Crown, Share2, ChevronUp, ChevronDown, Eye, EyeOff, Pencil, HelpCircle, ExternalLink, LogOut, Trash2, Copy, Plus, Minus, GripVertical, Check, X, Calendar, ArrowUp, ArrowDown, Info, AlertTriangle, Megaphone, Star as StarIcon, Image as ImageIcon, Type, Sparkles, Monitor, Smartphone, Tablet, Globe, MapPin, Download } from 'lucide-react'
 
 // Phosphor icons for features/content
-import { DiscordLogo, SpotifyLogo, TwitchLogo, GithubLogo, TwitterLogo, InstagramLogo, TiktokLogo, YoutubeLogo, LinkedinLogo, RedditLogo, TelegramLogo, SnapchatLogo, PinterestLogo, SoundcloudLogo, Gear, Bell, Trophy, Bug, Heart, Gift, Sparkle, Timer, ChatText, Lock, Hash, MusicNote, GameController, Lightning, Fire, Snowflake, Medal } from '@phosphor-icons/react'
+import { DiscordLogo, SpotifyLogo, TwitchLogo, GithubLogo, TwitterLogo, InstagramLogo, TiktokLogo, YoutubeLogo, LinkedinLogo, RedditLogo, TelegramLogo, SnapchatLogo, PinterestLogo, SoundcloudLogo, Gear, Bell, Trophy, Bug, Heart, Gift, Sparkle, Timer, ChatText, Lock, Hash, MusicNote, GameController, Lightning, Fire, Snowflake, Medal, AppleLogo } from '@phosphor-icons/react'
 
 type Section = 'overview' | 'profile' | 'appearance' | 'links' | 'music' | 'social' | 'widgets' | 'analytics' | 'themes' | 'share' | 'badges' | 'settings' | 'premium' | 'admin-invites' | 'admin-users' | 'admin-blacklist'
 
@@ -76,6 +76,27 @@ const FONT_FAMILY_MAP: Record<string, string> = {
   'space-grotesk': 'Space Grotesk',
   'outfit': 'Outfit',
   'syne': 'Syne',
+}
+
+const SOCIAL_ICON_MAP: Record<string, React.ReactNode> = {
+  discord: <DiscordLogo size={16} weight="fill"/>,
+  twitter: <TwitterLogo size={16} weight="fill"/>,
+  tiktok: <TiktokLogo size={16} weight="fill"/>,
+  youtube: <YoutubeLogo size={16} weight="fill"/>,
+  instagram: <InstagramLogo size={16} weight="fill"/>,
+  twitch: <TwitchLogo size={16} weight="fill"/>,
+  spotify: <SpotifyLogo size={16} weight="fill"/>,
+  github: <GithubLogo size={16} weight="fill"/>,
+  telegram: <TelegramLogo size={16} weight="fill"/>,
+  snapchat: <SnapchatLogo size={16} weight="fill"/>,
+  reddit: <RedditLogo size={16} weight="fill"/>,
+  pinterest: <PinterestLogo size={16} weight="fill"/>,
+  linkedin: <LinkedinLogo size={16} weight="fill"/>,
+  soundcloud: <SoundcloudLogo size={16} weight="fill"/>,
+  email: <Globe size={16}/>,
+  website: <Globe size={16}/>,
+  custom: <Link2 size={16}/>,
+  steam: <GameController size={16} weight="fill"/>,
 }
 
 export default function Dashboard() {
@@ -166,6 +187,39 @@ export default function Dashboard() {
   const [newBL,     setNewBL]     = useState('')
   const [generating,setGenerating]= useState(false)
 
+  // --- NEW STATE VARIABLES ---
+  const [showViewCount, setShowViewCount] = useState(true)
+  const [showJoinDate, setShowJoinDate] = useState(true)
+  const [buttonWidth, setButtonWidth] = useState<'auto'|'full'>('auto')
+  const [cardBorder, setCardBorder] = useState<'none'|'subtle'|'accent'|'glow'>('none')
+  const [avatarSize, setAvatarSize] = useState<'small'|'medium'|'large'>('medium')
+  const [overlayOpacity, setOverlayOpacity] = useState(0)
+  const [gradientFrom, setGradientFrom] = useState('#0d0d20')
+  const [gradientTo, setGradientTo] = useState('#1a0d2e')
+  const [gradientDir, setGradientDir] = useState('135')
+  const [animatedBgStyle, setAnimatedBgStyle] = useState<'mesh'|'aurora'|'particles'|'waves'>('mesh')
+  const [musicVolume, setMusicVolume] = useState(80)
+  const [announcementEnabled, setAnnouncementEnabled] = useState(false)
+  const [announcementColor, setAnnouncementColor] = useState('purple')
+  const [announcementIcon, setAnnouncementIcon] = useState('info')
+  const [countdownEnabled, setCountdownEnabled] = useState(false)
+  const [countdownStyle, setCountdownStyle] = useState<'minimal'|'card'|'glowing'>('minimal')
+  const [currentlyPlaying, setCurrentlyPlaying] = useState('')
+  const [currentlyPlayingEnabled, setCurrentlyPlayingEnabled] = useState(false)
+  const [customTextEnabled, setCustomTextEnabled] = useState(false)
+  const [customTextAlign, setCustomTextAlign] = useState<'left'|'center'|'right'>('center')
+  const [photoGalleryEnabled, setPhotoGalleryEnabled] = useState(false)
+  const [discordEnabled, setDiscordEnabled] = useState(false)
+  const [twitchEnabled, setTwitchEnabled] = useState(false)
+  const [githubEnabled, setGithubEnabled] = useState(false)
+  const [lastfmUser, setLastfmUser] = useState('')
+  const [lastfmEnabled, setLastfmEnabled] = useState(false)
+  const [badgeSize, setBadgeSize] = useState<'small'|'medium'|'large'>('medium')
+  const [badgePosition, setBadgePosition] = useState<'below-name'|'below-bio'|'above-links'>('below-name')
+  const [profileVisibility, setProfileVisibility] = useState<'public'|'unlisted'|'private'>('public')
+  const [showCoverPreview, setShowCoverPreview] = useState(false)
+  const [avatarBorderType, setAvatarBorderType] = useState<'none'|'solid'|'glow'|'gradient'>('solid')
+
   useEffect(() => {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
@@ -201,6 +255,37 @@ export default function Dashboard() {
       setCountdownLabel(data.countdown_label||''); setCustomText(data.custom_text||'')
       setPhotoGallery(data.photo_gallery||[]); setAvailStatus(data.availability_status||'')
       setCurrentStatus(data.current_status||''); setThemePreset(data.theme_preset||'')
+      // new fields load
+      setShowViewCount(data.show_view_count !== false)
+      setShowJoinDate(data.show_join_date !== false)
+      setButtonWidth(data.button_width || 'auto')
+      setCardBorder(data.card_border || 'none')
+      setAvatarSize(data.avatar_size || 'medium')
+      setOverlayOpacity(data.overlay_opacity || 0)
+      setGradientFrom(data.gradient_from || '#0d0d20')
+      setGradientTo(data.gradient_to || '#1a0d2e')
+      setGradientDir(data.gradient_direction || '135')
+      setAnimatedBgStyle(data.animated_bg_style || 'mesh')
+      setMusicVolume(data.music_volume || 80)
+      setAnnouncementEnabled(data.announcement_enabled || false)
+      setAnnouncementColor(data.announcement_color || 'purple')
+      setAnnouncementIcon(data.announcement_icon || 'info')
+      setCountdownEnabled(data.countdown_enabled || false)
+      setCountdownStyle(data.countdown_style || 'minimal')
+      setCurrentlyPlaying(data.currently_playing || '')
+      setCurrentlyPlayingEnabled(data.currently_playing_enabled || false)
+      setCustomTextEnabled(data.custom_text_enabled || false)
+      setCustomTextAlign(data.custom_text_align || 'center')
+      setPhotoGalleryEnabled(data.photo_gallery_enabled || false)
+      setDiscordEnabled(data.discord_enabled || false)
+      setTwitchEnabled(data.twitch_enabled || false)
+      setGithubEnabled(data.github_enabled || false)
+      setLastfmUser(data.lastfm_username || '')
+      setLastfmEnabled(data.lastfm_enabled || false)
+      setBadgeSize(data.badge_size || 'medium')
+      setBadgePosition(data.badge_position || 'below-name')
+      setProfileVisibility(data.profile_visibility || 'public')
+      setAvatarBorderType(data.avatar_border === true || data.avatar_border === 'solid' ? 'solid' : data.avatar_border || 'solid')
       if (data.is_admin) loadAdmin()
       setLoading(false)
     }
@@ -226,7 +311,7 @@ export default function Dashboard() {
       pronouns, location, website, cover_banner: coverBanner, tagline,
       verified, show_age: showAge, birthday,
       button_shape: btnShape, text_shadow: textShadow, blur_amount: blurAmount,
-      glassmorphism, avatar_shape: avatarShape, avatar_border: avatarBorder,
+      glassmorphism, avatar_shape: avatarShape, avatar_border: avatarBorderType,
       avatar_glow: avatarGlow, animation_type: animationType,
       custom_cursor: customCursor, layout_mode: layoutMode, hover_effect: hoverEffect,
       music_autoplay: musicAutoplay, music_loop: musicLoop, player_style: playerStyle,
@@ -236,6 +321,36 @@ export default function Dashboard() {
       custom_text: customText, photo_gallery: photoGallery,
       availability_status: availStatus, current_status: currentStatus,
       theme_preset: themePreset,
+      // new fields
+      show_view_count: showViewCount,
+      show_join_date: showJoinDate,
+      button_width: buttonWidth,
+      card_border: cardBorder,
+      avatar_size: avatarSize,
+      overlay_opacity: overlayOpacity,
+      gradient_from: gradientFrom,
+      gradient_to: gradientTo,
+      gradient_direction: gradientDir,
+      animated_bg_style: animatedBgStyle,
+      music_volume: musicVolume,
+      announcement_enabled: announcementEnabled,
+      announcement_color: announcementColor,
+      announcement_icon: announcementIcon,
+      countdown_enabled: countdownEnabled,
+      countdown_style: countdownStyle,
+      currently_playing: currentlyPlaying,
+      currently_playing_enabled: currentlyPlayingEnabled,
+      custom_text_enabled: customTextEnabled,
+      custom_text_align: customTextAlign,
+      photo_gallery_enabled: photoGalleryEnabled,
+      discord_enabled: discordEnabled,
+      twitch_enabled: twitchEnabled,
+      github_enabled: githubEnabled,
+      lastfm_username: lastfmUser,
+      lastfm_enabled: lastfmEnabled,
+      badge_size: badgeSize,
+      badge_position: badgePosition,
+      profile_visibility: profileVisibility,
     }
     await supabase.from('profiles').update(payload).eq('id', profile.id)
     setSaving(false); setSaved(true); setTimeout(()=>setSaved(false),2000)
@@ -291,6 +406,7 @@ export default function Dashboard() {
   }
 
   function addLink()    { setLinks(l=>[...l,{id:crypto.randomUUID(),label:'',url:'',icon:'custom',visible:true,clicks:0}]) }
+  function addSectionHeader() { setLinks(l=>[...l,{id:crypto.randomUUID(),label:'Section',url:'',icon:'custom',visible:true,clicks:0,section:'header'}]) }
   function removeLink(id:string) { setLinks(l=>l.filter(x=>x.id!==id)) }
   function updateLink(id:string, f:keyof ProfileLink, v:any) { setLinks(l=>l.map(x=>x.id===id?{...x,[f]:v}:x)) }
   function toggleActiveBadge(id:string) { setActiveBadges(b=>b.includes(id)?b.filter(x=>x!==id):[...b,id]) }
@@ -342,22 +458,22 @@ export default function Dashboard() {
         { id: 'overview' as Section, name: 'Overview', icon: <Home size={16}/> },
         { id: 'profile' as Section, name: 'Profile', icon: <User size={16}/> },
         { id: 'appearance' as Section, name: 'Appearance', icon: <Palette size={16}/> },
-        { id: 'links' as Section, name: 'Links', icon: <Link2 size={16}/> },
       ],
     },
     {
-      label: 'FEATURES',
+      label: 'CONTENT',
       items: [
+        { id: 'links' as Section, name: 'Links', icon: <Link2 size={16}/> },
         { id: 'music' as Section, name: 'Music', icon: <Music size={16}/> },
         { id: 'widgets' as Section, name: 'Widgets', icon: <LayoutGrid size={16}/> },
-        { id: 'social' as Section, name: 'Social', icon: <Users size={16}/> },
       ],
     },
     {
-      label: 'INSIGHTS',
+      label: 'SOCIAL',
       items: [
         { id: 'analytics' as Section, name: 'Analytics', icon: <BarChart3 size={16}/> },
         { id: 'badges' as Section, name: 'Badges', icon: <Shield size={16}/> },
+        { id: 'social' as Section, name: 'Social', icon: <Users size={16}/> },
       ],
     },
     {
@@ -366,6 +482,7 @@ export default function Dashboard() {
         { id: 'settings' as Section, name: 'Settings', icon: <Settings size={16}/> },
         { id: 'premium' as Section, name: 'Premium', icon: <Crown size={16}/> },
         { id: 'share' as Section, name: 'Share', icon: <Share2 size={16}/> },
+        { id: 'themes' as Section, name: 'Themes', icon: <Sparkles size={16}/> },
       ],
     },
   ]
@@ -458,7 +575,7 @@ export default function Dashboard() {
           {s:'social' as Section, icon:<Users size={14}/>},
           {s:'widgets' as Section, icon:<LayoutGrid size={14}/>},
           {s:'analytics' as Section, icon:<BarChart3 size={14}/>},
-          {s:'themes' as Section, icon:<StarIcon size={14}/>},
+          {s:'themes' as Section, icon:<Sparkles size={14}/>},
           {s:'share' as Section, icon:<Share2 size={14}/>},
         ]).map(item=>(
           <button key={item.s} className={section===item.s?'active':''} onClick={()=>setSection(item.s)}>
@@ -521,7 +638,7 @@ export default function Dashboard() {
               {label:'Edit Profile',   icon:<User size={16}/>,    cb:()=>setSection('profile')},
               {label:'Add Links',      icon:<Link2 size={16}/>,   cb:()=>setSection('links')},
               {label:'Customize',      icon:<Palette size={16}/>, cb:()=>setSection('appearance')},
-              {label:'Browse Themes',  icon:<StarIcon size={16}/>,cb:()=>setSection('themes')},
+              {label:'Browse Themes',  icon:<Sparkles size={16}/>,cb:()=>setSection('themes')},
             ].map(q=>(
               <button key={q.label} className="db-scard" onClick={q.cb} style={{cursor:'pointer',textAlign:'left',border:'none'}}>
                 <div className="db-scard-top"><span className="db-slabel">{q.label}</span><span className="db-sico">{q.icon}</span></div>
@@ -545,13 +662,18 @@ export default function Dashboard() {
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Customize how others see your profile</p>
 
           {/* Identity */}
-          <div className="db-sub-header">Identity</div>
+          <div className="db-section-divider"><span>IDENTITY</span></div>
           <div className="db-card" style={{marginBottom:14}}>
             <div className="db-sfield" style={{marginBottom:16}}>
-              <label>Cover Banner URL</label>
+              <label style={{display:'flex',alignItems:'center',gap:8}}>
+                Cover Banner URL
+                <button onClick={()=>setShowCoverPreview(v=>!v)} style={{background:'none',border:'none',color:'var(--dba)',cursor:'pointer',fontSize:12,fontWeight:500}}>
+                  {showCoverPreview ? 'Hide Preview' : 'Preview'}
+                </button>
+              </label>
               <input className="db-sinput" value={coverBanner} onChange={e=>setCoverBanner(e.target.value)} placeholder="https://... (recommended 1200x400)"/>
             </div>
-            {coverBanner && (
+            {showCoverPreview && coverBanner && (
               <div style={{width:'100%',height:120,borderRadius:10,overflow:'hidden',marginBottom:16,background:'rgba(0,0,0,0.2)'}}>
                 <img src={coverBanner} alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
               </div>
@@ -570,8 +692,8 @@ export default function Dashboard() {
               <input className="db-sinput" value={displayName} onChange={e=>setDisplayName(e.target.value)} maxLength={32}/>
             </div>
             <div className="db-sfield" style={{marginBottom:12}}>
-              <label style={{display:'flex',alignItems:'center',gap:6}}>Username <span style={{fontSize:11,color:'var(--dbf)'}}>(change in Settings)</span></label>
-              <input className="db-sinput" value={profile?.username||''} readOnly style={{opacity:0.5,cursor:'not-allowed'}}/>
+              <label style={{display:'flex',alignItems:'center',gap:6}}>Username <span style={{fontSize:11,color:'var(--dbf)'}}>(Change in Settings)</span></label>
+              <input className="db-sinput" value={profile?.username||''} readOnly style={{opacity:0.5,cursor:'not-allowed',background:'rgba(255,255,255,0.03)'}}/>
             </div>
             <div className="db-sfield" style={{marginBottom:12}}>
               <label>Tagline</label>
@@ -605,7 +727,7 @@ export default function Dashboard() {
           </div>
 
           {/* Details */}
-          <div className="db-sub-header">Details</div>
+          <div className="db-section-divider"><span>DETAILS</span></div>
           <div className="db-card" style={{marginBottom:14}}>
             <div className="db-sfield" style={{marginBottom:12}}>
               <label style={{display:'flex',alignItems:'center',gap:6}}><MapPin size={13}/> Location</label>
@@ -628,6 +750,11 @@ export default function Dashboard() {
                 <div style={{fontSize:11,color:'var(--dbf)'}}>Display your calculated age publicly</div>
               </div>
             </div>
+          </div>
+
+          {/* Status */}
+          <div className="db-section-divider"><span>STATUS</span></div>
+          <div className="db-card" style={{marginBottom:14}}>
             <div className="db-sfield" style={{marginBottom:12}}>
               <label>Availability Status</label>
               <select className="db-sinput" value={availStatus} onChange={e=>setAvailStatus(e.target.value as Profile['availability_status'])}>
@@ -640,8 +767,8 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Profile Card */}
-          <div className="db-sub-header">Profile Card</div>
+          {/* Profile Card Options */}
+          <div className="db-section-divider"><span>PROFILE CARD OPTIONS</span></div>
           <div className="db-card" style={{marginBottom:14}}>
             <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
               <button className={`db-toggle ${verified?'on':''}`} onClick={()=>setVerified(v=>!v)}>
@@ -663,22 +790,28 @@ export default function Dashboard() {
                 ))}
               </div>
             </div>
-            <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
-              <button className={`db-toggle on`} style={{opacity:0.5,cursor:'default'}}>
+            <div className="db-toggle-row">
+              <div className="db-toggle-info">
+                <span className="db-toggle-label">Show view count</span>
+                <span className="db-toggle-desc">Display view count on your profile</span>
+              </div>
+              <button className={`db-toggle ${showViewCount?'on':''}`} onClick={()=>setShowViewCount(v=>!v)}>
                 <span className="db-toggle-thumb"/>
               </button>
-              <span style={{fontSize:13,color:'var(--dbt)'}}>Show View Count</span>
             </div>
-            <div style={{display:'flex',alignItems:'center',gap:10}}>
-              <button className={`db-toggle on`} style={{opacity:0.5,cursor:'default'}}>
+            <div className="db-toggle-row">
+              <div className="db-toggle-info">
+                <span className="db-toggle-label">Show join date</span>
+                <span className="db-toggle-desc">Display when you joined on your profile</span>
+              </div>
+              <button className={`db-toggle ${showJoinDate?'on':''}`} onClick={()=>setShowJoinDate(v=>!v)}>
                 <span className="db-toggle-thumb"/>
               </button>
-              <span style={{fontSize:13,color:'var(--dbt)'}}>Show Join Date</span>
             </div>
           </div>
 
-          {/* Visual */}
-          <div className="db-sub-header">Visual</div>
+          {/* Animations */}
+          <div className="db-section-divider"><span>ANIMATIONS</span></div>
           <div className="db-card" style={{marginBottom:14}}>
             <div style={{marginBottom:16}}>
               <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Page Animation</label>
@@ -710,7 +843,7 @@ export default function Dashboard() {
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Customize the look and feel of your profile</p>
 
           {/* Background */}
-          <div className="db-sub-header">Background</div>
+          <div className="db-section-divider"><span>BACKGROUND</span></div>
           <div className="db-card" style={{marginBottom:14}}>
             <div style={{display:'flex',gap:8,marginBottom:12,flexWrap:'wrap'}}>
               {(['color','gradient','image','animated'] as Profile['background_type'][]).map(t=>(
@@ -718,52 +851,92 @@ export default function Dashboard() {
               ))}
             </div>
             {bgType==='animated' ? (
-              <p style={{fontSize:12,color:'var(--dbm)'}}>Animated gradient background will be applied automatically.</p>
-            ) : (
               <>
-                <div style={{display:'flex',gap:8,flexWrap:'wrap',alignItems:'center',marginBottom:12}}>
-                  {BG_PRESETS.map(c=><button key={c} className={`db-swatch ${bgValue===c?'sel':''}`} onClick={()=>setBgValue(c)} style={{background:c}}/>)}
-                  <input type="color" value={bgValue.startsWith('#')?bgValue:'#07060f'} onChange={e=>setBgValue(e.target.value)} className="db-cinput"/>
+                <p style={{fontSize:12,color:'var(--dbm)',marginBottom:14}}>Choose an animated background style for your profile.</p>
+                <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:10}}>
+                  {(['mesh','aurora','particles','waves'] as const).map(s=>(
+                    <button key={s} className={`db-pill ${animatedBgStyle===s?'active':''}`} onClick={()=>setAnimatedBgStyle(s)}
+                      style={{padding:'16px 10px',textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center',gap:6}}>
+                      <div style={{width:32,height:32,borderRadius:8,background:`linear-gradient(135deg, ${accent}40, ${accent}15)`,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                        {s==='mesh' && <LayoutGrid size={16} style={{color:accent}}/>}
+                        {s==='aurora' && <Sparkles size={16} style={{color:accent}}/>}
+                        {s==='particles' && <Sparkle size={16} weight="fill" style={{color:accent}}/>}
+                        {s==='waves' && <Lightning size={16} weight="fill" style={{color:accent}}/>}
+                      </div>
+                      {s.charAt(0).toUpperCase()+s.slice(1)}
+                    </button>
+                  ))}
                 </div>
-                {bgType==='gradient' && (
-                  <div className="db-sfield">
-                    <label>Gradient CSS</label>
-                    <input className="db-sinput" value={bgValue} onChange={e=>setBgValue(e.target.value)} placeholder="linear-gradient(135deg, #0d0d20, #1a0d2e)"/>
-                  </div>
-                )}
-                {bgType==='image' && (
-                  <>
-                    <div className="db-sfield" style={{marginBottom:12}}>
-                      <label>Image URL</label>
-                      <input className="db-sinput" value={bgValue} onChange={e=>setBgValue(e.target.value)} placeholder="https://..."/>
-                    </div>
-                    <div className="db-sfield">
-                      <label>Background Blur ({blurAmount}px)</label>
-                      <input type="range" className="db-range" min={0} max={20} value={blurAmount} onChange={e=>setBlurAmount(Number(e.target.value))}/>
-                    </div>
-                  </>
-                )}
               </>
+            ) : bgType==='gradient' ? (
+              <>
+                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:12}}>
+                  <div className="db-sfield">
+                    <label>From</label>
+                    <div style={{display:'flex',gap:8,alignItems:'center'}}>
+                      <input type="color" value={gradientFrom} onChange={e=>setGradientFrom(e.target.value)} className="db-cinput"/>
+                      <input className="db-sinput" value={gradientFrom} onChange={e=>setGradientFrom(e.target.value)} style={{flex:1}}/>
+                    </div>
+                  </div>
+                  <div className="db-sfield">
+                    <label>To</label>
+                    <div style={{display:'flex',gap:8,alignItems:'center'}}>
+                      <input type="color" value={gradientTo} onChange={e=>setGradientTo(e.target.value)} className="db-cinput"/>
+                      <input className="db-sinput" value={gradientTo} onChange={e=>setGradientTo(e.target.value)} style={{flex:1}}/>
+                    </div>
+                  </div>
+                </div>
+                <div className="db-sfield" style={{marginBottom:12}}>
+                  <label>Direction</label>
+                  <select className="db-sinput" value={gradientDir} onChange={e=>setGradientDir(e.target.value)}>
+                    <option value="45">45deg</option>
+                    <option value="90">90deg</option>
+                    <option value="135">135deg (default)</option>
+                    <option value="180">180deg</option>
+                  </select>
+                </div>
+                <div style={{height:40,borderRadius:8,background:`linear-gradient(${gradientDir}deg, ${gradientFrom}, ${gradientTo})`,border:'1px solid rgba(255,255,255,0.06)'}}/>
+              </>
+            ) : bgType==='image' ? (
+              <>
+                <div className="db-sfield" style={{marginBottom:12}}>
+                  <label>Image URL</label>
+                  <input className="db-sinput" value={bgValue} onChange={e=>setBgValue(e.target.value)} placeholder="https://..."/>
+                </div>
+                <div className="db-sfield" style={{marginBottom:12}}>
+                  <label>Background Blur ({blurAmount}px)</label>
+                  <input type="range" className="db-range" min={0} max={20} value={blurAmount} onChange={e=>setBlurAmount(Number(e.target.value))}/>
+                </div>
+                <div className="db-sfield">
+                  <label>Overlay Opacity ({overlayOpacity}%)</label>
+                  <input type="range" className="db-range" min={0} max={80} value={overlayOpacity} onChange={e=>setOverlayOpacity(Number(e.target.value))}/>
+                </div>
+              </>
+            ) : (
+              <div style={{display:'flex',gap:8,flexWrap:'wrap',alignItems:'center',marginBottom:12}}>
+                {BG_PRESETS.map(c=><button key={c} className={`db-swatch ${bgValue===c?'sel':''}`} onClick={()=>setBgValue(c)} style={{background:c}}/>)}
+                <input type="color" value={bgValue.startsWith('#')?bgValue:'#07060f'} onChange={e=>setBgValue(e.target.value)} className="db-cinput"/>
+              </div>
             )}
-            <p style={{fontSize:11,color:'var(--dbf)',marginTop:12}}>Overlay opacity control coming soon.</p>
           </div>
 
-          {/* Colors */}
-          <div className="db-sub-header">Colors</div>
+          {/* Accent Color */}
+          <div className="db-section-divider"><span>ACCENT COLOR</span></div>
           <div className="db-card" style={{marginBottom:14}}>
-            <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Accent Color</label>
             <div style={{display:'flex',gap:8,flexWrap:'wrap',alignItems:'center',marginBottom:12}}>
               {ACCENT_PRESETS.map(c=><button key={c} className={`db-swatch ${accent===c?'sel':''}`} onClick={()=>setAccent(c)} style={{background:c}}/>)}
               <input type="color" value={accent} onChange={e=>setAccent(e.target.value)} className="db-cinput"/>
             </div>
-            <div style={{display:'flex',alignItems:'center',gap:10}}>
+            <div style={{display:'flex',alignItems:'center',gap:14}}>
               <div style={{width:32,height:32,borderRadius:8,background:accent,border:'2px solid rgba(255,255,255,0.1)'}}/>
-              <span style={{fontSize:12,color:'var(--dbm)'}}>Live preview: {accent}</span>
+              <span style={{fontSize:16,fontWeight:700,color:accent,fontFamily:'inherit'}}>Aa</span>
+              <div style={{padding:'4px 14px',borderRadius:6,background:accent,fontSize:12,fontWeight:600,color:'#000'}}>Button</div>
+              <span style={{fontSize:12,color:'var(--dbm)'}}>{accent}</span>
             </div>
           </div>
 
           {/* Buttons */}
-          <div className="db-sub-header">Buttons</div>
+          <div className="db-section-divider"><span>BUTTONS</span></div>
           <div className="db-card" style={{marginBottom:14}}>
             <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Style</label>
             <div className="btn-preview-grid" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,marginBottom:16}}>
@@ -782,6 +955,14 @@ export default function Dashboard() {
                 </button>
               ))}
             </div>
+            <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Width</label>
+            <div style={{display:'flex',gap:8,marginBottom:16}}>
+              {(['auto','full'] as const).map(w=>(
+                <button key={w} className={`db-pill ${buttonWidth===w?'active':''}`} onClick={()=>setButtonWidth(w)} style={{flex:1,textAlign:'center'}}>
+                  {w==='auto'?'Auto':'Full Width'}
+                </button>
+              ))}
+            </div>
             <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Hover Effect</label>
             <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
               {HOVER_EFFECTS.map(s=>(
@@ -790,11 +971,10 @@ export default function Dashboard() {
                 </button>
               ))}
             </div>
-            <p style={{fontSize:11,color:'var(--dbf)',marginTop:12}}>Button width control coming soon.</p>
           </div>
 
           {/* Typography */}
-          <div className="db-sub-header">Typography</div>
+          <div className="db-section-divider"><span>TYPOGRAPHY</span></div>
           <div className="db-card" style={{marginBottom:14}}>
             <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
               {FONTS.map(f=>(
@@ -807,7 +987,7 @@ export default function Dashboard() {
           </div>
 
           {/* Profile Card */}
-          <div className="db-sub-header">Profile Card</div>
+          <div className="db-section-divider"><span>PROFILE CARD</span></div>
           <div className="db-card" style={{marginBottom:14}}>
             <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
               <button className={`db-toggle ${glassmorphism?'on':''}`} onClick={()=>setGlassmorphism(v=>!v)}>
@@ -821,11 +1001,18 @@ export default function Dashboard() {
                 <input type="range" className="db-range" min={0} max={20} value={blurAmount} onChange={e=>setBlurAmount(Number(e.target.value))}/>
               </div>
             )}
-            <p style={{fontSize:11,color:'var(--dbf)'}}>Card border customization coming soon.</p>
+            <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Card Border</label>
+            <div style={{display:'flex',gap:8}}>
+              {(['none','subtle','accent','glow'] as const).map(b=>(
+                <button key={b} className={`db-pill ${cardBorder===b?'active':''}`} onClick={()=>setCardBorder(b)} style={{flex:1,textAlign:'center'}}>
+                  {b.charAt(0).toUpperCase()+b.slice(1)}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Avatar */}
-          <div className="db-sub-header">Avatar</div>
+          <div className="db-section-divider"><span>AVATAR</span></div>
           <div className="db-card" style={{marginBottom:14}}>
             <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Shape</label>
             <div style={{display:'flex',gap:12,marginBottom:16}}>
@@ -840,21 +1027,28 @@ export default function Dashboard() {
                 </button>
               ))}
             </div>
-            <div style={{display:'flex',gap:20,flexWrap:'wrap',marginBottom:12}}>
-              <div style={{display:'flex',alignItems:'center',gap:10}}>
-                <button className={`db-toggle ${avatarBorder?'on':''}`} onClick={()=>setAvatarBorder(v=>!v)}>
-                  <span className="db-toggle-thumb"/>
+            <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Border Type</label>
+            <div style={{display:'flex',gap:8,marginBottom:16}}>
+              {(['none','solid','glow','gradient'] as const).map(b=>(
+                <button key={b} className={`db-pill ${avatarBorderType===b?'active':''}`} onClick={()=>setAvatarBorderType(b)} style={{flex:1,textAlign:'center'}}>
+                  {b.charAt(0).toUpperCase()+b.slice(1)}
                 </button>
-                <span style={{fontSize:13,color:'var(--dbt)'}}>Border</span>
-              </div>
-              <div style={{display:'flex',alignItems:'center',gap:10}}>
-                <button className={`db-toggle ${avatarGlow?'on':''}`} onClick={()=>setAvatarGlow(v=>!v)}>
-                  <span className="db-toggle-thumb"/>
-                </button>
-                <span style={{fontSize:13,color:'var(--dbt)'}}>Glow Effect</span>
-              </div>
+              ))}
             </div>
-            <p style={{fontSize:11,color:'var(--dbf)'}}>Avatar size customization coming soon.</p>
+            <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Size</label>
+            <div style={{display:'flex',gap:8,marginBottom:12}}>
+              {(['small','medium','large'] as const).map(s=>(
+                <button key={s} className={`db-pill ${avatarSize===s?'active':''}`} onClick={()=>setAvatarSize(s)} style={{flex:1,textAlign:'center'}}>
+                  {s.charAt(0).toUpperCase()+s.slice(1)}
+                </button>
+              ))}
+            </div>
+            <div style={{display:'flex',alignItems:'center',gap:10}}>
+              <button className={`db-toggle ${avatarGlow?'on':''}`} onClick={()=>setAvatarGlow(v=>!v)}>
+                <span className="db-toggle-thumb"/>
+              </button>
+              <span style={{fontSize:13,color:'var(--dbt)'}}>Glow Effect</span>
+            </div>
           </div>
           {saveBtn}
         </>}
@@ -865,29 +1059,50 @@ export default function Dashboard() {
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Add and manage links on your profile page. Drag to reorder.</p>
           <div style={{display:'flex',gap:10,marginBottom:16}}>
             <button className="db-cta-btn" onClick={addLink} style={{margin:0}}><Plus size={14}/> Add Link</button>
-            <button className="db-outline-btn" style={{opacity:0.5,cursor:'default'}}><Plus size={14}/> Add Section Header</button>
+            <button className="db-outline-btn" onClick={addSectionHeader}><Plus size={14}/> Add Section</button>
           </div>
           <div className="db-card">
             <div style={{display:'flex',flexDirection:'column',gap:8}}>
               {links.map((lnk,idx)=>(
-                <div key={lnk.id} className="db-lrow" style={{opacity:lnk.visible===false?0.4:1}}>
-                  <GripVertical size={16} style={{color:'var(--dbf)',flexShrink:0,cursor:'grab'}}/>
-                  <div style={{display:'flex',flexDirection:'column',gap:2}}>
-                    <button onClick={()=>moveLink(idx,-1)} style={{background:'none',border:'none',color:'var(--dbf)',cursor:'pointer',fontSize:10,lineHeight:1}}><ArrowUp size={12}/></button>
-                    <button onClick={()=>moveLink(idx,1)} style={{background:'none',border:'none',color:'var(--dbf)',cursor:'pointer',fontSize:10,lineHeight:1}}><ArrowDown size={12}/></button>
+                lnk.section === 'header' ? (
+                  <div key={lnk.id} className="db-lrow" style={{borderStyle:'dashed',opacity:lnk.visible===false?0.4:1}}>
+                    <GripVertical size={16} style={{color:'var(--dbf)',flexShrink:0,cursor:'grab'}}/>
+                    <div style={{display:'flex',flexDirection:'column',gap:2}}>
+                      <button onClick={()=>moveLink(idx,-1)} style={{background:'none',border:'none',color:'var(--dbf)',cursor:'pointer',fontSize:10,lineHeight:1}}><ArrowUp size={12}/></button>
+                      <button onClick={()=>moveLink(idx,1)} style={{background:'none',border:'none',color:'var(--dbf)',cursor:'pointer',fontSize:10,lineHeight:1}}><ArrowDown size={12}/></button>
+                    </div>
+                    <span style={{fontSize:11,color:'var(--dbf)',textTransform:'uppercase',letterSpacing:1,fontWeight:600}}>Section</span>
+                    <input value={lnk.label} onChange={e=>updateLink(lnk.id,'label',e.target.value)} placeholder="Section label" className="db-linput db-llabel" style={{flex:1}}/>
+                    <button onClick={()=>updateLink(lnk.id,'visible',lnk.visible===false?true:false)}
+                      style={{background:'none',border:'none',cursor:'pointer',color:lnk.visible===false?'var(--dbf)':'var(--dba)',fontSize:14}} title="Toggle visibility">
+                      {lnk.visible===false?<EyeOff size={14}/>:<Eye size={14}/>}
+                    </button>
+                    <button onClick={()=>removeLink(lnk.id)} className="db-ldel"><Trash2 size={14}/></button>
                   </div>
-                  <select value={lnk.icon} onChange={e=>updateLink(lnk.id,'icon',e.target.value)} className="db-lsel">
-                    {SOCIAL_ICONS.map(k=><option key={k} value={k}>{k}</option>)}
-                  </select>
-                  <input value={lnk.label} onChange={e=>updateLink(lnk.id,'label',e.target.value)} placeholder="Label" className="db-linput db-llabel"/>
-                  <input value={lnk.url} onChange={e=>updateLink(lnk.id,'url',e.target.value)} placeholder="https://..." className="db-linput"/>
-                  <input type="color" value={lnk.color||accent} onChange={e=>updateLink(lnk.id,'color',e.target.value)} className="db-cinput" title="Link color"/>
-                  <button onClick={()=>updateLink(lnk.id,'visible',lnk.visible===false?true:false)}
-                    style={{background:'none',border:'none',cursor:'pointer',color:lnk.visible===false?'var(--dbf)':'var(--dba)',fontSize:14}} title="Toggle visibility">
-                    {lnk.visible===false?<EyeOff size={14}/>:<Eye size={14}/>}
-                  </button>
-                  <button onClick={()=>removeLink(lnk.id)} className="db-ldel"><Trash2 size={14}/></button>
-                </div>
+                ) : (
+                  <div key={lnk.id} className="db-lrow" style={{opacity:lnk.visible===false?0.4:1}}>
+                    <GripVertical size={16} style={{color:'var(--dbf)',flexShrink:0,cursor:'grab'}}/>
+                    <div style={{display:'flex',flexDirection:'column',gap:2}}>
+                      <button onClick={()=>moveLink(idx,-1)} style={{background:'none',border:'none',color:'var(--dbf)',cursor:'pointer',fontSize:10,lineHeight:1}}><ArrowUp size={12}/></button>
+                      <button onClick={()=>moveLink(idx,1)} style={{background:'none',border:'none',color:'var(--dbf)',cursor:'pointer',fontSize:10,lineHeight:1}}><ArrowDown size={12}/></button>
+                    </div>
+                    <span style={{display:'flex',alignItems:'center',color:'var(--dbm)',flexShrink:0}}>{SOCIAL_ICON_MAP[lnk.icon] || <Link2 size={16}/>}</span>
+                    <select value={lnk.icon} onChange={e=>updateLink(lnk.id,'icon',e.target.value)} className="db-lsel">
+                      {SOCIAL_ICONS.map(k=><option key={k} value={k}>{k}</option>)}
+                    </select>
+                    <input value={lnk.label} onChange={e=>updateLink(lnk.id,'label',e.target.value)} placeholder="Label" className="db-linput db-llabel"/>
+                    <input value={lnk.url} onChange={e=>updateLink(lnk.id,'url',e.target.value)} placeholder="https://..." className="db-linput"/>
+                    <input type="color" value={lnk.color||accent} onChange={e=>updateLink(lnk.id,'color',e.target.value)} className="db-cinput" title="Link color"/>
+                    {(lnk.clicks||0) > 0 && (
+                      <span style={{fontSize:11,color:'var(--dbm)',background:'rgba(255,255,255,0.06)',padding:'2px 8px',borderRadius:10,flexShrink:0}}>{lnk.clicks} clicks</span>
+                    )}
+                    <button onClick={()=>updateLink(lnk.id,'visible',lnk.visible===false?true:false)}
+                      style={{background:'none',border:'none',cursor:'pointer',color:lnk.visible===false?'var(--dbf)':'var(--dba)',fontSize:14}} title="Toggle visibility">
+                      {lnk.visible===false?<EyeOff size={14}/>:<Eye size={14}/>}
+                    </button>
+                    <button onClick={()=>removeLink(lnk.id)} className="db-ldel"><Trash2 size={14}/></button>
+                  </div>
+                )
               ))}
               {!links.length && <p style={{textAlign:'center',color:'var(--dbf)',padding:'24px 0',fontSize:13}}>No links yet. Add your first link above.</p>}
             </div>
@@ -896,7 +1111,6 @@ export default function Dashboard() {
               <span style={{fontSize:12,color:'var(--dbf)'}}>{links.reduce((a,l)=>a+(l.clicks||0),0)} total clicks</span>
             </div>
           </div>
-          <p style={{fontSize:11,color:'var(--dbf)',marginTop:8}}>Section headers are a future feature.</p>
           {saveBtn}
         </>}
 
@@ -912,6 +1126,7 @@ export default function Dashboard() {
                 {type: 'spotify' as Profile['music_type'], icon: <SpotifyLogo size={16} weight="fill"/>, label: 'Spotify'},
                 {type: 'youtube' as Profile['music_type'], icon: <YoutubeLogo size={16} weight="fill"/>, label: 'YouTube'},
                 {type: 'soundcloud' as Profile['music_type'], icon: <SoundcloudLogo size={16} weight="fill"/>, label: 'SoundCloud'},
+                {type: 'apple-music' as Profile['music_type'], icon: <AppleLogo size={16} weight="fill"/>, label: 'Apple Music'},
                 {type: null as Profile['music_type'], icon: null, label: 'None'},
               ]).map(t=>(
                 <button key={String(t.type)} className={`db-pill ${musicType===t.type?'active':''}`} onClick={()=>setMusicType(t.type)}
@@ -924,7 +1139,14 @@ export default function Dashboard() {
               <div className="db-sfield">
                 <label>Music URL</label>
                 <input className="db-sinput" value={musicUrl} onChange={e=>setMusicUrl(e.target.value)}
-                  placeholder={musicType==='spotify'?'https://open.spotify.com/track/...':musicType==='youtube'?'https://youtube.com/watch?v=...':'https://soundcloud.com/...'}/>
+                  placeholder={musicType==='spotify'?'https://open.spotify.com/track/...':musicType==='youtube'?'https://youtube.com/watch?v=...':musicType==='apple-music'?'https://music.apple.com/...':'https://soundcloud.com/...'}/>
+              </div>
+            )}
+            {musicType === 'spotify' && musicUrl && musicUrl.includes('spotify.com') && (
+              <div style={{marginTop:12}}>
+                <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:8,display:'block'}}>Preview</label>
+                <iframe src={`https://open.spotify.com/embed/track/${musicUrl.match(/track\/([a-zA-Z0-9]+)/)?.[1]}?utm_source=generator`}
+                  width="100%" height={80} frameBorder="0" allow="autoplay; clipboard-write; encrypted-media" style={{borderRadius:12}} loading="lazy"/>
               </div>
             )}
           </div>
@@ -952,7 +1174,10 @@ export default function Dashboard() {
                 <span style={{fontSize:13,color:'var(--dbt)'}}>Loop</span>
               </div>
             </div>
-            <p style={{fontSize:11,color:'var(--dbf)'}}>Volume slider coming soon.</p>
+            <div className="db-sfield">
+              <label>Volume ({musicVolume}%)</label>
+              <input type="range" className="db-range" min={0} max={100} value={musicVolume} onChange={e=>setMusicVolume(Number(e.target.value))}/>
+            </div>
           </div>
           {saveBtn}
         </>}
@@ -962,40 +1187,98 @@ export default function Dashboard() {
           <h1 className="db-h1">Social Integrations</h1>
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Connect your social accounts to display on your profile</p>
 
-          <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><DiscordLogo size={18} weight="fill" style={{color:'#7289da'}}/> Discord Widget</div>
-            <p style={{fontSize:12,color:'var(--dbm)',marginBottom:10}}>Enter your Discord server ID to show a widget on your profile</p>
-            <div className="db-sfield">
-              <label>Discord Server ID</label>
-              <input className="db-sinput" value={discordWidget} onChange={e=>setDiscordWidget(e.target.value)} placeholder="123456789012345678"/>
+          {/* Discord */}
+          <div className="db-social-card">
+            <div className="db-social-icon-wrap" style={{background:'rgba(88,101,242,0.15)'}}>
+              <DiscordLogo size={24} weight="fill" style={{color:'#5865F2'}}/>
             </div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:15,fontWeight:600,color:'#fff',marginBottom:4}}>Discord</div>
+              <p style={{fontSize:12,color:'var(--dbm)',marginBottom:10}}>Show member count on profile</p>
+              <div className="db-sfield">
+                <label>Server ID</label>
+                <input className="db-sinput" value={discordWidget} onChange={e=>setDiscordWidget(e.target.value)} placeholder="123456789012345678"/>
+              </div>
+            </div>
+            <button className={`db-toggle ${discordEnabled?'on':''}`} onClick={()=>setDiscordEnabled(v=>!v)}>
+              <span className="db-toggle-thumb"/>
+            </button>
           </div>
 
-          <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><SpotifyLogo size={18} weight="fill" style={{color:'#1db954'}}/> Spotify</div>
-            <div style={{display:'flex',alignItems:'center',gap:10}}>
-              <button className={`db-toggle ${spotifyNP?'on':''}`} onClick={()=>setSpotifyNP(v=>!v)}>
-                <span className="db-toggle-thumb"/>
+          {/* Spotify */}
+          <div className="db-social-card">
+            <div className="db-social-icon-wrap" style={{background:'rgba(29,185,84,0.15)'}}>
+              <SpotifyLogo size={24} weight="fill" style={{color:'#1db954'}}/>
+            </div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:15,fontWeight:600,color:'#fff',marginBottom:4,display:'flex',alignItems:'center',gap:8}}>
+                Spotify
+                <span style={{fontSize:10,padding:'2px 8px',borderRadius:6,background:'rgba(255,255,255,0.08)',color:'var(--dbm)',fontWeight:500}}>Coming Soon</span>
+              </div>
+              <p style={{fontSize:12,color:'var(--dbm)',marginBottom:10}}>Show &quot;Now Playing&quot; widget on your profile</p>
+              <button className="db-outline-btn" style={{opacity:0.5,cursor:'default',display:'flex',alignItems:'center',gap:6}}>
+                <SpotifyLogo size={14} weight="fill"/> Connect Spotify
               </button>
-              <span style={{fontSize:13,color:'var(--dbt)'}}>Show &quot;Now Playing&quot; widget</span>
             </div>
+            <button className={`db-toggle ${spotifyNP?'on':''}`} onClick={()=>setSpotifyNP(v=>!v)}>
+              <span className="db-toggle-thumb"/>
+            </button>
           </div>
 
-          <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><TwitchLogo size={18} weight="fill" style={{color:'#9146ff'}}/> Twitch</div>
-            <div className="db-sfield">
-              <label>Twitch Username</label>
-              <input className="db-sinput" value={twitchUser} onChange={e=>setTwitchUser(e.target.value)} placeholder="yourtwitch"/>
+          {/* Twitch */}
+          <div className="db-social-card">
+            <div className="db-social-icon-wrap" style={{background:'rgba(145,70,255,0.15)'}}>
+              <TwitchLogo size={24} weight="fill" style={{color:'#9146ff'}}/>
             </div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:15,fontWeight:600,color:'#fff',marginBottom:4}}>Twitch</div>
+              <p style={{fontSize:12,color:'var(--dbm)',marginBottom:10}}>Show live status on your profile</p>
+              <div className="db-sfield">
+                <label>Twitch Username</label>
+                <input className="db-sinput" value={twitchUser} onChange={e=>setTwitchUser(e.target.value)} placeholder="yourtwitch"/>
+              </div>
+            </div>
+            <button className={`db-toggle ${twitchEnabled?'on':''}`} onClick={()=>setTwitchEnabled(v=>!v)}>
+              <span className="db-toggle-thumb"/>
+            </button>
           </div>
 
-          <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><GithubLogo size={18} weight="fill"/> GitHub</div>
-            <div className="db-sfield">
-              <label>GitHub Username</label>
-              <input className="db-sinput" value={githubUser} onChange={e=>setGithubUser(e.target.value)} placeholder="yourgithub"/>
+          {/* GitHub */}
+          <div className="db-social-card">
+            <div className="db-social-icon-wrap" style={{background:'rgba(255,255,255,0.08)'}}>
+              <GithubLogo size={24} weight="fill" style={{color:'#fff'}}/>
             </div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:15,fontWeight:600,color:'#fff',marginBottom:4}}>GitHub</div>
+              <p style={{fontSize:12,color:'var(--dbm)',marginBottom:10}}>Display your contribution graph</p>
+              <div className="db-sfield">
+                <label>GitHub Username</label>
+                <input className="db-sinput" value={githubUser} onChange={e=>setGithubUser(e.target.value)} placeholder="yourgithub"/>
+              </div>
+            </div>
+            <button className={`db-toggle ${githubEnabled?'on':''}`} onClick={()=>setGithubEnabled(v=>!v)}>
+              <span className="db-toggle-thumb"/>
+            </button>
           </div>
+
+          {/* Last.fm */}
+          <div className="db-social-card">
+            <div className="db-social-icon-wrap" style={{background:'rgba(185,0,0,0.15)'}}>
+              <MusicNote size={24} weight="fill" style={{color:'#b90000'}}/>
+            </div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:15,fontWeight:600,color:'#fff',marginBottom:4}}>Last.fm</div>
+              <p style={{fontSize:12,color:'var(--dbm)',marginBottom:10}}>Show your recent scrobbles</p>
+              <div className="db-sfield">
+                <label>Last.fm Username</label>
+                <input className="db-sinput" value={lastfmUser} onChange={e=>setLastfmUser(e.target.value)} placeholder="yourlastfm"/>
+              </div>
+            </div>
+            <button className={`db-toggle ${lastfmEnabled?'on':''}`} onClick={()=>setLastfmEnabled(v=>!v)}>
+              <span className="db-toggle-thumb"/>
+            </button>
+          </div>
+
           {saveBtn}
         </>}
 
@@ -1004,6 +1287,7 @@ export default function Dashboard() {
           <h1 className="db-h1">Widgets</h1>
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Add interactive widgets to your profile page</p>
 
+          {/* Availability Status (always shown, not collapsible) */}
           <div className="db-card" style={{marginBottom:14}}>
             <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><Lightning size={18}/> Availability Status</div>
             <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:12}}>
@@ -1019,58 +1303,178 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><Megaphone size={18}/> Announcement Banner</div>
-            <div className="db-sfield">
-              <label>Announcement Text</label>
-              <input className="db-sinput" value={announcement} onChange={e=>setAnnouncement(e.target.value)} placeholder="New merch dropping soon!" maxLength={120}/>
-            </div>
-            <p style={{fontSize:11,color:'var(--dbf)',marginTop:8}}>Banner color customization coming soon.</p>
-          </div>
-
-          <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><Timer size={18}/> Countdown Timer</div>
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
-              <div className="db-sfield">
-                <label>Label</label>
-                <input className="db-sinput" value={countdownLabel} onChange={e=>setCountdownLabel(e.target.value)} placeholder="Launch day"/>
+          {/* Announcement Banner */}
+          <div className="db-widget-card-v3">
+            <div className="db-widget-header-v3" onClick={()=>setAnnouncementEnabled(v=>!v)}>
+              <div className="db-widget-header-left">
+                <div className="db-widget-icon"><Megaphone size={16}/></div>
+                <span style={{fontSize:15,fontWeight:600,color:'#fff'}}>Announcement Banner</span>
               </div>
-              <div className="db-sfield">
-                <label>Date & Time</label>
-                <input className="db-sinput" type="datetime-local" value={countdownDate} onChange={e=>setCountdownDate(e.target.value)}/>
-              </div>
+              <button className={`db-toggle ${announcementEnabled?'on':''}`} onClick={e=>{e.stopPropagation();setAnnouncementEnabled(v=>!v)}}>
+                <span className="db-toggle-thumb"/>
+              </button>
             </div>
-          </div>
-
-          <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><ChatText size={18}/> Custom Text Block</div>
-            <div className="db-sfield">
-              <label>Text Content</label>
-              <textarea className="db-sinput" value={customText} onChange={e=>setCustomText(e.target.value)} rows={3} style={{resize:'none'}} placeholder="Write anything..." maxLength={500}/>
-              <span style={{fontSize:11,color:'var(--dbf)',textAlign:'right',marginTop:3,display:'block'}}>{customText.length}/500</span>
-            </div>
-          </div>
-
-          <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><ImageIcon size={18}/> Photo Gallery</div>
-            <div className="db-gallery-grid" style={{marginBottom:12}}>
-              {photoGallery.map((url,i)=>(
-                <div key={i} className="db-gallery-item">
-                  <img src={url} alt=""/>
-                  <button onClick={()=>removePhoto(i)} style={{position:'absolute',top:4,right:4,background:'rgba(0,0,0,0.6)',border:'none',color:'#fff',width:20,height:20,borderRadius:'50%',cursor:'pointer',fontSize:12,display:'flex',alignItems:'center',justifyContent:'center'}}>
-                    <X size={12}/>
-                  </button>
+            {announcementEnabled && (
+              <div className="db-widget-body-v3">
+                <div className="db-sfield" style={{marginBottom:14}}>
+                  <label>Announcement Text</label>
+                  <input className="db-sinput" value={announcement} onChange={e=>setAnnouncement(e.target.value)} placeholder="New merch dropping soon!" maxLength={120}/>
                 </div>
-              ))}
-              <div className="db-gallery-add" onClick={()=>document.getElementById('photo-url-input')?.focus()}>
-                <Plus size={18}/>
+                <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Color</label>
+                <div style={{display:'flex',gap:8,marginBottom:14}}>
+                  {[
+                    {id:'purple',color:'#a78bfa'},{id:'blue',color:'#60a5fa'},{id:'green',color:'#4ade80'},
+                    {id:'red',color:'#f87171'},{id:'orange',color:'#fb923c'},{id:'pink',color:'#f472b6'},
+                  ].map(c=>(
+                    <button key={c.id} className={`db-swatch ${announcementColor===c.id?'sel':''}`} onClick={()=>setAnnouncementColor(c.id)} style={{background:c.color}}/>
+                  ))}
+                </div>
+                <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Icon</label>
+                <div style={{display:'flex',gap:8}}>
+                  {[
+                    {id:'info',icon:<Info size={16}/>},{id:'warning',icon:<AlertTriangle size={16}/>},
+                    {id:'star',icon:<StarIcon size={16}/>},{id:'megaphone',icon:<Megaphone size={16}/>},
+                  ].map(i=>(
+                    <button key={i.id} className={`db-pill ${announcementIcon===i.id?'active':''}`} onClick={()=>setAnnouncementIcon(i.id)}
+                      style={{display:'flex',alignItems:'center',gap:6}}>
+                      {i.icon} {i.id.charAt(0).toUpperCase()+i.id.slice(1)}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div style={{display:'flex',gap:8}}>
-              <input id="photo-url-input" className="db-sinput" value={newPhotoUrl} onChange={e=>setNewPhotoUrl(e.target.value)} placeholder="Image URL..." onKeyDown={e=>e.key==='Enter'&&addPhoto()}/>
-              <button className="db-outline-btn" onClick={addPhoto} style={{flexShrink:0}}>Add</button>
-            </div>
+            )}
           </div>
+
+          {/* Countdown Timer */}
+          <div className="db-widget-card-v3">
+            <div className="db-widget-header-v3" onClick={()=>setCountdownEnabled(v=>!v)}>
+              <div className="db-widget-header-left">
+                <div className="db-widget-icon"><Timer size={16}/></div>
+                <span style={{fontSize:15,fontWeight:600,color:'#fff'}}>Countdown Timer</span>
+              </div>
+              <button className={`db-toggle ${countdownEnabled?'on':''}`} onClick={e=>{e.stopPropagation();setCountdownEnabled(v=>!v)}}>
+                <span className="db-toggle-thumb"/>
+              </button>
+            </div>
+            {countdownEnabled && (
+              <div className="db-widget-body-v3">
+                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:14}}>
+                  <div className="db-sfield">
+                    <label>Label</label>
+                    <input className="db-sinput" value={countdownLabel} onChange={e=>setCountdownLabel(e.target.value)} placeholder="Launch day"/>
+                  </div>
+                  <div className="db-sfield">
+                    <label>Date & Time</label>
+                    <input className="db-sinput" type="datetime-local" value={countdownDate} onChange={e=>setCountdownDate(e.target.value)}/>
+                  </div>
+                </div>
+                <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Style</label>
+                <div style={{display:'flex',gap:8}}>
+                  {(['minimal','card','glowing'] as const).map(s=>(
+                    <button key={s} className={`db-pill ${countdownStyle===s?'active':''}`} onClick={()=>setCountdownStyle(s)} style={{flex:1,textAlign:'center'}}>
+                      {s.charAt(0).toUpperCase()+s.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Currently Playing */}
+          <div className="db-widget-card-v3">
+            <div className="db-widget-header-v3" onClick={()=>setCurrentlyPlayingEnabled(v=>!v)}>
+              <div className="db-widget-header-left">
+                <div className="db-widget-icon"><MusicNote size={16} weight="fill"/></div>
+                <span style={{fontSize:15,fontWeight:600,color:'#fff'}}>Currently Playing</span>
+              </div>
+              <button className={`db-toggle ${currentlyPlayingEnabled?'on':''}`} onClick={e=>{e.stopPropagation();setCurrentlyPlayingEnabled(v=>!v)}}>
+                <span className="db-toggle-thumb"/>
+              </button>
+            </div>
+            {currentlyPlayingEnabled && (
+              <div className="db-widget-body-v3">
+                <div className="db-sfield" style={{marginBottom:12}}>
+                  <label>What are you playing/listening to?</label>
+                  <input className="db-sinput" value={currentlyPlaying} onChange={e=>setCurrentlyPlaying(e.target.value)} placeholder="Valorant, Minecraft, etc." maxLength={60}/>
+                </div>
+                {currentlyPlaying && (
+                  <div style={{display:'inline-flex',alignItems:'center',gap:6,padding:'6px 14px',borderRadius:20,background:'rgba(255,255,255,0.06)',fontSize:13,color:'var(--dbt)'}}>
+                    <GameController size={14} weight="fill" style={{color:'var(--dba)'}}/> Playing {currentlyPlaying}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Custom Text Block */}
+          <div className="db-widget-card-v3">
+            <div className="db-widget-header-v3" onClick={()=>setCustomTextEnabled(v=>!v)}>
+              <div className="db-widget-header-left">
+                <div className="db-widget-icon"><ChatText size={16}/></div>
+                <span style={{fontSize:15,fontWeight:600,color:'#fff'}}>Custom Text Block</span>
+              </div>
+              <button className={`db-toggle ${customTextEnabled?'on':''}`} onClick={e=>{e.stopPropagation();setCustomTextEnabled(v=>!v)}}>
+                <span className="db-toggle-thumb"/>
+              </button>
+            </div>
+            {customTextEnabled && (
+              <div className="db-widget-body-v3">
+                <div className="db-sfield" style={{marginBottom:12}}>
+                  <label>Text Content</label>
+                  <textarea className="db-sinput" value={customText} onChange={e=>setCustomText(e.target.value)} rows={3} style={{resize:'none'}} placeholder="Write anything..." maxLength={500}/>
+                  <span style={{fontSize:11,color:'var(--dbf)',textAlign:'right',marginTop:3,display:'block'}}>{customText.length}/500</span>
+                </div>
+                <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Alignment</label>
+                <div style={{display:'flex',gap:8}}>
+                  {(['left','center','right'] as const).map(a=>(
+                    <button key={a} className={`db-pill ${customTextAlign===a?'active':''}`} onClick={()=>setCustomTextAlign(a)} style={{flex:1,textAlign:'center'}}>
+                      {a.charAt(0).toUpperCase()+a.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Photo Gallery */}
+          <div className="db-widget-card-v3">
+            <div className="db-widget-header-v3" onClick={()=>setPhotoGalleryEnabled(v=>!v)}>
+              <div className="db-widget-header-left">
+                <div className="db-widget-icon"><ImageIcon size={16}/></div>
+                <span style={{fontSize:15,fontWeight:600,color:'#fff'}}>Photo Gallery</span>
+              </div>
+              <button className={`db-toggle ${photoGalleryEnabled?'on':''}`} onClick={e=>{e.stopPropagation();setPhotoGalleryEnabled(v=>!v)}}>
+                <span className="db-toggle-thumb"/>
+              </button>
+            </div>
+            {photoGalleryEnabled && (
+              <div className="db-widget-body-v3">
+                <p style={{fontSize:12,color:'var(--dbm)',marginBottom:12}}>Max 6 photos</p>
+                <div className="db-gallery-grid" style={{marginBottom:12}}>
+                  {photoGallery.map((url,i)=>(
+                    <div key={i} className="db-gallery-item">
+                      <img src={url} alt=""/>
+                      <button onClick={()=>removePhoto(i)} style={{position:'absolute',top:4,right:4,background:'rgba(0,0,0,0.6)',border:'none',color:'#fff',width:20,height:20,borderRadius:'50%',cursor:'pointer',fontSize:12,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                        <X size={12}/>
+                      </button>
+                    </div>
+                  ))}
+                  {photoGallery.length < 6 && (
+                    <div className="db-gallery-add" onClick={()=>document.getElementById('photo-url-input')?.focus()}>
+                      <Plus size={18}/>
+                    </div>
+                  )}
+                </div>
+                {photoGallery.length < 6 && (
+                  <div style={{display:'flex',gap:8}}>
+                    <input id="photo-url-input" className="db-sinput" value={newPhotoUrl} onChange={e=>setNewPhotoUrl(e.target.value)} placeholder="Image URL..." onKeyDown={e=>e.key==='Enter'&&addPhoto()}/>
+                    <button className="db-outline-btn" onClick={addPhoto} style={{flexShrink:0}}>Add</button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
           {saveBtn}
         </>}
 
@@ -1149,21 +1553,23 @@ export default function Dashboard() {
         {section==='themes' && <>
           <h1 className="db-h1">Themes</h1>
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Click a theme to instantly apply it to your profile</p>
-          <div className="db-section-grid">
+          <div style={{display:'grid',gridTemplateColumns:'repeat(4, 1fr)',gap:14}}>
             {THEME_PRESETS.map(t=>(
-              <div key={t.id} className={`db-theme-card ${themePreset===t.id?'active':''}`} onClick={()=>applyTheme(t)} style={{position:'relative'}}>
-                <div className="db-theme-card-preview" style={{background:t.bg}}>
-                  <div style={{width:30,height:30,borderRadius:'50%',background:t.accent,opacity:0.8}}/>
-                  <div style={{width:'60%',height:6,borderRadius:3,background:t.accent,opacity:0.4}}/>
-                  <div style={{width:'80%',height:8,borderRadius:4,background:t.accent,opacity:0.2,marginTop:4}}/>
-                  <div style={{width:'80%',height:8,borderRadius:4,background:t.accent,opacity:0.15}}/>
+              <div key={t.id} className={`db-theme-card-v3 ${themePreset===t.id?'active':''}`} onClick={()=>applyTheme(t)} style={{position:'relative',cursor:'pointer'}}>
+                <div style={{padding:16,borderRadius:10,background:t.bg,border:`1px solid ${themePreset===t.id?t.accent:'rgba(255,255,255,0.06)'}`,transition:'border-color 0.2s'}}>
+                  <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:10}}>
+                    <div style={{width:20,height:20,borderRadius:'50%',background:t.accent,opacity:0.8}}/>
+                    <div style={{flex:1,height:4,borderRadius:2,background:t.accent,opacity:0.3}}/>
+                  </div>
+                  <div style={{width:'100%',height:6,borderRadius:3,background:t.accent,opacity:0.15,marginBottom:4}}/>
+                  <div style={{width:'70%',height:6,borderRadius:3,background:t.accent,opacity:0.1}}/>
                 </div>
                 {themePreset===t.id && (
                   <div style={{position:'absolute',top:8,right:8,background:'var(--dba)',borderRadius:'50%',width:22,height:22,display:'flex',alignItems:'center',justifyContent:'center'}}>
                     <Check size={14} style={{color:'#fff'}}/>
                   </div>
                 )}
-                <div className="db-theme-card-name">{t.name}</div>
+                <div style={{fontSize:13,fontWeight:600,color:'var(--dbt)',textAlign:'center',marginTop:8}}>{t.name}</div>
               </div>
             ))}
           </div>
@@ -1177,12 +1583,10 @@ export default function Dashboard() {
 
           <div className="db-card" style={{marginBottom:14}}>
             <div className="db-card-h" style={{marginBottom:14}}>Profile URL</div>
-            <div style={{display:'flex',gap:8,alignItems:'center'}}>
-              <div className="db-sinput" style={{flex:1,display:'flex',alignItems:'center',gap:6,cursor:'text'}}>
-                <Globe size={14} style={{color:'var(--dbf)',flexShrink:0}}/>
-                <span style={{color:'var(--dbt)'}}>https://fentanyl.best/{profile?.username}</span>
-              </div>
-              <button className="db-outline-btn" style={{flexShrink:0,display:'flex',alignItems:'center',gap:6}} onClick={()=>{navigator.clipboard.writeText(`https://fentanyl.best/${profile?.username}`);flash('Link copied!')}}>
+            <div className="db-url-bar-v3">
+              <Globe size={14} style={{color:'var(--dbf)',flexShrink:0}}/>
+              <span style={{color:'var(--dbt)',flex:1}}>https://fentanyl.best/{profile?.username}</span>
+              <button className="db-outline-btn" style={{flexShrink:0,display:'flex',alignItems:'center',gap:6,padding:'6px 14px'}} onClick={()=>{navigator.clipboard.writeText(`https://fentanyl.best/${profile?.username}`);flash('Link copied!')}}>
                 <Copy size={14}/> Copy
               </button>
             </div>
@@ -1237,6 +1641,11 @@ export default function Dashboard() {
                   />
                 </div>
                 <div style={{textAlign:'center',fontSize:11,color:'var(--dbf)',marginTop:8}}>fentanyl.best/{profile?.username}</div>
+                <div style={{display:'flex',justifyContent:'center',marginTop:12}}>
+                  <a href={`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https://fentanyl.best/${profile?.username}`} download={`${profile?.username}-qr.png`} target="_blank" rel="noreferrer" className="db-outline-btn" style={{display:'flex',alignItems:'center',gap:6}}>
+                    <Download size={14}/> Download QR
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -1286,6 +1695,26 @@ export default function Dashboard() {
           <div style={{marginTop:32}}>
             <h2 className="db-h2" style={{marginBottom:14}}>Badge Settings</h2>
             <div className="db-card">
+              <div style={{marginBottom:16}}>
+                <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Size</label>
+                <div style={{display:'flex',gap:8}}>
+                  {(['small','medium','large'] as const).map(s=>(
+                    <button key={s} className={`db-pill ${badgeSize===s?'active':''}`} onClick={()=>setBadgeSize(s)} style={{flex:1,textAlign:'center'}}>
+                      {s.charAt(0).toUpperCase()+s.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div style={{marginBottom:16}}>
+                <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Position</label>
+                <div style={{display:'flex',gap:8}}>
+                  {(['below-name','below-bio','above-links'] as const).map(p=>(
+                    <button key={p} className={`db-pill ${badgePosition===p?'active':''}`} onClick={()=>setBadgePosition(p)} style={{flex:1,textAlign:'center'}}>
+                      {p.split('-').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ')}
+                    </button>
+                  ))}
+                </div>
+              </div>
               <div style={{display:'flex',gap:32,flexWrap:'wrap'}}>
                 <div>
                   <div style={{fontSize:14,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'flex',alignItems:'center',gap:6}}>
@@ -1330,7 +1759,7 @@ export default function Dashboard() {
           <h1 className="db-h1-center">Account Settings</h1>
           {msg && <div className="db-flash" style={{marginBottom:16}}>{msg}</div>}
 
-          <div className="db-sub-header">Account</div>
+          <div className="db-section-divider"><span>ACCOUNT</span></div>
           <div className="db-settings-card">
             {[
               {label:'Username',     val:sUser, set:setSUser, field:'username',      ph:'yourname',          maxLen:20},
@@ -1347,7 +1776,7 @@ export default function Dashboard() {
             ))}
           </div>
 
-          <div className="db-sub-header" style={{marginTop:28}}>Security</div>
+          <div className="db-section-divider" style={{marginTop:28}}><span>SECURITY</span></div>
           <div className="db-settings-card">
             {[
               {label:'Email Address', val:sEmail, set:setSEmail, field:'email',    type:'email',    ph:'new@email.com'},
@@ -1363,8 +1792,56 @@ export default function Dashboard() {
             ))}
           </div>
 
-          <div className="db-sub-header" style={{marginTop:28}}>Account Actions</div>
+          <div className="db-section-divider" style={{marginTop:28}}><span>CONNECTIONS</span></div>
           <div className="db-settings-card">
+            <div style={{display:'flex',alignItems:'center',gap:12}}>
+              <div style={{width:36,height:36,borderRadius:8,background:'rgba(88,101,242,0.15)',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <DiscordLogo size={20} weight="fill" style={{color:'#5865F2'}}/>
+              </div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:14,fontWeight:600,color:'var(--dbt)'}}>Discord</div>
+                <div style={{fontSize:12,color:'var(--dbm)'}}>Link your Discord account</div>
+              </div>
+              <button className="db-outline-btn" style={{display:'flex',alignItems:'center',gap:6}}>
+                <DiscordLogo size={14} weight="fill"/> Connect
+              </button>
+            </div>
+          </div>
+
+          <div className="db-section-divider" style={{marginTop:28}}><span>PRIVACY</span></div>
+          <div className="db-settings-card">
+            <div style={{marginBottom:16}}>
+              <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Profile Visibility</label>
+              <div style={{display:'flex',gap:8}}>
+                {(['public','unlisted','private'] as const).map(v=>(
+                  <button key={v} className={`db-pill ${profileVisibility===v?'active':''}`} onClick={()=>setProfileVisibility(v)} style={{flex:1,textAlign:'center'}}>
+                    {v.charAt(0).toUpperCase()+v.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="db-toggle-row">
+              <div className="db-toggle-info">
+                <span className="db-toggle-label">Email notifications</span>
+                <span className="db-toggle-desc">Receive email notifications about your profile</span>
+              </div>
+              <button className="db-toggle" style={{opacity:0.5,cursor:'default'}}>
+                <span className="db-toggle-thumb"/>
+              </button>
+            </div>
+            <div className="db-toggle-row">
+              <div className="db-toggle-info">
+                <span className="db-toggle-label">Marketing emails</span>
+                <span className="db-toggle-desc">Receive updates about new features and promotions</span>
+              </div>
+              <button className="db-toggle" style={{opacity:0.5,cursor:'default'}}>
+                <span className="db-toggle-thumb"/>
+              </button>
+            </div>
+          </div>
+
+          <div className="db-section-divider" style={{marginTop:28}}><span>DANGER ZONE</span></div>
+          <div className="db-danger-zone">
             <div style={{display:'flex',gap:10}}>
               <button className="db-outline-btn" style={{display:'flex',alignItems:'center',gap:6}} onClick={()=>{supabase.auth.signOut();router.push('/')}}>
                 <LogOut size={14}/> Sign out
@@ -1381,9 +1858,9 @@ export default function Dashboard() {
         {section==='premium' && <>
           <h1 className="db-h1">Premium</h1>
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Unlock advanced features for your profile</p>
-          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16}}>
+          <div className="db-tier-grid">
             {/* Free tier */}
-            <div className="db-card" style={{textAlign:'center',padding:'32px 20px',border:'2px solid rgba(255,255,255,0.06)'}}>
+            <div className="db-tier-card" style={{border:'2px solid rgba(255,255,255,0.06)'}}>
               <div style={{fontSize:14,fontWeight:700,color:'var(--dbt)',marginBottom:4}}>Free</div>
               <div style={{fontSize:28,fontWeight:800,color:'var(--dbt)',marginBottom:4}}>$0</div>
               <div style={{fontSize:12,color:'var(--dbm)',marginBottom:20}}>forever</div>
@@ -1395,7 +1872,7 @@ export default function Dashboard() {
               <div style={{marginTop:20,fontSize:12,color:'var(--dba)',fontWeight:600}}>Current Plan</div>
             </div>
             {/* Pro tier */}
-            <div className="db-card" style={{textAlign:'center',padding:'32px 20px',border:'2px solid var(--dba)',position:'relative'}}>
+            <div className="db-tier-card" style={{border:'2px solid var(--dba)',position:'relative'}}>
               <span className="db-pill-badge" style={{position:'absolute',top:12,right:12}}>Coming Soon</span>
               <div style={{fontSize:14,fontWeight:700,color:'var(--dba)',marginBottom:4}}>Pro</div>
               <div style={{fontSize:28,fontWeight:800,color:'var(--dbt)',marginBottom:4}}>$5</div>
@@ -1407,7 +1884,7 @@ export default function Dashboard() {
               </div>
             </div>
             {/* Elite tier */}
-            <div className="db-card" style={{textAlign:'center',padding:'32px 20px',border:'2px solid rgba(255,255,255,0.06)',position:'relative'}}>
+            <div className="db-tier-card" style={{border:'2px solid rgba(255,255,255,0.06)',position:'relative'}}>
               <span className="db-pill-badge" style={{position:'absolute',top:12,right:12}}>Coming Soon</span>
               <div style={{fontSize:14,fontWeight:700,color:'#facc15',marginBottom:4}}>Elite</div>
               <div style={{fontSize:28,fontWeight:800,color:'var(--dbt)',marginBottom:4}}>$15</div>
@@ -1418,6 +1895,38 @@ export default function Dashboard() {
                 ))}
               </div>
             </div>
+          </div>
+
+          {/* Feature comparison */}
+          <h2 className="db-h2" style={{marginTop:28,marginBottom:14}}>Feature Comparison</h2>
+          <div className="db-card" style={{padding:0,overflow:'hidden'}}>
+            <table className="db-table">
+              <thead>
+                <tr><th>Feature</th><th>Free</th><th>Pro</th><th>Elite</th></tr>
+              </thead>
+              <tbody>
+                {[
+                  {f:'Custom Links',     free:true, pro:true, elite:true},
+                  {f:'Basic Themes',     free:true, pro:true, elite:true},
+                  {f:'Analytics',        free:true, pro:true, elite:true},
+                  {f:'Music Player',     free:true, pro:true, elite:true},
+                  {f:'Custom Badges',    free:false,pro:true, elite:true},
+                  {f:'Animated BGs',     free:false,pro:true, elite:true},
+                  {f:'Custom Domains',   free:false,pro:true, elite:true},
+                  {f:'Priority Support', free:false,pro:true, elite:true},
+                  {f:'Verified Badge',   free:false,pro:false,elite:true},
+                  {f:'API Access',       free:false,pro:false,elite:true},
+                  {f:'Custom CSS',       free:false,pro:false,elite:true},
+                ].map(r=>(
+                  <tr key={r.f}>
+                    <td style={{fontWeight:500}}>{r.f}</td>
+                    <td>{r.free ? <Check size={14} style={{color:'#4ade80'}}/> : <X size={14} style={{color:'var(--dbf)'}}/>}</td>
+                    <td>{r.pro  ? <Check size={14} style={{color:'var(--dba)'}}/> : <X size={14} style={{color:'var(--dbf)'}}/>}</td>
+                    <td>{r.elite? <Check size={14} style={{color:'#facc15'}}/> : <X size={14} style={{color:'var(--dbf)'}}/>}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </>}
 

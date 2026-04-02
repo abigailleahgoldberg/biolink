@@ -19,13 +19,14 @@ export type Profile = {
   links: Link[]
   badges: string[]
   music_url: string
-  music_type: 'spotify' | 'youtube' | 'soundcloud' | null
+  music_type: 'spotify' | 'youtube' | 'soundcloud' | 'apple-music' | null
+  music_volume: number
   views: number
   view_count: number
   is_admin: boolean
   created_at: string
 
-  // New profile fields
+  // Profile fields
   pronouns: string
   location: string
   website: string
@@ -34,19 +35,29 @@ export type Profile = {
   verified: boolean
   show_age: boolean
   birthday: string
+  show_view_count: boolean
+  show_join_date: boolean
 
   // Appearance
   button_shape: 'rounded' | 'pill' | 'square'
+  button_width: 'auto' | 'full'
   text_shadow: boolean
   blur_amount: number
+  overlay_opacity: number
   glassmorphism: boolean
+  card_border: 'none' | 'subtle' | 'accent' | 'glow'
   avatar_shape: 'circle' | 'squircle' | 'square'
-  avatar_border: boolean
+  avatar_border: 'none' | 'solid' | 'glow' | 'gradient'
   avatar_glow: boolean
+  avatar_size: 'small' | 'medium' | 'large'
   animation_type: 'none' | 'fade-in' | 'slide-up' | 'scale'
+  animated_bg_style: 'mesh' | 'aurora' | 'particles' | 'waves'
   custom_cursor: string
   layout_mode: 'centered' | 'left' | 'wide'
   hover_effect: 'lift' | 'glow' | 'slide' | 'none'
+  gradient_from: string
+  gradient_to: string
+  gradient_direction: string
 
   // Music
   music_autoplay: boolean
@@ -55,18 +66,41 @@ export type Profile = {
 
   // Social
   discord_widget: string
+  discord_enabled: boolean
   spotify_now_playing: boolean
   twitch_username: string
+  twitch_enabled: boolean
   github_username: string
+  github_enabled: boolean
+  lastfm_username: string
+  lastfm_enabled: boolean
 
   // Widgets
   announcement: string
+  announcement_enabled: boolean
+  announcement_color: string
+  announcement_icon: string
   countdown_date: string
   countdown_label: string
+  countdown_enabled: boolean
+  countdown_style: 'minimal' | 'card' | 'glowing'
+  currently_playing: string
+  currently_playing_enabled: boolean
   custom_text: string
+  custom_text_enabled: boolean
+  custom_text_align: 'left' | 'center' | 'right'
   photo_gallery: string[]
+  photo_gallery_enabled: boolean
   availability_status: 'online' | 'away' | 'busy' | 'offline' | ''
   current_status: string
+
+  // Badges
+  badge_size: 'small' | 'medium' | 'large'
+  badge_position: 'below-name' | 'below-bio' | 'above-links'
+  badge_monochrome: boolean
+
+  // Privacy
+  profile_visibility: 'public' | 'unlisted' | 'private'
 
   // Theme
   theme_preset: string
