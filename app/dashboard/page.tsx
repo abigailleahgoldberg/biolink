@@ -5,25 +5,46 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { supabase, type Profile, type Link as ProfileLink } from '@/lib/supabase'
 
+// Lucide icons for UI/navigation
+import { Home, User, Palette, Link2, Music, LayoutGrid, Users, BarChart3, Shield, Settings, Crown, Share2, ChevronUp, ChevronDown, Eye, EyeOff, Pencil, HelpCircle, ExternalLink, LogOut, Trash2, Copy, Plus, Minus, GripVertical, Check, X, Calendar, ArrowUp, ArrowDown, Info, AlertTriangle, Megaphone, Star as StarIcon, Image as ImageIcon, Type, Sparkles, Monitor, Smartphone, Tablet, Globe, MapPin } from 'lucide-react'
+
+// Phosphor icons for features/content
+import { DiscordLogo, SpotifyLogo, TwitchLogo, GithubLogo, TwitterLogo, InstagramLogo, TiktokLogo, YoutubeLogo, LinkedinLogo, RedditLogo, TelegramLogo, SnapchatLogo, PinterestLogo, SoundcloudLogo, Gear, Bell, Trophy, Bug, Heart, Gift, Sparkle, Timer, ChatText, Lock, Hash, MusicNote, GameController, Lightning, Fire, Snowflake, Medal } from '@phosphor-icons/react'
+
 type Section = 'overview' | 'profile' | 'appearance' | 'links' | 'music' | 'social' | 'widgets' | 'analytics' | 'themes' | 'share' | 'badges' | 'settings' | 'premium' | 'admin-invites' | 'admin-users' | 'admin-blacklist'
 
+const BADGE_ICONS: Record<string, React.ReactNode> = {
+  staff: <Shield size={22} />,
+  helper: <Heart size={22} weight="fill" />,
+  premium: <Crown size={22} />,
+  verified: <Check size={22} />,
+  donor: <Heart size={22} weight="fill" />,
+  gifter: <Gift size={22} weight="fill" />,
+  og: <Fire size={22} weight="fill" />,
+  bughunter: <Bug size={22} weight="fill" />,
+  winner: <Trophy size={22} weight="fill" />,
+  founder: <Sparkle size={22} weight="fill" />,
+  christmas: <Snowflake size={22} weight="fill" />,
+  secondplace: <Medal size={22} weight="fill" />,
+}
+
 const ALL_BADGES = [
-  { id:'staff',      emoji:'🛡️', name:'Staff',         desc:'Be a part of the fentanyl.best team.' },
-  { id:'helper',     emoji:'🤝', name:'Helper',        desc:'Be active and help users in the community.' },
-  { id:'premium',    emoji:'💎', name:'Premium',       desc:'Purchase the premium package.' },
-  { id:'verified',   emoji:'✅', name:'Verified',      desc:'Purchase or be a known content creator.' },
-  { id:'donor',      emoji:'❤️', name:'Donor',         desc:'Donate to fentanyl.best.' },
-  { id:'gifter',     emoji:'🎁', name:'Gifter',        desc:'Gift a fentanyl.best product to another user.' },
-  { id:'og',         emoji:'🔥', name:'OG',            desc:'Be an early supporter of fentanyl.best.' },
-  { id:'bughunter',  emoji:'🐛', name:'Bug Hunter',    desc:'Report a bug to the fentanyl.best team.' },
-  { id:'winner',     emoji:'🏆', name:'Winner',        desc:'Win a fentanyl.best event.' },
-  { id:'founder',    emoji:'🌌', name:'Founder',       desc:'Exclusive founder badge.' },
-  { id:'christmas',  emoji:'🎄', name:'Christmas 2025',desc:'Exclusive badge from the 2025 winter event.' },
-  { id:'secondplace',emoji:'🥈', name:'Second Place',  desc:'Get second place in a fentanyl.best event.' },
+  { id:'staff',      name:'Staff',         desc:'Be a part of the fentanyl.best team.' },
+  { id:'helper',     name:'Helper',        desc:'Be active and help users in the community.' },
+  { id:'premium',    name:'Premium',       desc:'Purchase the premium package.' },
+  { id:'verified',   name:'Verified',      desc:'Purchase or be a known content creator.' },
+  { id:'donor',      name:'Donor',         desc:'Donate to fentanyl.best.' },
+  { id:'gifter',     name:'Gifter',        desc:'Gift a fentanyl.best product to another user.' },
+  { id:'og',         name:'OG',            desc:'Be an early supporter of fentanyl.best.' },
+  { id:'bughunter',  name:'Bug Hunter',    desc:'Report a bug to the fentanyl.best team.' },
+  { id:'winner',     name:'Winner',        desc:'Win a fentanyl.best event.' },
+  { id:'founder',    name:'Founder',       desc:'Exclusive founder badge.' },
+  { id:'christmas',  name:'Christmas 2025',desc:'Exclusive badge from the 2025 winter event.' },
+  { id:'secondplace',name:'Second Place',  desc:'Get second place in a fentanyl.best event.' },
 ]
 const ACCENT_PRESETS = ['#A397DD','#C9BDFE','#B7AAF3','#9583CB','#60a5fa','#34d399','#f472b6','#fb923c','#facc15','#a78bfa','#22d3ee','#e879f9']
 const BG_PRESETS     = ['#07060f','#0a0f1e','#0f0a1a','#0a1a0a','#1a0a0a','#0f0f0f','#0a0a1f','#1a0f0a','#0d1117','#111111','#0c0c14','#15121f']
-const FONTS          = ['inter','geist','space-grotesk']
+const FONTS          = ['inter','geist','space-grotesk','outfit','syne']
 const SOCIAL_ICONS   = ['discord','twitter','tiktok','youtube','instagram','twitch','spotify','github','steam','telegram','snapchat','reddit','pinterest','linkedin','email','website','custom']
 const BTN_STYLES     = ['filled','outline','glass','neon','soft','3d-shadow'] as Profile['button_style'][]
 const BTN_SHAPES     = ['rounded','pill','square'] as Profile['button_shape'][]
@@ -48,6 +69,14 @@ const THEME_PRESETS = [
   { id:'gold',        name:'Gold Rush',      bg:'#1a1400',    accent:'#facc15', btnStyle:'3d-shadow' as const, btnShape:'rounded' as const },
   { id:'ice',         name:'Ice Cold',       bg:'#0a1a2a',    accent:'#7dd3fc', btnStyle:'glass' as const, btnShape:'pill' as const },
 ]
+
+const FONT_FAMILY_MAP: Record<string, string> = {
+  'inter': 'Inter',
+  'geist': 'Geist',
+  'space-grotesk': 'Space Grotesk',
+  'outfit': 'Outfit',
+  'syne': 'Syne',
+}
 
 export default function Dashboard() {
   const router = useRouter()
@@ -285,7 +314,6 @@ export default function Dashboard() {
 
   const isAdmin = profile?.is_admin
   const isAdminSection = section.startsWith('admin-')
-  const isAccountSection = ['overview','badges','settings'].includes(section)
 
   const checks = [
     { label:'Upload An Avatar',   done:!!avatarUrl },
@@ -298,7 +326,7 @@ export default function Dashboard() {
   const pct = Math.round((checks.filter(c=>c.done).length/checks.length)*100)
 
   const saveBtn = <button className="db-cta-btn" onClick={()=>save()} disabled={saving} style={{marginTop:16}}>
-    {saved?'✓ Saved':saving?'Saving...':'Save Changes'}
+    {saved ? <><Check size={14}/> Saved</> : saving ? 'Saving...' : 'Save Changes'}
   </button>
 
   if (loading) return (
@@ -307,9 +335,44 @@ export default function Dashboard() {
     </div>
   )
 
+  const SIDEBAR_GROUPS = [
+    {
+      label: 'PROFILE',
+      items: [
+        { id: 'overview' as Section, name: 'Overview', icon: <Home size={16}/> },
+        { id: 'profile' as Section, name: 'Profile', icon: <User size={16}/> },
+        { id: 'appearance' as Section, name: 'Appearance', icon: <Palette size={16}/> },
+        { id: 'links' as Section, name: 'Links', icon: <Link2 size={16}/> },
+      ],
+    },
+    {
+      label: 'FEATURES',
+      items: [
+        { id: 'music' as Section, name: 'Music', icon: <Music size={16}/> },
+        { id: 'widgets' as Section, name: 'Widgets', icon: <LayoutGrid size={16}/> },
+        { id: 'social' as Section, name: 'Social', icon: <Users size={16}/> },
+      ],
+    },
+    {
+      label: 'INSIGHTS',
+      items: [
+        { id: 'analytics' as Section, name: 'Analytics', icon: <BarChart3 size={16}/> },
+        { id: 'badges' as Section, name: 'Badges', icon: <Shield size={16}/> },
+      ],
+    },
+    {
+      label: 'ACCOUNT',
+      items: [
+        { id: 'settings' as Section, name: 'Settings', icon: <Settings size={16}/> },
+        { id: 'premium' as Section, name: 'Premium', icon: <Crown size={16}/> },
+        { id: 'share' as Section, name: 'Share', icon: <Share2 size={16}/> },
+      ],
+    },
+  ]
+
   return (
     <div className="db-wrap">
-      {/* ═══ SIDEBAR ═══ */}
+      {/* --- SIDEBAR --- */}
       <aside className="db-sidebar">
         <Link href="/" className="db-logo">
           <Image src="/needle-logo.png" alt="" width={24} height={24} style={{objectFit:'contain',filter:'drop-shadow(0 0 5px rgba(163,151,221,0.5))'}}/>
@@ -317,60 +380,31 @@ export default function Dashboard() {
         </Link>
 
         <nav className="db-nav">
-          {/* Account */}
-          <button className={`db-ni ${isAccountSection?'active':''}`} onClick={()=>setAcctOpen(o=>!o)}>
-            <span className="db-ni-ico">{IUser}</span><span>Account</span>
-            <span className="db-ni-chev">{acctOpen?IChevUp:IChevDn}</span>
-          </button>
-          {acctOpen && (
-            <div className="db-sub">
-              {(['overview','badges','settings'] as Section[]).map(t=>(
-                <button key={t} className={`db-si ${section===t?'active':''}`} onClick={()=>setSection(t)}>
-                  {t.charAt(0).toUpperCase()+t.slice(1)}
+          {SIDEBAR_GROUPS.map(group => (
+            <div key={group.label}>
+              <div className="db-section-group-label">{group.label}</div>
+              {group.items.map(item => (
+                <button
+                  key={item.id}
+                  className={`db-ni ${section===item.id?'active':''}`}
+                  onClick={()=>setSection(item.id)}
+                  style={section===item.id ? {borderLeft:`3px solid var(--dba)`,background:'rgba(163,151,221,0.08)',color:'var(--dba)'} : {borderLeft:'3px solid transparent'}}
+                >
+                  <span className="db-ni-ico">{item.icon}</span>
+                  <span>{item.name}</span>
                 </button>
               ))}
             </div>
-          )}
-
-          <button className={`db-ni ${section==='profile'?'active':''}`} onClick={()=>setSection('profile')}>
-            <span className="db-ni-ico">{IUserP}</span><span>Profile</span>
-          </button>
-          <button className={`db-ni ${section==='appearance'?'active':''}`} onClick={()=>setSection('appearance')}>
-            <span className="db-ni-ico">{IPaint}</span><span>Appearance</span>
-          </button>
-          <button className={`db-ni ${section==='links'?'active':''}`} onClick={()=>setSection('links')}>
-            <span className="db-ni-ico">{ILink}</span><span>Links</span>
-          </button>
-          <button className={`db-ni ${section==='music'?'active':''}`} onClick={()=>setSection('music')}>
-            <span className="db-ni-ico">{IMusic}</span><span>Music</span>
-          </button>
-          <button className={`db-ni ${section==='social'?'active':''}`} onClick={()=>setSection('social')}>
-            <span className="db-ni-ico">{IShare}</span><span>Social</span>
-          </button>
-          <button className={`db-ni ${section==='widgets'?'active':''}`} onClick={()=>setSection('widgets')}>
-            <span className="db-ni-ico">{IGrid}</span><span>Widgets</span>
-          </button>
-          <button className={`db-ni ${section==='analytics'?'active':''}`} onClick={()=>setSection('analytics')}>
-            <span className="db-ni-ico">{IBarChart}</span><span>Analytics</span>
-          </button>
-          <button className={`db-ni ${section==='themes'?'active':''}`} onClick={()=>setSection('themes')}>
-            <span className="db-ni-ico">{IStar}</span><span>Themes</span>
-          </button>
-          <button className={`db-ni ${section==='share'?'active':''}`} onClick={()=>setSection('share')}>
-            <span className="db-ni-ico">{IExt}</span><span>Share</span>
-          </button>
-          <button className={`db-ni ${section==='premium'?'active':''}`} onClick={()=>setSection('premium')}>
-            <span className="db-ni-ico">{IDiamond}</span><span>Premium</span>
-          </button>
+          ))}
 
           {/* Admin section */}
           {isAdmin && <>
             <div className="db-nav-divider"/>
             <button className={`db-ni ${isAdminSection?'active':''}`} onClick={()=>setAdminOpen(o=>!o)}>
-              <span className="db-ni-ico">{IShield}</span>
+              <span className="db-ni-ico"><Shield size={16}/></span>
               <span>Admin</span>
               <span className="db-admin-badge">ADMIN</span>
-              <span className="db-ni-chev">{adminOpen?IChevUp:IChevDn}</span>
+              <span className="db-ni-chev">{adminOpen?<ChevronUp size={12}/>:<ChevronDown size={12}/>}</span>
             </button>
             {adminOpen && (
               <div className="db-sub">
@@ -390,11 +424,11 @@ export default function Dashboard() {
 
         <div className="db-bot">
           <p className="db-bot-hint">Have a question or need support?</p>
-          <a href="#" className="db-bot-btn">{IHelp} Help Center</a>
+          <a href="#" className="db-bot-btn"><HelpCircle size={14}/> Help Center</a>
           <p className="db-bot-hint" style={{marginTop:12}}>Check out your page</p>
-          <a href={`/${profile?.username}`} target="_blank" className="db-bot-btn">{IExt} My Page</a>
+          <a href={`/${profile?.username}`} target="_blank" className="db-bot-btn"><ExternalLink size={13}/> My Page</a>
           <button className="db-share-btn" onClick={()=>{navigator.clipboard.writeText(`https://fentanyl.best/${profile?.username}`);flash('Link copied!')}}>
-            {IShare} Share Your Profile
+            <Share2 size={14}/> Share Your Profile
           </button>
           <div className="db-user">
             <div className="db-uav">
@@ -406,33 +440,47 @@ export default function Dashboard() {
               <div className="db-uname">{profile?.username}</div>
               <div className="db-uuid">UID {(profile?.id||'').slice(0,8).toUpperCase()}</div>
             </div>
-            <button className="db-udots" title="Sign out" onClick={()=>{supabase.auth.signOut();router.push('/')}}>⋯</button>
+            <button className="db-udots" title="Sign out" onClick={()=>{supabase.auth.signOut();router.push('/')}}>
+              <LogOut size={14}/>
+            </button>
           </div>
         </div>
       </aside>
 
       {/* Mobile nav */}
       <div className="db-sidebar-mobile">
-        {(['overview','profile','appearance','links','music','social','widgets','analytics','themes','share'] as Section[]).map(s=>(
-          <button key={s} className={section===s?'active':''} onClick={()=>setSection(s)}>
-            {s.charAt(0).toUpperCase()+s.slice(1)}
+        {([
+          {s:'overview' as Section, icon:<Home size={14}/>},
+          {s:'profile' as Section, icon:<User size={14}/>},
+          {s:'appearance' as Section, icon:<Palette size={14}/>},
+          {s:'links' as Section, icon:<Link2 size={14}/>},
+          {s:'music' as Section, icon:<Music size={14}/>},
+          {s:'social' as Section, icon:<Users size={14}/>},
+          {s:'widgets' as Section, icon:<LayoutGrid size={14}/>},
+          {s:'analytics' as Section, icon:<BarChart3 size={14}/>},
+          {s:'themes' as Section, icon:<StarIcon size={14}/>},
+          {s:'share' as Section, icon:<Share2 size={14}/>},
+        ]).map(item=>(
+          <button key={item.s} className={section===item.s?'active':''} onClick={()=>setSection(item.s)}>
+            {item.icon}
+            {item.s.charAt(0).toUpperCase()+item.s.slice(1)}
           </button>
         ))}
       </div>
 
-      {/* ═══ MAIN ═══ */}
+      {/* --- MAIN --- */}
       <main className="db-main">
         {msg && <div className="db-flash">{msg}</div>}
 
-        {/* ── OVERVIEW ── */}
+        {/* -- OVERVIEW -- */}
         {section==='overview' && <>
           <h1 className="db-h1">Account Overview</h1>
           <div className="db-stat4">
             {[
-              {label:'Username',     icon:IPencil,  val:`@${profile?.username}`,                       sub:'Change available now'},
-              {label:'Display Name', icon:IUserP,   val:profile?.display_name||profile?.username||'—', sub:'Shown on your profile'},
-              {label:'Links',        icon:ILink,    val:String(links.length),                          sub:'Active on your page'},
-              {label:'Profile Views',icon:IEye,     val:String(profile?.view_count||0),                sub:'All-time total'},
+              {label:'Total Views',  icon:<Eye size={16}/>,       val:String(profile?.view_count||0),  sub:'All-time total'},
+              {label:'Links',        icon:<Link2 size={16}/>,     val:String(links.length),            sub:'Active on your page'},
+              {label:'Profile Score',icon:<BarChart3 size={16}/>, val:String(Math.min(100,pct+links.length*5+((profile?.view_count||0)>10?20:0))), sub:'Out of 100'},
+              {label:'Member Since', icon:<Calendar size={16}/>,  val:profile?.created_at ? new Date(profile.created_at).toLocaleDateString('en-US',{month:'short',year:'numeric'}) : '--', sub:'Join date'},
             ].map(s=>(
               <div key={s.label} className="db-scard">
                 <div className="db-scard-top"><span className="db-slabel">{s.label}</span><span className="db-sico">{s.icon}</span></div>
@@ -442,121 +490,88 @@ export default function Dashboard() {
             ))}
           </div>
 
-          <h2 className="db-h2">Account Statistics</h2>
-          <div className="db-2col">
-            <div style={{display:'flex',flexDirection:'column',gap:16}}>
-              <div className="db-card">
-                <div className="db-card-h">Profile Completion</div>
-                <div style={{display:'flex',alignItems:'center',gap:12,marginTop:14}}>
-                  <div className="db-prog-t"><div className="db-prog-f" style={{width:`${pct}%`}}/></div>
-                  <span style={{fontSize:12,color:'var(--dbm)',flexShrink:0}}>{pct}% completed</span>
-                </div>
-                {pct===100 && (
-                  <div className="db-complete-msg">
-                    <span>✅</span>
-                    <div>
-                      <div style={{fontSize:14,fontWeight:700,color:'#4ade80'}}>Your profile is complete!</div>
-                      <div style={{fontSize:12,color:'var(--dbm)',marginTop:2}}>Discover more features to enhance your experience.</div>
-                    </div>
-                  </div>
-                )}
-                <div className="db-check-row">
-                  {checks.map(c=>(
-                    <div key={c.label} className={`db-cpill ${c.done?'done':''}`}>
-                      <span className={`db-cico ${c.done?'done':''}`}>{c.done?'✓':'○'}</span>
-                      {c.label}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <h2 className="db-h2" style={{margin:'4px 0 10px'}}>
-                Account Analytics
-                <button className="db-viewmore" onClick={()=>setSection('analytics')}>View More</button>
-              </h2>
-              <div className="db-2col-eq">
-                <div className="db-card">
-                  <div className="db-card-h" style={{marginBottom:10}}>Profile Views <span style={{color:'var(--dba)'}}>14 days</span></div>
-                  <div className="db-bar-chart">{Array.from({length:14},(_,i)=><div key={i} className="db-bar" style={{height:`${Math.random()*70+5}%`}}/>)}</div>
-                  <div className="db-chart-ax"><span>14d ago</span><span>Today</span></div>
-                </div>
-                <div className="db-card">
-                  <div className="db-card-h" style={{marginBottom:10}}>Link Clicks <span style={{color:'var(--dba)'}}>14 days</span></div>
-                  <div style={{height:80,display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,color:'var(--dbf)'}}>
-                    {links.reduce((a,l)=>a+(l.clicks||0),0) > 0
-                      ? <div className="db-bar-chart" style={{height:80}}>{Array.from({length:14},(_,i)=><div key={i} className="db-bar" style={{height:`${Math.random()*50+5}%`}}/>)}</div>
-                      : 'No clicks yet'}
-                  </div>
-                </div>
-              </div>
+          <div className="db-card" style={{marginTop:20}}>
+            <div className="db-card-h">Profile Completion</div>
+            <div style={{display:'flex',alignItems:'center',gap:12,marginTop:14}}>
+              <div className="db-prog-t"><div className="db-prog-f" style={{width:`${pct}%`}}/></div>
+              <span style={{fontSize:12,color:'var(--dbm)',flexShrink:0}}>{pct}% completed</span>
             </div>
+            {pct===100 && (
+              <div className="db-complete-msg">
+                <Check size={16} style={{color:'#4ade80'}}/>
+                <div>
+                  <div style={{fontSize:14,fontWeight:700,color:'#4ade80'}}>Your profile is complete!</div>
+                  <div style={{fontSize:12,color:'var(--dbm)',marginTop:2}}>Discover more features to enhance your experience.</div>
+                </div>
+              </div>
+            )}
+            <div className="db-check-row">
+              {checks.map(c=>(
+                <div key={c.label} className={`db-cpill ${c.done?'done':''}`}>
+                  <span className={`db-cico ${c.done?'done':''}`}>{c.done?<Check size={12}/>:'○'}</span>
+                  {c.label}
+                </div>
+              ))}
+            </div>
+          </div>
 
-            <div style={{display:'flex',flexDirection:'column',gap:16}}>
-              <div className="db-card">
-                <div className="db-card-h">Manage your account</div>
-                <p style={{fontSize:12,color:'var(--dbm)',margin:'4px 0 14px'}}>Change your email, username and more.</p>
-                <div className="db-mlist">
-                  {[
-                    {ico:IUserP, label:'Edit Profile',        cb:()=>setSection('profile')},
-                    {ico:IPaint, label:'Customize Appearance', cb:()=>setSection('appearance')},
-                    {ico:ILink,  label:'Manage Links',         cb:()=>setSection('links')},
-                    {ico:IGear,  label:'Account Settings',     cb:()=>setSection('settings')},
-                    {ico:IShield,label:'Badges',               cb:()=>setSection('badges')},
-                    {ico:IStar,  label:'Browse Themes',        cb:()=>setSection('themes')},
-                  ].map(item=>(
-                    <button key={item.label} className="db-mrow" onClick={item.cb}>
-                      <span className="db-mico">{item.ico}</span>
-                      <span>{item.label}</span>
-                      <span style={{marginLeft:'auto',color:'var(--dbf)',fontSize:16}}>›</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="db-card">
-                <div className="db-card-h">Connections</div>
-                <p style={{fontSize:12,color:'var(--dbm)',margin:'4px 0 12px'}}>Link your Discord account to fentanyl.best</p>
-                <div className="db-conn-row">
-                  <span style={{color:'#7289da',display:'flex'}}>{IDiscord}</span>
-                  <span style={{flex:1,fontSize:13,fontWeight:600,color:'var(--dbt)'}}>Discord</span>
-                  <button className="db-conn-btn">Connect</button>
-                </div>
-              </div>
+          <h2 className="db-h2" style={{marginTop:24,marginBottom:14}}>Quick Links</h2>
+          <div className="db-stat4">
+            {[
+              {label:'Edit Profile',   icon:<User size={16}/>,    cb:()=>setSection('profile')},
+              {label:'Add Links',      icon:<Link2 size={16}/>,   cb:()=>setSection('links')},
+              {label:'Customize',      icon:<Palette size={16}/>, cb:()=>setSection('appearance')},
+              {label:'Browse Themes',  icon:<StarIcon size={16}/>,cb:()=>setSection('themes')},
+            ].map(q=>(
+              <button key={q.label} className="db-scard" onClick={q.cb} style={{cursor:'pointer',textAlign:'left',border:'none'}}>
+                <div className="db-scard-top"><span className="db-slabel">{q.label}</span><span className="db-sico">{q.icon}</span></div>
+                <div className="db-ssub" style={{marginTop:8}}>{q.label} &rarr;</div>
+              </button>
+            ))}
+          </div>
+
+          <h2 className="db-h2" style={{marginTop:24,marginBottom:14}}>Recent Activity</h2>
+          <div className="db-card">
+            <div style={{display:'flex',alignItems:'center',justifyContent:'center',padding:'32px 0',color:'var(--dbf)',fontSize:13}}>
+              <Info size={14} style={{marginRight:8}}/>
+              No recent activity to display.
             </div>
           </div>
         </>}
 
-        {/* ── PROFILE ── */}
+        {/* -- PROFILE -- */}
         {section==='profile' && <>
           <h1 className="db-h1">Profile</h1>
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Customize how others see your profile</p>
 
+          {/* Identity */}
+          <div className="db-sub-header">Identity</div>
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:16}}>Avatar & Banner</div>
+            <div className="db-sfield" style={{marginBottom:16}}>
+              <label>Cover Banner URL</label>
+              <input className="db-sinput" value={coverBanner} onChange={e=>setCoverBanner(e.target.value)} placeholder="https://... (recommended 1200x400)"/>
+            </div>
+            {coverBanner && (
+              <div style={{width:'100%',height:120,borderRadius:10,overflow:'hidden',marginBottom:16,background:'rgba(0,0,0,0.2)'}}>
+                <img src={coverBanner} alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+              </div>
+            )}
             <div style={{display:'flex',alignItems:'center',gap:16,marginBottom:16}}>
-              <div className="db-apreview">
-                {avatarUrl?<img src={avatarUrl} alt="" style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%'}}/>:<span style={{fontSize:22}}>👤</span>}
+              <div className="db-apreview" style={{width:64,height:64,borderRadius:'50%',overflow:'hidden',background:'rgba(255,255,255,0.06)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                {avatarUrl?<img src={avatarUrl} alt="" style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%'}}/>:<User size={22} style={{opacity:0.4}}/>}
               </div>
               <div className="db-sfield" style={{flex:1}}>
                 <label>Avatar URL</label>
                 <input className="db-sinput" value={avatarUrl} onChange={e=>setAvatarUrl(e.target.value)} placeholder="https://..."/>
               </div>
             </div>
-            <div className="db-sfield" style={{marginBottom:16}}>
-              <label>Cover Banner URL</label>
-              <input className="db-sinput" value={coverBanner} onChange={e=>setCoverBanner(e.target.value)} placeholder="https://... (recommended 1200x400)"/>
-            </div>
-            {coverBanner && (
-              <div style={{width:'100%',height:120,borderRadius:10,overflow:'hidden',marginBottom:12,background:'rgba(0,0,0,0.2)'}}>
-                <img src={coverBanner} alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
-              </div>
-            )}
-          </div>
-
-          <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:16}}>Basic Info</div>
             <div className="db-sfield" style={{marginBottom:12}}>
               <label>Display Name</label>
               <input className="db-sinput" value={displayName} onChange={e=>setDisplayName(e.target.value)} maxLength={32}/>
+            </div>
+            <div className="db-sfield" style={{marginBottom:12}}>
+              <label style={{display:'flex',alignItems:'center',gap:6}}>Username <span style={{fontSize:11,color:'var(--dbf)'}}>(change in Settings)</span></label>
+              <input className="db-sinput" value={profile?.username||''} readOnly style={{opacity:0.5,cursor:'not-allowed'}}/>
             </div>
             <div className="db-sfield" style={{marginBottom:12}}>
               <label>Tagline</label>
@@ -564,56 +579,139 @@ export default function Dashboard() {
               <span style={{fontSize:11,color:'var(--dbf)',textAlign:'right',marginTop:3,display:'block'}}>{tagline.length}/80</span>
             </div>
             <div className="db-sfield" style={{marginBottom:12}}>
+              <label>Pronouns</label>
+              <div style={{display:'flex',gap:8}}>
+                <select className="db-sinput" value={['he/him','she/her','they/them','ze/zir',''].includes(pronouns)?pronouns:'custom'} onChange={e=>{
+                  if(e.target.value==='custom') setPronouns('')
+                  else setPronouns(e.target.value)
+                }} style={{flex:1}}>
+                  <option value="">Not set</option>
+                  <option value="he/him">he/him</option>
+                  <option value="she/her">she/her</option>
+                  <option value="they/them">they/them</option>
+                  <option value="ze/zir">ze/zir</option>
+                  <option value="custom">Custom...</option>
+                </select>
+                {!['he/him','she/her','they/them','ze/zir',''].includes(pronouns) && (
+                  <input className="db-sinput" value={pronouns} onChange={e=>setPronouns(e.target.value)} placeholder="Custom pronouns" style={{flex:1}}/>
+                )}
+              </div>
+            </div>
+            <div className="db-sfield">
               <label>Bio</label>
               <textarea className="db-sinput" value={bio} onChange={e=>setBio(e.target.value)} rows={3} maxLength={160} style={{resize:'none'}}/>
               <span style={{fontSize:11,color:'var(--dbf)',textAlign:'right',marginTop:3,display:'block'}}>{bio.length}/160</span>
             </div>
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:12}}>
-              <div className="db-sfield">
-                <label>Pronouns</label>
-                <input className="db-sinput" value={pronouns} onChange={e=>setPronouns(e.target.value)} placeholder="they/them"/>
-              </div>
-              <div className="db-sfield">
-                <label>Location</label>
-                <input className="db-sinput" value={location} onChange={e=>setLocation(e.target.value)} placeholder="City, Country"/>
+          </div>
+
+          {/* Details */}
+          <div className="db-sub-header">Details</div>
+          <div className="db-card" style={{marginBottom:14}}>
+            <div className="db-sfield" style={{marginBottom:12}}>
+              <label style={{display:'flex',alignItems:'center',gap:6}}><MapPin size={13}/> Location</label>
+              <input className="db-sinput" value={location} onChange={e=>setLocation(e.target.value)} placeholder="City, Country"/>
+            </div>
+            <div className="db-sfield" style={{marginBottom:12}}>
+              <label style={{display:'flex',alignItems:'center',gap:6}}><Globe size={13}/> Website</label>
+              <input className="db-sinput" value={website} onChange={e=>setWebsite(e.target.value)} placeholder="https://yoursite.com"/>
+            </div>
+            <div className="db-sfield" style={{marginBottom:12}}>
+              <label>Birthday</label>
+              <input className="db-sinput" type="date" value={birthday} onChange={e=>setBirthday(e.target.value)}/>
+            </div>
+            <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
+              <button className={`db-toggle ${showAge?'on':''}`} onClick={()=>setShowAge(v=>!v)}>
+                <span className="db-toggle-thumb"/>
+              </button>
+              <div>
+                <span style={{fontSize:13,color:'var(--dbt)'}}>Show Age on Profile</span>
+                <div style={{fontSize:11,color:'var(--dbf)'}}>Display your calculated age publicly</div>
               </div>
             </div>
             <div className="db-sfield" style={{marginBottom:12}}>
-              <label>Website</label>
-              <input className="db-sinput" value={website} onChange={e=>setWebsite(e.target.value)} placeholder="https://yoursite.com"/>
+              <label>Availability Status</label>
+              <select className="db-sinput" value={availStatus} onChange={e=>setAvailStatus(e.target.value as Profile['availability_status'])}>
+                {AVAIL_STATUSES.map(s=><option key={s||'none'} value={s}>{s?s.charAt(0).toUpperCase()+s.slice(1):'Hidden'}</option>)}
+              </select>
             </div>
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
-              <div className="db-sfield">
-                <label>Birthday</label>
-                <input className="db-sinput" type="date" value={birthday} onChange={e=>setBirthday(e.target.value)}/>
+            <div className="db-sfield">
+              <label>Current Status</label>
+              <input className="db-sinput" value={currentStatus} onChange={e=>setCurrentStatus(e.target.value)} placeholder="What are you up to?" maxLength={60}/>
+            </div>
+          </div>
+
+          {/* Profile Card */}
+          <div className="db-sub-header">Profile Card</div>
+          <div className="db-card" style={{marginBottom:14}}>
+            <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
+              <button className={`db-toggle ${verified?'on':''}`} onClick={()=>setVerified(v=>!v)}>
+                <span className="db-toggle-thumb"/>
+              </button>
+              <div>
+                <span style={{fontSize:13,color:'var(--dbt)'}}>Verified Badge</span>
+                <div style={{fontSize:11,color:'var(--dbf)'}}>Show a verified checkmark on your profile</div>
               </div>
-              <div style={{display:'flex',flexDirection:'column',gap:12}}>
-                <div style={{display:'flex',alignItems:'center',gap:10}}>
-                  <button className={`db-toggle ${verified?'on':''}`} onClick={()=>setVerified(v=>!v)}>
-                    <span className="db-toggle-thumb"/>
+            </div>
+            <div style={{marginBottom:16}}>
+              <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Profile Layout</label>
+              <div style={{display:'flex',gap:10}}>
+                {LAYOUT_MODES.map(m=>(
+                  <button key={m} className={`db-pill ${layoutMode===m?'active':''}`} onClick={()=>setLayoutMode(m)}
+                    style={{padding:'12px 20px',flex:1,textAlign:'center'}}>
+                    {m.charAt(0).toUpperCase()+m.slice(1)}
                   </button>
-                  <span style={{fontSize:13,color:'var(--dbt)'}}>Verified Badge</span>
-                </div>
-                <div style={{display:'flex',alignItems:'center',gap:10}}>
-                  <button className={`db-toggle ${showAge?'on':''}`} onClick={()=>setShowAge(v=>!v)}>
-                    <span className="db-toggle-thumb"/>
-                  </button>
-                  <span style={{fontSize:13,color:'var(--dbt)'}}>Show Age on Profile</span>
-                </div>
+                ))}
               </div>
+            </div>
+            <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
+              <button className={`db-toggle on`} style={{opacity:0.5,cursor:'default'}}>
+                <span className="db-toggle-thumb"/>
+              </button>
+              <span style={{fontSize:13,color:'var(--dbt)'}}>Show View Count</span>
+            </div>
+            <div style={{display:'flex',alignItems:'center',gap:10}}>
+              <button className={`db-toggle on`} style={{opacity:0.5,cursor:'default'}}>
+                <span className="db-toggle-thumb"/>
+              </button>
+              <span style={{fontSize:13,color:'var(--dbt)'}}>Show Join Date</span>
+            </div>
+          </div>
+
+          {/* Visual */}
+          <div className="db-sub-header">Visual</div>
+          <div className="db-card" style={{marginBottom:14}}>
+            <div style={{marginBottom:16}}>
+              <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Page Animation</label>
+              <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+                {ANIMATIONS.map(a=>(
+                  <button key={a} className={`db-pill ${animationType===a?'active':''}`} onClick={()=>setAnimationType(a)}>
+                    {a==='none'?'None':a.split('-').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ')}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="db-sfield" style={{marginBottom:16}}>
+              <label>Custom Cursor URL</label>
+              <input className="db-sinput" value={customCursor} onChange={e=>setCustomCursor(e.target.value)} placeholder="https://... (.png or .cur, leave empty for default)"/>
+            </div>
+            <div style={{display:'flex',alignItems:'center',gap:10}}>
+              <button className={`db-toggle ${textShadow?'on':''}`} onClick={()=>setTextShadow(v=>!v)}>
+                <span className="db-toggle-thumb"/>
+              </button>
+              <span style={{fontSize:13,color:'var(--dbt)'}}>Text Shadow</span>
             </div>
           </div>
           {saveBtn}
         </>}
 
-        {/* ── APPEARANCE ── */}
+        {/* -- APPEARANCE -- */}
         {section==='appearance' && <>
           <h1 className="db-h1">Appearance</h1>
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Customize the look and feel of your profile</p>
 
           {/* Background */}
+          <div className="db-sub-header">Background</div>
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Background</div>
             <div style={{display:'flex',gap:8,marginBottom:12,flexWrap:'wrap'}}>
               {(['color','gradient','image','animated'] as Profile['background_type'][]).map(t=>(
                 <button key={t} className={`db-pill ${bgType===t?'active':''}`} onClick={()=>setBgType(t)}>{t.charAt(0).toUpperCase()+t.slice(1)}</button>
@@ -634,43 +732,57 @@ export default function Dashboard() {
                   </div>
                 )}
                 {bgType==='image' && (
-                  <div className="db-sfield">
-                    <label>Image URL</label>
-                    <input className="db-sinput" value={bgValue} onChange={e=>setBgValue(e.target.value)} placeholder="https://..."/>
-                  </div>
+                  <>
+                    <div className="db-sfield" style={{marginBottom:12}}>
+                      <label>Image URL</label>
+                      <input className="db-sinput" value={bgValue} onChange={e=>setBgValue(e.target.value)} placeholder="https://..."/>
+                    </div>
+                    <div className="db-sfield">
+                      <label>Background Blur ({blurAmount}px)</label>
+                      <input type="range" className="db-range" min={0} max={20} value={blurAmount} onChange={e=>setBlurAmount(Number(e.target.value))}/>
+                    </div>
+                  </>
                 )}
               </>
             )}
+            <p style={{fontSize:11,color:'var(--dbf)',marginTop:12}}>Overlay opacity control coming soon.</p>
           </div>
 
-          {/* Accent Color */}
+          {/* Colors */}
+          <div className="db-sub-header">Colors</div>
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Accent Color</div>
-            <div style={{display:'flex',gap:8,flexWrap:'wrap',alignItems:'center'}}>
+            <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Accent Color</label>
+            <div style={{display:'flex',gap:8,flexWrap:'wrap',alignItems:'center',marginBottom:12}}>
               {ACCENT_PRESETS.map(c=><button key={c} className={`db-swatch ${accent===c?'sel':''}`} onClick={()=>setAccent(c)} style={{background:c}}/>)}
               <input type="color" value={accent} onChange={e=>setAccent(e.target.value)} className="db-cinput"/>
             </div>
+            <div style={{display:'flex',alignItems:'center',gap:10}}>
+              <div style={{width:32,height:32,borderRadius:8,background:accent,border:'2px solid rgba(255,255,255,0.1)'}}/>
+              <span style={{fontSize:12,color:'var(--dbm)'}}>Live preview: {accent}</span>
+            </div>
           </div>
 
-          {/* Button Style */}
+          {/* Buttons */}
+          <div className="db-sub-header">Buttons</div>
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Button Style</div>
-            <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:14}}>
+            <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Style</label>
+            <div className="btn-preview-grid" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,marginBottom:16}}>
               {BTN_STYLES.map(s=>(
-                <button key={s} className={`db-pill ${btnStyle===s?'active':''}`} onClick={()=>setBtnStyle(s)}>
+                <button key={s} className={`db-pill ${btnStyle===s?'active':''}`} onClick={()=>setBtnStyle(s)}
+                  style={{padding:'10px 8px',textAlign:'center'}}>
                   {s.charAt(0).toUpperCase()+s.slice(1).replace('-',' ')}
                 </button>
               ))}
             </div>
-            <div className="db-card-h" style={{marginBottom:10,fontSize:14}}>Button Shape</div>
-            <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:14}}>
+            <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Shape</label>
+            <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:16}}>
               {BTN_SHAPES.map(s=>(
                 <button key={s} className={`db-pill ${btnShape===s?'active':''}`} onClick={()=>setBtnShape(s)}>
                   {s.charAt(0).toUpperCase()+s.slice(1)}
                 </button>
               ))}
             </div>
-            <div className="db-card-h" style={{marginBottom:10,fontSize:14}}>Hover Effect</div>
+            <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Hover Effect</label>
             <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
               {HOVER_EFFECTS.map(s=>(
                 <button key={s} className={`db-pill ${hoverEffect===s?'active':''}`} onClick={()=>setHoverEffect(s)}>
@@ -678,44 +790,57 @@ export default function Dashboard() {
                 </button>
               ))}
             </div>
+            <p style={{fontSize:11,color:'var(--dbf)',marginTop:12}}>Button width control coming soon.</p>
           </div>
 
-          {/* Font */}
+          {/* Typography */}
+          <div className="db-sub-header">Typography</div>
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Font</div>
             <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
               {FONTS.map(f=>(
                 <button key={f} className={`db-pill ${font===f?'active':''}`} onClick={()=>setFont(f)}
-                  style={{fontFamily:f==='inter'?'Inter':f==='geist'?'Geist':'Space Grotesk'}}>
+                  style={{fontFamily:FONT_FAMILY_MAP[f]||f}}>
                   {f.split('-').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ')}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Layout Mode */}
+          {/* Profile Card */}
+          <div className="db-sub-header">Profile Card</div>
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Layout</div>
-            <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-              {LAYOUT_MODES.map(m=>(
-                <button key={m} className={`db-pill ${layoutMode===m?'active':''}`} onClick={()=>setLayoutMode(m)}>
-                  {m.charAt(0).toUpperCase()+m.slice(1)}
-                </button>
-              ))}
+            <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+              <button className={`db-toggle ${glassmorphism?'on':''}`} onClick={()=>setGlassmorphism(v=>!v)}>
+                <span className="db-toggle-thumb"/>
+              </button>
+              <span style={{fontSize:13,color:'var(--dbt)'}}>Glassmorphism</span>
             </div>
+            {glassmorphism && (
+              <div className="db-sfield" style={{marginBottom:14}}>
+                <label>Card Blur ({blurAmount}px)</label>
+                <input type="range" className="db-range" min={0} max={20} value={blurAmount} onChange={e=>setBlurAmount(Number(e.target.value))}/>
+              </div>
+            )}
+            <p style={{fontSize:11,color:'var(--dbf)'}}>Card border customization coming soon.</p>
           </div>
 
           {/* Avatar */}
+          <div className="db-sub-header">Avatar</div>
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Avatar Style</div>
-            <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:14}}>
+            <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Shape</label>
+            <div style={{display:'flex',gap:12,marginBottom:16}}>
               {AVATAR_SHAPES.map(s=>(
-                <button key={s} className={`db-pill ${avatarShape===s?'active':''}`} onClick={()=>setAvatarShape(s)}>
+                <button key={s} className={`db-pill ${avatarShape===s?'active':''}`} onClick={()=>setAvatarShape(s)}
+                  style={{display:'flex',flexDirection:'column',alignItems:'center',gap:6,padding:'12px 18px'}}>
+                  <div style={{
+                    width:28,height:28,background:'var(--dba)',opacity:0.5,
+                    borderRadius:s==='circle'?'50%':s==='squircle'?'30%':'4px'
+                  }}/>
                   {s.charAt(0).toUpperCase()+s.slice(1)}
                 </button>
               ))}
             </div>
-            <div style={{display:'flex',gap:20,flexWrap:'wrap'}}>
+            <div style={{display:'flex',gap:20,flexWrap:'wrap',marginBottom:12}}>
               <div style={{display:'flex',alignItems:'center',gap:10}}>
                 <button className={`db-toggle ${avatarBorder?'on':''}`} onClick={()=>setAvatarBorder(v=>!v)}>
                   <span className="db-toggle-thumb"/>
@@ -729,65 +854,27 @@ export default function Dashboard() {
                 <span style={{fontSize:13,color:'var(--dbt)'}}>Glow Effect</span>
               </div>
             </div>
-          </div>
-
-          {/* Animation */}
-          <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Page Animation</div>
-            <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-              {ANIMATIONS.map(a=>(
-                <button key={a} className={`db-pill ${animationType===a?'active':''}`} onClick={()=>setAnimationType(a)}>
-                  {a==='none'?'None':a.split('-').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ')}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Effects */}
-          <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Effects</div>
-            <div style={{display:'flex',gap:20,flexWrap:'wrap',marginBottom:14}}>
-              <div style={{display:'flex',alignItems:'center',gap:10}}>
-                <button className={`db-toggle ${textShadow?'on':''}`} onClick={()=>setTextShadow(v=>!v)}>
-                  <span className="db-toggle-thumb"/>
-                </button>
-                <span style={{fontSize:13,color:'var(--dbt)'}}>Text Shadow</span>
-              </div>
-              <div style={{display:'flex',alignItems:'center',gap:10}}>
-                <button className={`db-toggle ${glassmorphism?'on':''}`} onClick={()=>setGlassmorphism(v=>!v)}>
-                  <span className="db-toggle-thumb"/>
-                </button>
-                <span style={{fontSize:13,color:'var(--dbt)'}}>Glassmorphism</span>
-              </div>
-            </div>
-            <div className="db-sfield">
-              <label>Background Blur ({blurAmount}px)</label>
-              <input type="range" className="db-range" min={0} max={20} value={blurAmount} onChange={e=>setBlurAmount(Number(e.target.value))}/>
-            </div>
-          </div>
-
-          {/* Custom Cursor */}
-          <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Custom Cursor</div>
-            <div className="db-sfield">
-              <label>Cursor URL (leave empty for default)</label>
-              <input className="db-sinput" value={customCursor} onChange={e=>setCustomCursor(e.target.value)} placeholder="https://... (.png or .cur)"/>
-            </div>
+            <p style={{fontSize:11,color:'var(--dbf)'}}>Avatar size customization coming soon.</p>
           </div>
           {saveBtn}
         </>}
 
-        {/* ── LINKS ── */}
+        {/* -- LINKS -- */}
         {section==='links' && <>
           <h1 className="db-h1">Links</h1>
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Add and manage links on your profile page. Drag to reorder.</p>
+          <div style={{display:'flex',gap:10,marginBottom:16}}>
+            <button className="db-cta-btn" onClick={addLink} style={{margin:0}}><Plus size={14}/> Add Link</button>
+            <button className="db-outline-btn" style={{opacity:0.5,cursor:'default'}}><Plus size={14}/> Add Section Header</button>
+          </div>
           <div className="db-card">
             <div style={{display:'flex',flexDirection:'column',gap:8}}>
               {links.map((lnk,idx)=>(
                 <div key={lnk.id} className="db-lrow" style={{opacity:lnk.visible===false?0.4:1}}>
+                  <GripVertical size={16} style={{color:'var(--dbf)',flexShrink:0,cursor:'grab'}}/>
                   <div style={{display:'flex',flexDirection:'column',gap:2}}>
-                    <button onClick={()=>moveLink(idx,-1)} style={{background:'none',border:'none',color:'var(--dbf)',cursor:'pointer',fontSize:10,lineHeight:1}}>▲</button>
-                    <button onClick={()=>moveLink(idx,1)} style={{background:'none',border:'none',color:'var(--dbf)',cursor:'pointer',fontSize:10,lineHeight:1}}>▼</button>
+                    <button onClick={()=>moveLink(idx,-1)} style={{background:'none',border:'none',color:'var(--dbf)',cursor:'pointer',fontSize:10,lineHeight:1}}><ArrowUp size={12}/></button>
+                    <button onClick={()=>moveLink(idx,1)} style={{background:'none',border:'none',color:'var(--dbf)',cursor:'pointer',fontSize:10,lineHeight:1}}><ArrowDown size={12}/></button>
                   </div>
                   <select value={lnk.icon} onChange={e=>updateLink(lnk.id,'icon',e.target.value)} className="db-lsel">
                     {SOCIAL_ICONS.map(k=><option key={k} value={k}>{k}</option>)}
@@ -797,23 +884,23 @@ export default function Dashboard() {
                   <input type="color" value={lnk.color||accent} onChange={e=>updateLink(lnk.id,'color',e.target.value)} className="db-cinput" title="Link color"/>
                   <button onClick={()=>updateLink(lnk.id,'visible',lnk.visible===false?true:false)}
                     style={{background:'none',border:'none',cursor:'pointer',color:lnk.visible===false?'var(--dbf)':'var(--dba)',fontSize:14}} title="Toggle visibility">
-                    {lnk.visible===false?IEyeOff:IEye}
+                    {lnk.visible===false?<EyeOff size={14}/>:<Eye size={14}/>}
                   </button>
-                  <button onClick={()=>removeLink(lnk.id)} className="db-ldel">×</button>
+                  <button onClick={()=>removeLink(lnk.id)} className="db-ldel"><Trash2 size={14}/></button>
                 </div>
               ))}
-              {!links.length && <p style={{textAlign:'center',color:'var(--dbf)',padding:'24px 0',fontSize:13}}>No links yet. Add your first link below.</p>}
+              {!links.length && <p style={{textAlign:'center',color:'var(--dbf)',padding:'24px 0',fontSize:13}}>No links yet. Add your first link above.</p>}
             </div>
-            <button className="db-addlink" onClick={addLink}>+ Add Link</button>
             <div style={{marginTop:12,display:'flex',justifyContent:'space-between',alignItems:'center'}}>
               <span style={{fontSize:12,color:'var(--dbf)'}}>{links.length} link{links.length!==1?'s':''} total</span>
               <span style={{fontSize:12,color:'var(--dbf)'}}>{links.reduce((a,l)=>a+(l.clicks||0),0)} total clicks</span>
             </div>
           </div>
+          <p style={{fontSize:11,color:'var(--dbf)',marginTop:8}}>Section headers are a future feature.</p>
           {saveBtn}
         </>}
 
-        {/* ── MUSIC ── */}
+        {/* -- MUSIC -- */}
         {section==='music' && <>
           <h1 className="db-h1">Music Player</h1>
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Add a music player to your profile</p>
@@ -821,9 +908,15 @@ export default function Dashboard() {
           <div className="db-card" style={{marginBottom:14}}>
             <div className="db-card-h" style={{marginBottom:14}}>Platform</div>
             <div style={{display:'flex',gap:8,marginBottom:12,flexWrap:'wrap'}}>
-              {(['spotify','youtube','soundcloud',null] as Profile['music_type'][]).map(t=>(
-                <button key={String(t)} className={`db-pill ${musicType===t?'active':''}`} onClick={()=>setMusicType(t)}>
-                  {t===null?'None':t.charAt(0).toUpperCase()+t.slice(1)}
+              {([
+                {type: 'spotify' as Profile['music_type'], icon: <SpotifyLogo size={16} weight="fill"/>, label: 'Spotify'},
+                {type: 'youtube' as Profile['music_type'], icon: <YoutubeLogo size={16} weight="fill"/>, label: 'YouTube'},
+                {type: 'soundcloud' as Profile['music_type'], icon: <SoundcloudLogo size={16} weight="fill"/>, label: 'SoundCloud'},
+                {type: null as Profile['music_type'], icon: null, label: 'None'},
+              ]).map(t=>(
+                <button key={String(t.type)} className={`db-pill ${musicType===t.type?'active':''}`} onClick={()=>setMusicType(t.type)}
+                  style={{display:'flex',alignItems:'center',gap:6}}>
+                  {t.icon}{t.label}
                 </button>
               ))}
             </div>
@@ -845,7 +938,7 @@ export default function Dashboard() {
                 </button>
               ))}
             </div>
-            <div style={{display:'flex',gap:20,flexWrap:'wrap'}}>
+            <div style={{display:'flex',gap:20,flexWrap:'wrap',marginBottom:14}}>
               <div style={{display:'flex',alignItems:'center',gap:10}}>
                 <button className={`db-toggle ${musicAutoplay?'on':''}`} onClick={()=>setMusicAutoplay(v=>!v)}>
                   <span className="db-toggle-thumb"/>
@@ -859,17 +952,18 @@ export default function Dashboard() {
                 <span style={{fontSize:13,color:'var(--dbt)'}}>Loop</span>
               </div>
             </div>
+            <p style={{fontSize:11,color:'var(--dbf)'}}>Volume slider coming soon.</p>
           </div>
           {saveBtn}
         </>}
 
-        {/* ── SOCIAL ── */}
+        {/* -- SOCIAL -- */}
         {section==='social' && <>
           <h1 className="db-h1">Social Integrations</h1>
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Connect your social accounts to display on your profile</p>
 
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Discord Widget</div>
+            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><DiscordLogo size={18} weight="fill" style={{color:'#7289da'}}/> Discord Widget</div>
             <p style={{fontSize:12,color:'var(--dbm)',marginBottom:10}}>Enter your Discord server ID to show a widget on your profile</p>
             <div className="db-sfield">
               <label>Discord Server ID</label>
@@ -878,17 +972,17 @@ export default function Dashboard() {
           </div>
 
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Spotify</div>
+            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><SpotifyLogo size={18} weight="fill" style={{color:'#1db954'}}/> Spotify</div>
             <div style={{display:'flex',alignItems:'center',gap:10}}>
               <button className={`db-toggle ${spotifyNP?'on':''}`} onClick={()=>setSpotifyNP(v=>!v)}>
                 <span className="db-toggle-thumb"/>
               </button>
-              <span style={{fontSize:13,color:'var(--dbt)'}}>Show "Now Playing" widget</span>
+              <span style={{fontSize:13,color:'var(--dbt)'}}>Show &quot;Now Playing&quot; widget</span>
             </div>
           </div>
 
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Twitch</div>
+            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><TwitchLogo size={18} weight="fill" style={{color:'#9146ff'}}/> Twitch</div>
             <div className="db-sfield">
               <label>Twitch Username</label>
               <input className="db-sinput" value={twitchUser} onChange={e=>setTwitchUser(e.target.value)} placeholder="yourtwitch"/>
@@ -896,7 +990,7 @@ export default function Dashboard() {
           </div>
 
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>GitHub</div>
+            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><GithubLogo size={18} weight="fill"/> GitHub</div>
             <div className="db-sfield">
               <label>GitHub Username</label>
               <input className="db-sinput" value={githubUser} onChange={e=>setGithubUser(e.target.value)} placeholder="yourgithub"/>
@@ -905,13 +999,13 @@ export default function Dashboard() {
           {saveBtn}
         </>}
 
-        {/* ── WIDGETS ── */}
+        {/* -- WIDGETS -- */}
         {section==='widgets' && <>
           <h1 className="db-h1">Widgets</h1>
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Add interactive widgets to your profile page</p>
 
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Availability Status</div>
+            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><Lightning size={18}/> Availability Status</div>
             <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:12}}>
               {AVAIL_STATUSES.map(s=>(
                 <button key={s||'none'} className={`db-pill ${availStatus===s?'active':''}`} onClick={()=>setAvailStatus(s)}>
@@ -926,15 +1020,16 @@ export default function Dashboard() {
           </div>
 
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Announcement Banner</div>
+            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><Megaphone size={18}/> Announcement Banner</div>
             <div className="db-sfield">
               <label>Announcement Text</label>
               <input className="db-sinput" value={announcement} onChange={e=>setAnnouncement(e.target.value)} placeholder="New merch dropping soon!" maxLength={120}/>
             </div>
+            <p style={{fontSize:11,color:'var(--dbf)',marginTop:8}}>Banner color customization coming soon.</p>
           </div>
 
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Countdown Timer</div>
+            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><Timer size={18}/> Countdown Timer</div>
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
               <div className="db-sfield">
                 <label>Label</label>
@@ -948,7 +1043,7 @@ export default function Dashboard() {
           </div>
 
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Custom Text Block</div>
+            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><ChatText size={18}/> Custom Text Block</div>
             <div className="db-sfield">
               <label>Text Content</label>
               <textarea className="db-sinput" value={customText} onChange={e=>setCustomText(e.target.value)} rows={3} style={{resize:'none'}} placeholder="Write anything..." maxLength={500}/>
@@ -957,15 +1052,19 @@ export default function Dashboard() {
           </div>
 
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-card-h" style={{marginBottom:14}}>Photo Gallery</div>
+            <div className="db-card-h" style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}><ImageIcon size={18}/> Photo Gallery</div>
             <div className="db-gallery-grid" style={{marginBottom:12}}>
               {photoGallery.map((url,i)=>(
                 <div key={i} className="db-gallery-item">
                   <img src={url} alt=""/>
-                  <button onClick={()=>removePhoto(i)} style={{position:'absolute',top:4,right:4,background:'rgba(0,0,0,0.6)',border:'none',color:'#fff',width:20,height:20,borderRadius:'50%',cursor:'pointer',fontSize:12,display:'flex',alignItems:'center',justifyContent:'center'}}>×</button>
+                  <button onClick={()=>removePhoto(i)} style={{position:'absolute',top:4,right:4,background:'rgba(0,0,0,0.6)',border:'none',color:'#fff',width:20,height:20,borderRadius:'50%',cursor:'pointer',fontSize:12,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                    <X size={12}/>
+                  </button>
                 </div>
               ))}
-              <div className="db-gallery-add" onClick={()=>document.getElementById('photo-url-input')?.focus()}>+</div>
+              <div className="db-gallery-add" onClick={()=>document.getElementById('photo-url-input')?.focus()}>
+                <Plus size={18}/>
+              </div>
             </div>
             <div style={{display:'flex',gap:8}}>
               <input id="photo-url-input" className="db-sinput" value={newPhotoUrl} onChange={e=>setNewPhotoUrl(e.target.value)} placeholder="Image URL..." onKeyDown={e=>e.key==='Enter'&&addPhoto()}/>
@@ -975,30 +1074,30 @@ export default function Dashboard() {
           {saveBtn}
         </>}
 
-        {/* ── ANALYTICS ── */}
+        {/* -- ANALYTICS -- */}
         {section==='analytics' && <>
-          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:6}}>{IBarChart}<h1 className="db-h1" style={{marginBottom:0}}>Analytics</h1></div>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:6}}><BarChart3 size={20}/><h1 className="db-h1" style={{marginBottom:0}}>Analytics</h1></div>
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Track your profile performance and engagement.</p>
           <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:20}}>
             <div style={{display:'flex',alignItems:'center',gap:10}}>
               <span style={{fontSize:15,fontWeight:600,color:'var(--dbt)'}}>Time Range</span>
               <span className="db-pill-badge">Updated just now</span>
             </div>
-            <div className="db-date-btn">{ICal} Last 14 days</div>
+            <div className="db-date-btn"><Calendar size={13}/> Last 14 days</div>
           </div>
           <div className="db-stat4" style={{marginBottom:20}}>
             {[
-              {label:'Total Views',        val:String(profile?.view_count||0), sub:'All time'},
-              {label:'Today',              val:'0',    sub:'Views today'},
-              {label:'This Week',          val:'0',    sub:'Views this week'},
-              {label:'This Month',         val:'0',    sub:'Views this month'},
-              {label:'Total Link Clicks',  val:String(links.reduce((a,l)=>a+(l.clicks||0),0)), sub:'All time'},
-              {label:'Click Rate',         val:((profile?.view_count||0)>0?((links.reduce((a,l)=>a+(l.clicks||0),0)/(profile?.view_count||1))*100).toFixed(1):'0.0')+'%', sub:'Clicks / views'},
-              {label:'Avg Daily Views',    val:'0',    sub:'Last 14 days'},
-              {label:'Profile Score',      val:String(Math.min(100,pct+links.length*5+((profile?.view_count||0)>10?20:0))), sub:'Out of 100'},
+              {label:'Total Views',        icon:<Eye size={14}/>,        val:String(profile?.view_count||0), sub:'All time'},
+              {label:'Today',              icon:<BarChart3 size={14}/>,  val:'0',    sub:'Views today'},
+              {label:'This Week',          icon:<BarChart3 size={14}/>,  val:'0',    sub:'Views this week'},
+              {label:'This Month',         icon:<BarChart3 size={14}/>,  val:'0',    sub:'Views this month'},
+              {label:'Total Link Clicks',  icon:<Link2 size={14}/>,     val:String(links.reduce((a,l)=>a+(l.clicks||0),0)), sub:'All time'},
+              {label:'Click Rate',         icon:<BarChart3 size={14}/>,  val:((profile?.view_count||0)>0?((links.reduce((a,l)=>a+(l.clicks||0),0)/(profile?.view_count||1))*100).toFixed(1):'0.0')+'%', sub:'Clicks / views'},
+              {label:'Avg Daily Views',    icon:<BarChart3 size={14}/>,  val:'0',    sub:'Last 14 days'},
+              {label:'Profile Score',      icon:<StarIcon size={14}/>,   val:String(Math.min(100,pct+links.length*5+((profile?.view_count||0)>10?20:0))), sub:'Out of 100'},
             ].map(s=>(
               <div key={s.label} className="db-scard">
-                <div className="db-slabel" style={{marginBottom:8}}>{s.label}</div>
+                <div className="db-slabel" style={{marginBottom:8,display:'flex',alignItems:'center',gap:6}}>{s.icon} {s.label}</div>
                 <div className="db-sval">{s.val}</div>
                 <div className="db-ssub">{s.sub}</div>
               </div>
@@ -1015,9 +1114,9 @@ export default function Dashboard() {
               <div style={{display:'flex',flexDirection:'column',alignItems:'center',paddingTop:12}}>
                 <div className="db-donut"><div className="db-donut-inner"><span style={{fontSize:11,color:'var(--dbm)'}}>Total</span><span style={{fontSize:11,color:'var(--dbm)',marginTop:2}}>{profile?.view_count||0}</span></div></div>
                 <div style={{display:'flex',gap:14,marginTop:14}}>
-                  {[{l:'Desktop',c:'#e879f9'},{l:'Mobile',c:'#22c55e'},{l:'Tablet',c:'#3b82f6'}].map(d=>(
+                  {[{l:'Desktop',c:'#e879f9',icon:<Monitor size={12}/>},{l:'Mobile',c:'#22c55e',icon:<Smartphone size={12}/>},{l:'Tablet',c:'#3b82f6',icon:<Tablet size={12}/>}].map(d=>(
                     <span key={d.l} style={{fontSize:12,color:'var(--dbm)',display:'flex',alignItems:'center',gap:5}}>
-                      <span style={{width:7,height:7,borderRadius:'50%',background:d.c,display:'inline-block'}}/>{d.l}
+                      <span style={{width:7,height:7,borderRadius:'50%',background:d.c,display:'inline-block'}}/>{d.icon} {d.l}
                     </span>
                   ))}
                 </div>
@@ -1046,19 +1145,24 @@ export default function Dashboard() {
           </div>
         </>}
 
-        {/* ── THEMES ── */}
+        {/* -- THEMES -- */}
         {section==='themes' && <>
           <h1 className="db-h1">Themes</h1>
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Click a theme to instantly apply it to your profile</p>
           <div className="db-section-grid">
             {THEME_PRESETS.map(t=>(
-              <div key={t.id} className={`db-theme-card ${themePreset===t.id?'active':''}`} onClick={()=>applyTheme(t)}>
+              <div key={t.id} className={`db-theme-card ${themePreset===t.id?'active':''}`} onClick={()=>applyTheme(t)} style={{position:'relative'}}>
                 <div className="db-theme-card-preview" style={{background:t.bg}}>
                   <div style={{width:30,height:30,borderRadius:'50%',background:t.accent,opacity:0.8}}/>
                   <div style={{width:'60%',height:6,borderRadius:3,background:t.accent,opacity:0.4}}/>
                   <div style={{width:'80%',height:8,borderRadius:4,background:t.accent,opacity:0.2,marginTop:4}}/>
                   <div style={{width:'80%',height:8,borderRadius:4,background:t.accent,opacity:0.15}}/>
                 </div>
+                {themePreset===t.id && (
+                  <div style={{position:'absolute',top:8,right:8,background:'var(--dba)',borderRadius:'50%',width:22,height:22,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                    <Check size={14} style={{color:'#fff'}}/>
+                  </div>
+                )}
                 <div className="db-theme-card-name">{t.name}</div>
               </div>
             ))}
@@ -1066,51 +1170,35 @@ export default function Dashboard() {
           {saveBtn}
         </>}
 
-        {/* ── SHARE ── */}
+        {/* -- SHARE -- */}
         {section==='share' && <>
           <h1 className="db-h1">Share Your Profile</h1>
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Share your profile with friends and followers</p>
 
-          <div className="db-2col">
-            <div className="db-card">
-              <div className="db-card-h" style={{marginBottom:16}}>Profile Card Preview</div>
-              <div className="db-profile-preview" style={{margin:'0 auto'}}>
-                {avatarUrl
-                  ? <img src={avatarUrl} alt="" style={{width:50,height:50,borderRadius:'50%',objectFit:'cover',border:`2px solid ${accent}40`}}/>
-                  : <div style={{width:50,height:50,borderRadius:'50%',background:'rgba(255,255,255,0.08)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:20}}>{(displayName||profile?.username||'?')[0].toUpperCase()}</div>
-                }
-                <div style={{fontSize:16,fontWeight:700,color:'#fff'}}>{displayName||profile?.username}</div>
-                {tagline && <div style={{fontSize:11,color:'rgba(255,255,255,0.5)',textAlign:'center'}}>{tagline}</div>}
-                <div style={{fontSize:11,color:'rgba(255,255,255,0.3)'}}>fentanyl.best/{profile?.username}</div>
+          <div className="db-card" style={{marginBottom:14}}>
+            <div className="db-card-h" style={{marginBottom:14}}>Profile URL</div>
+            <div style={{display:'flex',gap:8,alignItems:'center'}}>
+              <div className="db-sinput" style={{flex:1,display:'flex',alignItems:'center',gap:6,cursor:'text'}}>
+                <Globe size={14} style={{color:'var(--dbf)',flexShrink:0}}/>
+                <span style={{color:'var(--dbt)'}}>https://fentanyl.best/{profile?.username}</span>
               </div>
+              <button className="db-outline-btn" style={{flexShrink:0,display:'flex',alignItems:'center',gap:6}} onClick={()=>{navigator.clipboard.writeText(`https://fentanyl.best/${profile?.username}`);flash('Link copied!')}}>
+                <Copy size={14}/> Copy
+              </button>
             </div>
+          </div>
 
+          <div className="db-2col">
             <div style={{display:'flex',flexDirection:'column',gap:14}}>
               <div className="db-card">
-                <div className="db-card-h" style={{marginBottom:14}}>Quick Share</div>
+                <div className="db-card-h" style={{marginBottom:14}}>Share on Social</div>
                 <div className="db-share-btns">
-                  <button className="db-outline-btn" onClick={()=>{navigator.clipboard.writeText(`https://fentanyl.best/${profile?.username}`);flash('Link copied!')}}>
-                    📋 Copy Link
-                  </button>
-                  <a href={`https://twitter.com/intent/tweet?text=Check%20out%20my%20profile%20on%20fentanyl.best%2F${profile?.username}`} target="_blank" rel="noreferrer" className="db-outline-btn">
-                    🐦 Twitter
+                  <a href={`https://twitter.com/intent/tweet?text=Check%20out%20my%20profile%20on%20fentanyl.best%2F${profile?.username}`} target="_blank" rel="noreferrer" className="db-outline-btn" style={{display:'flex',alignItems:'center',gap:6}}>
+                    <TwitterLogo size={16} weight="fill"/> Share on Twitter
                   </a>
-                  <button className="db-outline-btn" onClick={()=>{navigator.clipboard.writeText(`https://fentanyl.best/${profile?.username}`);flash('Link copied! Paste in Discord.')}}>
-                    💬 Discord
+                  <button className="db-outline-btn" style={{display:'flex',alignItems:'center',gap:6}} onClick={()=>{navigator.clipboard.writeText(`https://fentanyl.best/${profile?.username}`);flash('Link copied! Paste in Discord.')}}>
+                    <DiscordLogo size={16} weight="fill"/> Share on Discord
                   </button>
-                </div>
-              </div>
-
-              <div className="db-card">
-                <div className="db-card-h" style={{marginBottom:14}}>QR Code</div>
-                <div style={{display:'flex',justifyContent:'center'}}>
-                  <div className="db-qr-placeholder">
-                    <div style={{textAlign:'center'}}>
-                      <div style={{fontSize:32,marginBottom:4}}>📱</div>
-                      <div>QR Code</div>
-                      <div style={{fontSize:10,color:'#666'}}>fentanyl.best/{profile?.username}</div>
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -1119,17 +1207,45 @@ export default function Dashboard() {
                 <div className="db-embed-code">
                   {`<iframe src="https://fentanyl.best/${profile?.username}" width="400" height="600" frameborder="0"></iframe>`}
                 </div>
-                <button className="db-outline-btn" style={{marginTop:10}} onClick={()=>{navigator.clipboard.writeText(`<iframe src="https://fentanyl.best/${profile?.username}" width="400" height="600" frameborder="0"></iframe>`);flash('Embed code copied!')}}>
-                  Copy Embed Code
+                <button className="db-outline-btn" style={{marginTop:10,display:'flex',alignItems:'center',gap:6}} onClick={()=>{navigator.clipboard.writeText(`<iframe src="https://fentanyl.best/${profile?.username}" width="400" height="600" frameborder="0"></iframe>`);flash('Embed code copied!')}}>
+                  <Copy size={14}/> Copy Embed Code
                 </button>
+              </div>
+            </div>
+
+            <div style={{display:'flex',flexDirection:'column',gap:14}}>
+              <div className="db-card">
+                <div className="db-card-h" style={{marginBottom:16}}>Profile Card Preview</div>
+                <div className="db-profile-preview" style={{margin:'0 auto'}}>
+                  {avatarUrl
+                    ? <img src={avatarUrl} alt="" style={{width:50,height:50,borderRadius:'50%',objectFit:'cover',border:`2px solid ${accent}40`}}/>
+                    : <div style={{width:50,height:50,borderRadius:'50%',background:'rgba(255,255,255,0.08)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:20}}>{(displayName||profile?.username||'?')[0].toUpperCase()}</div>
+                  }
+                  <div style={{fontSize:16,fontWeight:700,color:'#fff'}}>{displayName||profile?.username}</div>
+                  {tagline && <div style={{fontSize:11,color:'rgba(255,255,255,0.5)',textAlign:'center'}}>{tagline}</div>}
+                  <div style={{fontSize:11,color:'rgba(255,255,255,0.3)'}}>fentanyl.best/{profile?.username}</div>
+                </div>
+              </div>
+
+              <div className="db-card">
+                <div className="db-card-h" style={{marginBottom:14}}>QR Code</div>
+                <div style={{display:'flex',justifyContent:'center'}}>
+                  <img
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://fentanyl.best/${profile?.username}`}
+                    alt="QR Code"
+                    style={{width:180,height:180,borderRadius:8,background:'#fff',padding:8}}
+                  />
+                </div>
+                <div style={{textAlign:'center',fontSize:11,color:'var(--dbf)',marginTop:8}}>fentanyl.best/{profile?.username}</div>
               </div>
             </div>
           </div>
         </>}
 
-        {/* ── BADGES ── */}
+        {/* -- BADGES -- */}
         {section==='badges' && <>
           <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:24}}>
+            <Shield size={20}/>
             <h1 className="db-h1" style={{marginBottom:0}}>All Badges</h1>
           </div>
           <div className="db-badge-grid">
@@ -1137,7 +1253,9 @@ export default function Dashboard() {
               const owned = badges.includes(b.id)
               return (
                 <div key={b.id} className={`db-badge-card ${owned?'owned':''}`}>
-                  <span style={{fontSize:24,flexShrink:0,width:38,textAlign:'center'}}>{b.emoji}</span>
+                  <span style={{fontSize:24,flexShrink:0,width:38,textAlign:'center',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--dba)'}}>
+                    {BADGE_ICONS[b.id] || <Shield size={22}/>}
+                  </span>
                   <div style={{flex:1,minWidth:0}}>
                     <div style={{fontSize:14,fontWeight:700,color:'var(--dbt)',marginBottom:2}}>{b.name}</div>
                     <div style={{fontSize:12,color:'var(--dbm)',lineHeight:1.4}}>{b.desc}</div>
@@ -1154,7 +1272,7 @@ export default function Dashboard() {
           <div style={{marginTop:32}}>
             <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
               <h2 className="db-h2" style={{margin:0}}>Custom Badges</h2>
-              <span className="db-new-pill">✨ New</span>
+              <span className="db-new-pill"><Sparkles size={12}/> New</span>
             </div>
             <p style={{fontSize:13,color:'var(--dbm)',lineHeight:1.6,marginBottom:14}}>
               Custom badges allow you to create your own badges with a custom icon and name.
@@ -1170,7 +1288,9 @@ export default function Dashboard() {
             <div className="db-card">
               <div style={{display:'flex',gap:32,flexWrap:'wrap'}}>
                 <div>
-                  <div style={{fontSize:14,fontWeight:600,color:'var(--dbt)',marginBottom:10}}>Monochrome Badges <span style={{color:'var(--dbm)'}}>ⓘ</span></div>
+                  <div style={{fontSize:14,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'flex',alignItems:'center',gap:6}}>
+                    Monochrome Badges <Info size={14} style={{color:'var(--dbm)',cursor:'help'}}/>
+                  </div>
                   <button className={`db-toggle ${monoChrome?'on':''}`} onClick={()=>setMonoChrome(m=>!m)}>
                     <span className="db-toggle-thumb"/>
                   </button>
@@ -1178,7 +1298,7 @@ export default function Dashboard() {
               </div>
             </div>
             <button className="db-outline-btn" style={{marginTop:14}} onClick={()=>save({badges:activeBadges})} disabled={saving}>
-              {saved?'✓ Saved':saving?'Saving...':'Save Changes'}
+              {saved ? <><Check size={14}/> Saved</> : saving ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
 
@@ -1191,8 +1311,10 @@ export default function Dashboard() {
                   if (!b) return null
                   return (
                     <div key={id} className="db-mybadge">
-                      <span className="db-drag">⠿</span>
-                      <span style={{fontSize:17}}>{b.emoji}</span>
+                      <GripVertical size={16} style={{color:'var(--dbf)',cursor:'grab'}}/>
+                      <span style={{fontSize:17,display:'flex',alignItems:'center',color:'var(--dba)'}}>
+                        {BADGE_ICONS[b.id] || <Shield size={17}/>}
+                      </span>
                       <span style={{fontSize:13,fontWeight:600,color:'var(--dbt)',flex:1}}>{b.name}</span>
                       <button className="db-toggle on" onClick={()=>toggleActiveBadge(b.id)}><span className="db-toggle-thumb"/></button>
                     </div>
@@ -1203,12 +1325,12 @@ export default function Dashboard() {
           )}
         </>}
 
-        {/* ── SETTINGS ── */}
+        {/* -- SETTINGS -- */}
         {section==='settings' && <>
           <h1 className="db-h1-center">Account Settings</h1>
           {msg && <div className="db-flash" style={{marginBottom:16}}>{msg}</div>}
 
-          <h2 className="db-h2" style={{marginBottom:14}}>General Information</h2>
+          <div className="db-sub-header">Account</div>
           <div className="db-settings-card">
             {[
               {label:'Username',     val:sUser, set:setSUser, field:'username',      ph:'yourname',          maxLen:20},
@@ -1225,7 +1347,7 @@ export default function Dashboard() {
             ))}
           </div>
 
-          <h2 className="db-h2" style={{marginTop:28,marginBottom:14}}>Security</h2>
+          <div className="db-sub-header" style={{marginTop:28}}>Security</div>
           <div className="db-settings-card">
             {[
               {label:'Email Address', val:sEmail, set:setSEmail, field:'email',    type:'email',    ph:'new@email.com'},
@@ -1241,33 +1363,69 @@ export default function Dashboard() {
             ))}
           </div>
 
-          <h2 className="db-h2" style={{marginTop:28,marginBottom:14}}>Account Actions</h2>
+          <div className="db-sub-header" style={{marginTop:28}}>Account Actions</div>
           <div className="db-settings-card">
             <div style={{display:'flex',gap:10}}>
-              <button className="db-outline-btn" onClick={()=>{supabase.auth.signOut();router.push('/')}}>Sign out</button>
-              <button className="db-outline-btn" style={{borderColor:'rgba(239,68,68,0.25)',color:'#f87171'}}
+              <button className="db-outline-btn" style={{display:'flex',alignItems:'center',gap:6}} onClick={()=>{supabase.auth.signOut();router.push('/')}}>
+                <LogOut size={14}/> Sign out
+              </button>
+              <button className="db-outline-btn" style={{borderColor:'rgba(239,68,68,0.25)',color:'#f87171',display:'flex',alignItems:'center',gap:6}}
                 onClick={()=>{if(confirm('Delete account? Cannot be undone.')){supabase.auth.signOut();router.push('/')}}}>
-                Delete Account
+                <Trash2 size={14}/> Delete Account
               </button>
             </div>
           </div>
         </>}
 
-        {/* ── PREMIUM ── */}
+        {/* -- PREMIUM -- */}
         {section==='premium' && <>
           <h1 className="db-h1">Premium</h1>
-          <div className="db-card" style={{textAlign:'center',padding:'48px 32px'}}>
-            <div style={{fontSize:40,marginBottom:14}}>💎</div>
-            <div style={{fontSize:18,fontWeight:800,color:'var(--dbt)',marginBottom:8}}>Coming Soon</div>
-            <div style={{fontSize:13,color:'var(--dbm)'}}>Premium features are on the way.</div>
+          <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Unlock advanced features for your profile</p>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16}}>
+            {/* Free tier */}
+            <div className="db-card" style={{textAlign:'center',padding:'32px 20px',border:'2px solid rgba(255,255,255,0.06)'}}>
+              <div style={{fontSize:14,fontWeight:700,color:'var(--dbt)',marginBottom:4}}>Free</div>
+              <div style={{fontSize:28,fontWeight:800,color:'var(--dbt)',marginBottom:4}}>$0</div>
+              <div style={{fontSize:12,color:'var(--dbm)',marginBottom:20}}>forever</div>
+              <div style={{textAlign:'left',fontSize:12,color:'var(--dbm)',display:'flex',flexDirection:'column',gap:8}}>
+                {['Custom links','Basic themes','Profile analytics','Music player','Social integrations'].map(f=>(
+                  <div key={f} style={{display:'flex',alignItems:'center',gap:6}}><Check size={12} style={{color:'#4ade80'}}/>{f}</div>
+                ))}
+              </div>
+              <div style={{marginTop:20,fontSize:12,color:'var(--dba)',fontWeight:600}}>Current Plan</div>
+            </div>
+            {/* Pro tier */}
+            <div className="db-card" style={{textAlign:'center',padding:'32px 20px',border:'2px solid var(--dba)',position:'relative'}}>
+              <span className="db-pill-badge" style={{position:'absolute',top:12,right:12}}>Coming Soon</span>
+              <div style={{fontSize:14,fontWeight:700,color:'var(--dba)',marginBottom:4}}>Pro</div>
+              <div style={{fontSize:28,fontWeight:800,color:'var(--dbt)',marginBottom:4}}>$5</div>
+              <div style={{fontSize:12,color:'var(--dbm)',marginBottom:20}}>per month</div>
+              <div style={{textAlign:'left',fontSize:12,color:'var(--dbm)',display:'flex',flexDirection:'column',gap:8}}>
+                {['Everything in Free','Custom badges','Priority support','Advanced analytics','Custom domains','Animated backgrounds'].map(f=>(
+                  <div key={f} style={{display:'flex',alignItems:'center',gap:6}}><Check size={12} style={{color:'var(--dba)'}}/>{f}</div>
+                ))}
+              </div>
+            </div>
+            {/* Elite tier */}
+            <div className="db-card" style={{textAlign:'center',padding:'32px 20px',border:'2px solid rgba(255,255,255,0.06)',position:'relative'}}>
+              <span className="db-pill-badge" style={{position:'absolute',top:12,right:12}}>Coming Soon</span>
+              <div style={{fontSize:14,fontWeight:700,color:'#facc15',marginBottom:4}}>Elite</div>
+              <div style={{fontSize:28,fontWeight:800,color:'var(--dbt)',marginBottom:4}}>$15</div>
+              <div style={{fontSize:12,color:'var(--dbm)',marginBottom:20}}>per month</div>
+              <div style={{textAlign:'left',fontSize:12,color:'var(--dbm)',display:'flex',flexDirection:'column',gap:8}}>
+                {['Everything in Pro','Verified badge','API access','White-label embeds','Custom CSS injection','Dedicated support'].map(f=>(
+                  <div key={f} style={{display:'flex',alignItems:'center',gap:6}}><Check size={12} style={{color:'#facc15'}}/>{f}</div>
+                ))}
+              </div>
+            </div>
           </div>
         </>}
 
-        {/* ═══════════════════════════
+        {/* ===========================
             ADMIN SECTIONS
-        ═══════════════════════════ */}
+        =========================== */}
 
-        {/* ── ADMIN: INVITES ── */}
+        {/* -- ADMIN: INVITES -- */}
         {section==='admin-invites' && <>
           <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
             <div>
@@ -1291,7 +1449,7 @@ export default function Dashboard() {
                     <td><code className="db-code">{inv.code}</code></td>
                     <td><span className={`db-status-pill ${inv.used_by?'used':'avail'}`}>{inv.used_by?'Used':'Available'}</span></td>
                     <td style={{color:'var(--dbm)',fontSize:13}}>{new Date(inv.created_at).toLocaleDateString()}</td>
-                    <td style={{color:'var(--dbm)',fontSize:13}}>{inv.used_by?inv.used_by.slice(0,8)+'...':'—'}</td>
+                    <td style={{color:'var(--dbm)',fontSize:13}}>{inv.used_by?inv.used_by.slice(0,8)+'...':'--'}</td>
                     <td>
                       {!inv.used_by && (
                         <button className="db-tbl-btn danger" onClick={()=>revokeInvite(inv.id)}>Revoke</button>
@@ -1305,7 +1463,7 @@ export default function Dashboard() {
           </div>
         </>}
 
-        {/* ── ADMIN: USERS ── */}
+        {/* -- ADMIN: USERS -- */}
         {section==='admin-users' && <>
           <h1 className="db-h1" style={{marginBottom:4}}>Users</h1>
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>{users.length} total accounts</p>
@@ -1318,7 +1476,7 @@ export default function Dashboard() {
                 {users.map(u=>(
                   <tr key={u.id}>
                     <td><a href={`/${u.username}`} target="_blank" style={{color:'var(--dba)',fontWeight:600}}>@{u.username}</a></td>
-                    <td style={{color:'var(--dbm)',fontSize:13}}>{u.display_name||'—'}</td>
+                    <td style={{color:'var(--dbm)',fontSize:13}}>{u.display_name||'--'}</td>
                     <td style={{color:'var(--dbm)',fontSize:13}}>{(u.view_count||0).toLocaleString()}</td>
                     <td style={{color:'var(--dbm)',fontSize:13}}>{new Date(u.created_at).toLocaleDateString()}</td>
                     <td><span className={`db-status-pill ${u.is_admin?'admin':'user'}`}>{u.is_admin?'Admin':'User'}</span></td>
@@ -1330,7 +1488,7 @@ export default function Dashboard() {
           </div>
         </>}
 
-        {/* ── ADMIN: BLACKLIST ── */}
+        {/* -- ADMIN: BLACKLIST -- */}
         {section==='admin-blacklist' && <>
           <h1 className="db-h1" style={{marginBottom:4}}>Username Blacklist</h1>
           <p style={{fontSize:13,color:'var(--dbm)',marginBottom:24}}>Blocked usernames can never be registered</p>
@@ -1364,27 +1522,3 @@ export default function Dashboard() {
     </div>
   )
 }
-
-// Icons
-const IUser     = <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-const ILink     = <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-const IPaint    = <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
-const IShield   = <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-const IStar     = <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-const IGrid     = <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-const IHelp     = <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-const IExt      = <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-const IShare    = <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-const IChevUp   = <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-const IChevDn   = <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-const IPencil   = <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-const IUserP    = <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-const IEye      = <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-const IEyeOff   = <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-const IChat     = <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-const IGear     = <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-const IDiscord  = <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.034.055a19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.026c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
-const IBarChart = <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
-const ICal      = <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-const IMusic    = <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-const IDiamond  = <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M2 9h20"/></svg>
