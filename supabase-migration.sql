@@ -40,6 +40,8 @@ ALTER TABLE profiles ADD COLUMN IF NOT EXISTS gradient_to text default '';
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS gradient_direction text default '135deg';
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS animated_bg_style text default 'mesh';
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS accent_glow_color text default '';
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS avatar_size text default 'medium';
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS button_width text default 'auto';
 
 -- ── MUSIC ────────────────────────────────────────────────────
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS music_autoplay boolean default false;
