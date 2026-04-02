@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { supabase, type Profile, type Link as ProfileLink } from '@/lib/supabase'
+import FileUpload from '@/components/FileUpload'
 
 // Lucide icons for UI/navigation
 import { Home, User, Palette, Link2, Music, LayoutGrid, Users, BarChart3, Shield, Settings, Crown, Share2, ChevronUp, ChevronDown, Eye, EyeOff, Pencil, HelpCircle, ExternalLink, LogOut, Trash2, Copy, Plus, Minus, GripVertical, Check, X, Calendar, ArrowUp, ArrowDown, Info, AlertTriangle, Megaphone, Star as StarIcon, Image as ImageIcon, Type, Sparkles, Monitor, Smartphone, Tablet, Globe, MapPin, Download } from 'lucide-react'
@@ -197,7 +198,7 @@ export default function Dashboard() {
   const [gradientFrom, setGradientFrom] = useState('#0d0d20')
   const [gradientTo, setGradientTo] = useState('#1a0d2e')
   const [gradientDir, setGradientDir] = useState('135')
-  const [animatedBgStyle, setAnimatedBgStyle] = useState<'mesh'|'aurora'|'particles'|'waves'>('mesh')
+  const [animatedBgStyle, setAnimatedBgStyle] = useState<Profile['animated_bg_style']>('mesh')
   const [musicVolume, setMusicVolume] = useState(80)
   const [announcementEnabled, setAnnouncementEnabled] = useState(false)
   const [announcementColor, setAnnouncementColor] = useState('purple')
@@ -219,6 +220,15 @@ export default function Dashboard() {
   const [profileVisibility, setProfileVisibility] = useState<'public'|'unlisted'|'private'>('public')
   const [showCoverPreview, setShowCoverPreview] = useState(false)
   const [avatarBorderType, setAvatarBorderType] = useState<'none'|'solid'|'glow'|'gradient'>('solid')
+
+  // New: announcement upgrades
+  const [announcementFontSize, setAnnouncementFontSize] = useState<'small'|'medium'|'large'|'xl'>('medium')
+  const [announcementBorder, setAnnouncementBorder] = useState<'none'|'solid'|'dashed'|'glowing'>('none')
+  const [announcementPosition, setAnnouncementPosition] = useState<'top'|'above-links'|'below-links'>('top')
+  const [announcementDismissable, setAnnouncementDismissable] = useState(false)
+  const [announcementExpiry, setAnnouncementExpiry] = useState('')
+  // New: music file upload
+  const [musicFileUrl, setMusicFileUrl] = useState('')
 
   useEffect(() => {
     async function load() {
@@ -286,6 +296,13 @@ export default function Dashboard() {
       setBadgePosition(data.badge_position || 'below-name')
       setProfileVisibility(data.profile_visibility || 'public')
       setAvatarBorderType(data.avatar_border === true || data.avatar_border === 'solid' ? 'solid' : data.avatar_border || 'solid')
+      // new fields v2
+      setAnnouncementFontSize(data.announcement_font_size || 'medium')
+      setAnnouncementBorder(data.announcement_border || 'none')
+      setAnnouncementPosition(data.announcement_position || 'top')
+      setAnnouncementDismissable(data.announcement_dismissable || false)
+      setAnnouncementExpiry(data.announcement_expiry || '')
+      setMusicFileUrl(data.music_file_url || '')
       if (data.is_admin) loadAdmin()
       setLoading(false)
     }
@@ -351,6 +368,13 @@ export default function Dashboard() {
       badge_size: badgeSize,
       badge_position: badgePosition,
       profile_visibility: profileVisibility,
+      // v2 fields
+      announcement_font_size: announcementFontSize,
+      announcement_border: announcementBorder,
+      announcement_position: announcementPosition,
+      announcement_dismissable: announcementDismissable,
+      announcement_expiry: announcementExpiry || null,
+      music_file_url: musicFileUrl,
     }
     await supabase.from('profiles').update(payload).eq('id', profile.id)
     setSaving(false); setSaved(true); setTimeout(()=>setSaved(false),2000)
@@ -664,27 +688,32 @@ export default function Dashboard() {
           {/* Identity */}
           <div className="db-section-divider"><span>IDENTITY</span></div>
           <div className="db-card" style={{marginBottom:14}}>
-            <div className="db-sfield" style={{marginBottom:16}}>
-              <label style={{display:'flex',alignItems:'center',gap:8}}>
-                Cover Banner URL
+            <div style={{marginBottom:16}}>
+              <label style={{display:'flex',alignItems:'center',gap:8,fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:8}}>
+                Cover Banner
                 <button onClick={()=>setShowCoverPreview(v=>!v)} style={{background:'none',border:'none',color:'var(--dba)',cursor:'pointer',fontSize:12,fontWeight:500}}>
                   {showCoverPreview ? 'Hide Preview' : 'Preview'}
                 </button>
               </label>
-              <input className="db-sinput" value={coverBanner} onChange={e=>setCoverBanner(e.target.value)} placeholder="https://... (recommended 1200x400)"/>
-            </div>
-            {showCoverPreview && coverBanner && (
-              <div style={{width:'100%',height:120,borderRadius:10,overflow:'hidden',marginBottom:16,background:'rgba(0,0,0,0.2)'}}>
-                <img src={coverBanner} alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+              <FileUpload bucket="media" path={`banners/${profile?.id}`} accept="image/*" maxSizeMB={5}
+                label="Upload Cover Banner (1200x400 recommended)" preview={showCoverPreview && coverBanner ? coverBanner : ''} previewType="image"
+                onUpload={(url) => setCoverBanner(url)} />
+              <div className="db-sfield" style={{marginTop:6}}>
+                <label>Or paste URL</label>
+                <input className="db-sinput" value={coverBanner} onChange={e=>setCoverBanner(e.target.value)} placeholder="https://... (recommended 1200x400)"/>
               </div>
-            )}
+            </div>
             <div style={{display:'flex',alignItems:'center',gap:16,marginBottom:16}}>
               <div className="db-apreview" style={{width:64,height:64,borderRadius:'50%',overflow:'hidden',background:'rgba(255,255,255,0.06)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
                 {avatarUrl?<img src={avatarUrl} alt="" style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%'}}/>:<User size={22} style={{opacity:0.4}}/>}
               </div>
-              <div className="db-sfield" style={{flex:1}}>
-                <label>Avatar URL</label>
-                <input className="db-sinput" value={avatarUrl} onChange={e=>setAvatarUrl(e.target.value)} placeholder="https://..."/>
+              <div style={{flex:1}}>
+                <FileUpload bucket="media" path={`avatars/${profile?.id}`} accept="image/*" maxSizeMB={2}
+                  label="Upload Avatar" onUpload={(url) => setAvatarUrl(url)} />
+                <div className="db-sfield" style={{marginTop:6}}>
+                  <label>Or paste URL</label>
+                  <input className="db-sinput" value={avatarUrl} onChange={e=>setAvatarUrl(e.target.value)} placeholder="https://..."/>
+                </div>
               </div>
             </div>
             <div className="db-sfield" style={{marginBottom:12}}>
@@ -853,17 +882,24 @@ export default function Dashboard() {
             {bgType==='animated' ? (
               <>
                 <p style={{fontSize:12,color:'var(--dbm)',marginBottom:14}}>Choose an animated background style for your profile.</p>
-                <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:10}}>
-                  {(['mesh','aurora','particles','waves'] as const).map(s=>(
-                    <button key={s} className={`db-pill ${animatedBgStyle===s?'active':''}`} onClick={()=>setAnimatedBgStyle(s)}
+                <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:10}}>
+                  {([
+                    {id:'mesh' as const, icon:<LayoutGrid size={16} style={{color:accent}}/>},
+                    {id:'aurora' as const, icon:<Sparkles size={16} style={{color:accent}}/>},
+                    {id:'particles' as const, icon:<Sparkle size={16} weight="fill" style={{color:accent}}/>},
+                    {id:'waves' as const, icon:<Lightning size={16} weight="fill" style={{color:accent}}/>},
+                    {id:'matrix' as const, icon:<Hash size={16} style={{color:accent}}/>},
+                    {id:'starfield' as const, icon:<Sparkle size={16} style={{color:accent}}/>},
+                    {id:'gradient-shift' as const, icon:<Palette size={16} style={{color:accent}}/>},
+                    {id:'glitch' as const, icon:<Monitor size={16} style={{color:accent}}/>},
+                    {id:'fireflies' as const, icon:<Fire size={16} weight="fill" style={{color:accent}}/>},
+                  ]).map(s=>(
+                    <button key={s.id} className={`db-pill ${animatedBgStyle===s.id?'active':''}`} onClick={()=>setAnimatedBgStyle(s.id)}
                       style={{padding:'16px 10px',textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center',gap:6}}>
                       <div style={{width:32,height:32,borderRadius:8,background:`linear-gradient(135deg, ${accent}40, ${accent}15)`,display:'flex',alignItems:'center',justifyContent:'center'}}>
-                        {s==='mesh' && <LayoutGrid size={16} style={{color:accent}}/>}
-                        {s==='aurora' && <Sparkles size={16} style={{color:accent}}/>}
-                        {s==='particles' && <Sparkle size={16} weight="fill" style={{color:accent}}/>}
-                        {s==='waves' && <Lightning size={16} weight="fill" style={{color:accent}}/>}
+                        {s.icon}
                       </div>
-                      {s.charAt(0).toUpperCase()+s.slice(1)}
+                      {s.id.split('-').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ')}
                     </button>
                   ))}
                 </div>
@@ -899,9 +935,14 @@ export default function Dashboard() {
               </>
             ) : bgType==='image' ? (
               <>
-                <div className="db-sfield" style={{marginBottom:12}}>
-                  <label>Image URL</label>
-                  <input className="db-sinput" value={bgValue} onChange={e=>setBgValue(e.target.value)} placeholder="https://..."/>
+                <div style={{marginBottom:12}}>
+                  <FileUpload bucket="media" path={`backgrounds/${profile?.id}`} accept="image/*" maxSizeMB={5}
+                    label="Upload Background Image" preview={bgValue.startsWith('http') ? bgValue : ''} previewType="image"
+                    onUpload={(url) => setBgValue(url)} />
+                  <div className="db-sfield" style={{marginTop:8}}>
+                    <label>Or paste URL</label>
+                    <input className="db-sinput" value={bgValue} onChange={e=>setBgValue(e.target.value)} placeholder="https://..."/>
+                  </div>
                 </div>
                 <div className="db-sfield" style={{marginBottom:12}}>
                   <label>Background Blur ({blurAmount}px)</label>
@@ -1127,6 +1168,7 @@ export default function Dashboard() {
                 {type: 'youtube' as Profile['music_type'], icon: <YoutubeLogo size={16} weight="fill"/>, label: 'YouTube'},
                 {type: 'soundcloud' as Profile['music_type'], icon: <SoundcloudLogo size={16} weight="fill"/>, label: 'SoundCloud'},
                 {type: 'apple-music' as Profile['music_type'], icon: <AppleLogo size={16} weight="fill"/>, label: 'Apple Music'},
+                {type: 'upload' as Profile['music_type'], icon: <MusicNote size={16} weight="fill"/>, label: 'Upload Audio'},
                 {type: null as Profile['music_type'], icon: null, label: 'None'},
               ]).map(t=>(
                 <button key={String(t.type)} className={`db-pill ${musicType===t.type?'active':''}`} onClick={()=>setMusicType(t.type)}
@@ -1135,11 +1177,26 @@ export default function Dashboard() {
                 </button>
               ))}
             </div>
-            {musicType && (
+            {musicType && musicType !== 'upload' && (
               <div className="db-sfield">
                 <label>Music URL</label>
                 <input className="db-sinput" value={musicUrl} onChange={e=>setMusicUrl(e.target.value)}
                   placeholder={musicType==='spotify'?'https://open.spotify.com/track/...':musicType==='youtube'?'https://youtube.com/watch?v=...':musicType==='apple-music'?'https://music.apple.com/...':'https://soundcloud.com/...'}/>
+              </div>
+            )}
+            {musicType === 'upload' && (
+              <div style={{marginTop:8}}>
+                <FileUpload
+                  bucket="media"
+                  path={`audio/${profile?.id}`}
+                  accept="audio/mpeg,audio/wav,audio/ogg,audio/mp3"
+                  maxSizeMB={15}
+                  maxDurationSec={300}
+                  label="Upload Audio (MP3/WAV/OGG, max 5 min)"
+                  preview={musicFileUrl}
+                  previewType="audio"
+                  onUpload={(url) => { setMusicFileUrl(url); setMusicUrl(url) }}
+                />
               </div>
             )}
             {musicType === 'spotify' && musicUrl && musicUrl.includes('spotify.com') && (
@@ -1330,7 +1387,7 @@ export default function Dashboard() {
                   ))}
                 </div>
                 <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Icon</label>
-                <div style={{display:'flex',gap:8}}>
+                <div style={{display:'flex',gap:8,marginBottom:14}}>
                   {[
                     {id:'info',icon:<Info size={16}/>},{id:'warning',icon:<AlertTriangle size={16}/>},
                     {id:'star',icon:<StarIcon size={16}/>},{id:'megaphone',icon:<Megaphone size={16}/>},
@@ -1340,6 +1397,48 @@ export default function Dashboard() {
                       {i.icon} {i.id.charAt(0).toUpperCase()+i.id.slice(1)}
                     </button>
                   ))}
+                </div>
+
+                <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Font Size</label>
+                <div style={{display:'flex',gap:8,marginBottom:14}}>
+                  {(['small','medium','large','xl'] as const).map(s=>(
+                    <button key={s} className={`db-pill ${announcementFontSize===s?'active':''}`} onClick={()=>setAnnouncementFontSize(s)} style={{flex:1,textAlign:'center'}}>
+                      {s === 'xl' ? 'XL' : s.charAt(0).toUpperCase()+s.slice(1)}
+                    </button>
+                  ))}
+                </div>
+
+                <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Border Style</label>
+                <div style={{display:'flex',gap:8,marginBottom:14}}>
+                  {(['none','solid','dashed','glowing'] as const).map(b=>(
+                    <button key={b} className={`db-pill ${announcementBorder===b?'active':''}`} onClick={()=>setAnnouncementBorder(b)} style={{flex:1,textAlign:'center'}}>
+                      {b.charAt(0).toUpperCase()+b.slice(1)}
+                    </button>
+                  ))}
+                </div>
+
+                <label style={{fontSize:13,fontWeight:600,color:'var(--dbt)',marginBottom:10,display:'block'}}>Position</label>
+                <div style={{display:'flex',gap:8,marginBottom:14}}>
+                  {([{id:'top' as const,label:'Top'},{id:'above-links' as const,label:'Above Links'},{id:'below-links' as const,label:'Below Links'}]).map(p=>(
+                    <button key={p.id} className={`db-pill ${announcementPosition===p.id?'active':''}`} onClick={()=>setAnnouncementPosition(p.id)} style={{flex:1,textAlign:'center'}}>
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div style={{display:'flex',gap:20,flexWrap:'wrap',marginBottom:14}}>
+                  <div style={{display:'flex',alignItems:'center',gap:10}}>
+                    <button className={`db-toggle ${announcementDismissable?'on':''}`} onClick={()=>setAnnouncementDismissable(v=>!v)}>
+                      <span className="db-toggle-thumb"/>
+                    </button>
+                    <span style={{fontSize:13,color:'var(--dbt)'}}>Dismissable</span>
+                  </div>
+                </div>
+
+                <div className="db-sfield">
+                  <label>Expiry Date (optional)</label>
+                  <input className="db-sinput" type="datetime-local" value={announcementExpiry} onChange={e=>setAnnouncementExpiry(e.target.value)}/>
+                  {announcementExpiry && <span style={{fontSize:11,color:'var(--dbf)',marginTop:4,display:'block'}}>Banner auto-hides after this date</span>}
                 </div>
               </div>
             )}
@@ -1449,7 +1548,7 @@ export default function Dashboard() {
             </div>
             {photoGalleryEnabled && (
               <div className="db-widget-body-v3">
-                <p style={{fontSize:12,color:'var(--dbm)',marginBottom:12}}>Max 6 photos</p>
+                <p style={{fontSize:12,color:'var(--dbm)',marginBottom:12}}>Max 10 photos</p>
                 <div className="db-gallery-grid" style={{marginBottom:12}}>
                   {photoGallery.map((url,i)=>(
                     <div key={i} className="db-gallery-item">
@@ -1459,17 +1558,18 @@ export default function Dashboard() {
                       </button>
                     </div>
                   ))}
-                  {photoGallery.length < 6 && (
-                    <div className="db-gallery-add" onClick={()=>document.getElementById('photo-url-input')?.focus()}>
-                      <Plus size={18}/>
-                    </div>
-                  )}
                 </div>
-                {photoGallery.length < 6 && (
-                  <div style={{display:'flex',gap:8}}>
-                    <input id="photo-url-input" className="db-sinput" value={newPhotoUrl} onChange={e=>setNewPhotoUrl(e.target.value)} placeholder="Image URL..." onKeyDown={e=>e.key==='Enter'&&addPhoto()}/>
-                    <button className="db-outline-btn" onClick={addPhoto} style={{flexShrink:0}}>Add</button>
-                  </div>
+                {photoGallery.length < 10 && (
+                  <>
+                    <FileUpload bucket="media" path={`gallery/${profile?.id}`} accept="image/*" maxSizeMB={5}
+                      label="Upload Photos" multiple maxFiles={10 - photoGallery.length}
+                      onUpload={(url) => setPhotoGallery(g=>[...g, url])}
+                      onMultiUpload={(urls) => setPhotoGallery(g=>[...g, ...urls].slice(0, 10))} />
+                    <div style={{display:'flex',gap:8,marginTop:8}}>
+                      <input id="photo-url-input" className="db-sinput" value={newPhotoUrl} onChange={e=>setNewPhotoUrl(e.target.value)} placeholder="Or paste image URL..." onKeyDown={e=>e.key==='Enter'&&addPhoto()}/>
+                      <button className="db-outline-btn" onClick={addPhoto} style={{flexShrink:0}}>Add</button>
+                    </div>
+                  </>
                 )}
               </div>
             )}

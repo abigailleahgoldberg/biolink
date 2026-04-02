@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useParams, notFound } from 'next/navigation'
 import { supabase, type Profile, type Link as ProfileLink } from '@/lib/supabase'
 
@@ -7,7 +7,7 @@ import { supabase, type Profile, type Link as ProfileLink } from '@/lib/supabase
 import { DiscordLogo, SpotifyLogo, TwitchLogo, GithubLogo, TwitterLogo, InstagramLogo, TiktokLogo, YoutubeLogo, LinkedinLogo, RedditLogo, TelegramLogo, SnapchatLogo, PinterestLogo, SoundcloudLogo, Envelope, Globe, LinkSimple, GameController, Heart, Gift, Fire, Bug, Trophy, Sparkle, Snowflake, Medal, Shield, Crown, MusicNote, MapPin, Cake, Check, Eye, Megaphone, Timer, ChatText } from '@phosphor-icons/react'
 
 // Lucide icons for announcement
-import { Info, AlertTriangle } from 'lucide-react'
+import { Info, AlertTriangle, X } from 'lucide-react'
 
 const FONT_MAP: Record<string, string> = {
   'inter': "'Inter', system-ui, sans-serif",
@@ -84,6 +84,12 @@ function parseCustomText(text: string): string {
     .replace(/_(.*?)_/g, '<em>$1</em>')
 }
 
+function parseRichText(text: string): string {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+}
+
 function CountdownTimer({ date, label, style: countdownStyle }: { date: string; label: string; style?: string }) {
   const [now, setNow] = useState(Date.now())
   useEffect(() => {
@@ -121,6 +127,12 @@ export default function ProfilePage() {
   const [notFoundFlag, setNotFoundFlag] = useState(false)
   const [githubData, setGithubData] = useState<{ contributions: number } | null>(null)
   const [discordCount, setDiscordCount] = useState<number | null>(null)
+  const [entered, setEntered] = useState(false)
+  const [announcementDismissed, setAnnouncementDismissed] = useState(false)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const matrixCanvasRef = useRef<HTMLCanvasElement | null>(null)
+  const starfieldCanvasRef = useRef<HTMLCanvasElement | null>(null)
+  const firefliesCanvasRef = useRef<HTMLCanvasElement | null>(null)
   const username = params?.username as string
 
   useEffect(() => {
@@ -152,6 +164,128 @@ export default function ProfilePage() {
     }
     load()
   }, [username])
+
+  // Determine if click-to-enter overlay is needed (uploaded audio)
+  const hasUploadedAudio = profile?.music_type === 'upload' && (profile?.music_file_url || profile?.music_url)
+  const needsOverlay = hasUploadedAudio && !entered
+
+  // Handle click-to-enter
+  const handleEnter = useCallback(() => {
+    setEntered(true)
+    if (audioRef.current) {
+      audioRef.current.volume = (profile?.music_volume || 80) / 100
+      audioRef.current.play().catch(() => {})
+    }
+  }, [profile?.music_volume])
+
+  // Matrix rain effect
+  useEffect(() => {
+    if (!profile || profile.background_type !== 'animated' || profile.animated_bg_style !== 'matrix') return
+    const canvas = matrixCanvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+    const columns = Math.floor(canvas.width / 16)
+    const drops = new Array(columns).fill(1)
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()_+-=[]{}|;:,.<>?ァイウエオカキクケコサシスセソ'
+
+    const draw = () => {
+      ctx.fillStyle = 'rgba(10,10,10,0.05)'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctx.fillStyle = '#0f0'
+      ctx.font = '14px monospace'
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)]
+        ctx.fillStyle = `rgba(0,${150 + Math.random() * 105},0,${0.5 + Math.random() * 0.5})`
+        ctx.fillText(text, i * 16, drops[i] * 16)
+        if (drops[i] * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0
+        drops[i]++
+      }
+    }
+    const interval = setInterval(draw, 50)
+    const handleResize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight }
+    window.addEventListener('resize', handleResize)
+    return () => { clearInterval(interval); window.removeEventListener('resize', handleResize) }
+  }, [profile])
+
+  // Starfield effect
+  useEffect(() => {
+    if (!profile || profile.background_type !== 'animated' || profile.animated_bg_style !== 'starfield') return
+    const canvas = starfieldCanvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+    const stars = Array.from({ length: 200 }, () => ({
+      x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+      z: Math.random() * 3, speed: 0.5 + Math.random() * 2,
+    }))
+
+    const draw = () => {
+      ctx.fillStyle = '#000010'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      for (const star of stars) {
+        star.y += star.speed
+        if (star.y > canvas.height) { star.y = 0; star.x = Math.random() * canvas.width }
+        const size = star.z
+        const opacity = 0.3 + star.z * 0.23
+        ctx.beginPath()
+        ctx.arc(star.x, star.y, size, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(255,255,255,${opacity})`
+        ctx.fill()
+      }
+    }
+    const interval = setInterval(draw, 30)
+    const handleResize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight }
+    window.addEventListener('resize', handleResize)
+    return () => { clearInterval(interval); window.removeEventListener('resize', handleResize) }
+  }, [profile])
+
+  // Fireflies effect
+  useEffect(() => {
+    if (!profile || profile.background_type !== 'animated' || profile.animated_bg_style !== 'fireflies') return
+    const canvas = firefliesCanvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+    const flies = Array.from({ length: 40 }, () => ({
+      x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.8, vy: (Math.random() - 0.5) * 0.8,
+      size: 2 + Math.random() * 3, phase: Math.random() * Math.PI * 2,
+    }))
+
+    const draw = () => {
+      ctx.fillStyle = 'rgba(10,15,10,0.15)'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      const t = Date.now() / 1000
+      for (const f of flies) {
+        f.x += f.vx; f.y += f.vy
+        if (f.x < 0 || f.x > canvas.width) f.vx *= -1
+        if (f.y < 0 || f.y > canvas.height) f.vy *= -1
+        const glow = 0.3 + 0.7 * Math.sin(t * 2 + f.phase) ** 2
+        const gradient = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.size * 4)
+        gradient.addColorStop(0, `rgba(180,255,80,${glow})`)
+        gradient.addColorStop(0.4, `rgba(120,200,40,${glow * 0.4})`)
+        gradient.addColorStop(1, 'rgba(0,0,0,0)')
+        ctx.beginPath()
+        ctx.arc(f.x, f.y, f.size * 4, 0, Math.PI * 2)
+        ctx.fillStyle = gradient
+        ctx.fill()
+      }
+    }
+    const interval = setInterval(draw, 30)
+    const handleResize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight }
+    window.addEventListener('resize', handleResize)
+    return () => { clearInterval(interval); window.removeEventListener('resize', handleResize) }
+  }, [profile])
 
   if (notFoundFlag) notFound()
   if (!profile) return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.3)' }}>Loading...</div>
@@ -211,6 +345,11 @@ export default function ProfilePage() {
     if (style === 'aurora') return 'background: linear-gradient(135deg, #0a1628, #1a0d2e, #0d1a2e); background-size:400% 400%; animation:animBg 15s ease infinite;'
     if (style === 'particles') return 'background: #0d0d20;'
     if (style === 'waves') return 'background: linear-gradient(180deg, #0d0d20, #1a0d2e); background-size:200% 200%; animation:animBg 8s ease infinite;'
+    if (style === 'matrix') return 'background: #0a0a0a;'
+    if (style === 'starfield') return 'background: #000010;'
+    if (style === 'gradient-shift') return 'background: linear-gradient(135deg, #0d0d20, #1a0d2e, #2e0d1a, #0d2e1a); background-size:600% 600%; animation:animBg 20s ease infinite;'
+    if (style === 'glitch') return 'background: #0d0d14;'
+    if (style === 'fireflies') return 'background: #0a0f0a;'
     return 'background: #0d0d20;'
   })() : ''
 
@@ -256,6 +395,37 @@ export default function ProfilePage() {
     )
   }
 
+  // Announcement rendering
+  const announcementFontSizeMap = { small: 12, medium: 14, large: 16, xl: 20 }
+  const announcementPosition = profile.announcement_position || 'top'
+  const isAnnouncementExpired = profile.announcement_expiry ? new Date(profile.announcement_expiry) < new Date() : false
+  const showAnnouncement = profile.announcement_enabled && profile.announcement && !announcementDismissed && !isAnnouncementExpired
+
+  const renderAnnouncement = (position: string) => {
+    if (!showAnnouncement || announcementPosition !== position) return null
+    const fontSize = announcementFontSizeMap[profile.announcement_font_size as keyof typeof announcementFontSizeMap] || 14
+    const borderClass = profile.announcement_border === 'solid' ? 'announce-border-solid'
+      : profile.announcement_border === 'dashed' ? 'announce-border-dashed'
+      : profile.announcement_border === 'glowing' ? 'announce-border-glowing' : ''
+    return (
+      <div className={`profile-announcement ${borderClass}`} style={{
+        marginBottom: 14, fontSize,
+        background: ANNOUNCE_COLORS[profile.announcement_color] || ANNOUNCE_COLORS.purple,
+        border: profile.announcement_border === 'none' ? `1px solid ${accentColor}25` : undefined,
+        position: 'relative',
+      }}>
+        {ANNOUNCE_ICON_MAP[profile.announcement_icon] || <Megaphone size={16} />}
+        <span dangerouslySetInnerHTML={{ __html: parseRichText(profile.announcement) }} />
+        {profile.announcement_dismissable && (
+          <button onClick={() => setAnnouncementDismissed(true)} style={{
+            position: 'absolute', top: 6, right: 8, background: 'none', border: 'none',
+            color: 'rgba(255,255,255,0.4)', cursor: 'pointer', padding: 2,
+          }}><X size={14} /></button>
+        )}
+      </div>
+    )
+  }
+
   // Social row check
   const hasSocialRow = (profile.discord_enabled && profile.discord_widget) ||
     (profile.twitch_enabled && profile.twitch_username) ||
@@ -294,7 +464,74 @@ export default function ProfilePage() {
         .profile-link.hover-slide:hover::before { left:100%; }
         .verified-badge { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; background:linear-gradient(135deg,#3b82f6,#8b5cf6); margin-left:6px; flex-shrink:0; }
         .verified-badge svg { width:12px; height:12px; }
+        /* Click-to-enter overlay */
+        .enter-overlay {
+          position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center;
+          background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); cursor:pointer;
+          animation: overlayPulse 3s ease-in-out infinite;
+        }
+        @keyframes overlayPulse { 0%,100%{background:rgba(0,0,0,0.85)} 50%{background:rgba(0,0,0,0.78)} }
+        .enter-overlay-content {
+          text-align:center; padding:40px; border-radius:20px;
+          border:1px solid rgba(255,255,255,0.1);
+          animation: enterPulse 2s ease-in-out infinite;
+        }
+        @keyframes enterPulse {
+          0%,100%{border-color:rgba(255,255,255,0.1); box-shadow:0 0 20px rgba(255,255,255,0.03)}
+          50%{border-color:rgba(255,255,255,0.25); box-shadow:0 0 40px rgba(255,255,255,0.08)}
+        }
+        .enter-overlay-text { font-size:14px; color:rgba(255,255,255,0.5); letter-spacing:2px; text-transform:uppercase; }
+        .enter-overlay-sub { font-size:11px; color:rgba(255,255,255,0.25); margin-top:8px; }
+        /* Canvas backgrounds */
+        .anim-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
+        /* Glitch effect */
+        ${profile.background_type === 'animated' && profile.animated_bg_style === 'glitch' ? `
+          body::before, body::after {
+            content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+          }
+          body::before {
+            background: repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 3px);
+            animation: glitchScanline 0.1s linear infinite;
+          }
+          @keyframes glitchScanline { 0%{transform:translateY(0)} 100%{transform:translateY(3px)} }
+          @keyframes glitchShift {
+            0%,90%,100%{transform:translate(0)} 92%{transform:translate(-2px,1px)} 94%{transform:translate(2px,-1px)} 96%{transform:translate(-1px,2px)} 98%{transform:translate(1px,-2px)}
+          }
+        ` : ''}
+        /* Announcement border styles */
+        .announce-border-solid { border:1px solid currentColor !important; }
+        .announce-border-dashed { border:2px dashed currentColor !important; }
+        .announce-border-glowing { border:1px solid currentColor !important; box-shadow:0 0 10px currentColor, 0 0 20px rgba(255,255,255,0.05); }
       `}</style>
+
+      {/* Click-to-enter overlay for uploaded audio */}
+      {needsOverlay && (
+        <div className="enter-overlay" onClick={handleEnter}>
+          <div className="enter-overlay-content">
+            <div className="enter-overlay-text">click to enter</div>
+            <div className="enter-overlay-sub">{profile.display_name || profile.username}</div>
+          </div>
+        </div>
+      )}
+
+      {/* Uploaded audio element */}
+      {hasUploadedAudio && (
+        <audio ref={audioRef} src={profile.music_file_url || profile.music_url} loop={profile.music_loop} preload="auto" />
+      )}
+
+      {/* Canvas animated backgrounds */}
+      {profile.background_type === 'animated' && profile.animated_bg_style === 'matrix' && (
+        <canvas ref={matrixCanvasRef} className="anim-canvas" />
+      )}
+      {profile.background_type === 'animated' && profile.animated_bg_style === 'starfield' && (
+        <canvas ref={starfieldCanvasRef} className="anim-canvas" />
+      )}
+      {profile.background_type === 'animated' && profile.animated_bg_style === 'fireflies' && (
+        <canvas ref={firefliesCanvasRef} className="anim-canvas" />
+      )}
+      {profile.background_type === 'animated' && profile.animated_bg_style === 'glitch' && (
+        <div className="anim-canvas" style={{ animation: 'glitchShift 4s ease-in-out infinite' }} />
+      )}
 
       {/* Cover Banner */}
       {hasCover && (
@@ -404,20 +641,23 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {/* Announcement Banner */}
-          {profile.announcement_enabled && profile.announcement && (
-            <div className="profile-announcement" style={{
-              marginBottom: 14,
-              background: ANNOUNCE_COLORS[profile.announcement_color] || ANNOUNCE_COLORS.purple,
-              border: `1px solid ${accentColor}25`,
-            }}>
-              {ANNOUNCE_ICON_MAP[profile.announcement_icon] || <Megaphone size={16} />}
-              {profile.announcement}
-            </div>
-          )}
+          {/* Announcement Banner — position: top */}
+          {renderAnnouncement('top')}
 
           {/* Music Player */}
-          {profile.music_url && profile.music_type && (
+          {profile.music_type === 'upload' && (profile.music_file_url || profile.music_url) ? (
+            <div className="profile-music-wrap" style={{ width: '100%', marginBottom: 14 }}>
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px',
+                background: 'rgba(255,255,255,0.06)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.08)',
+              }}>
+                <MusicNote size={16} style={{ color: accentColor, flexShrink: 0 }} />
+                <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>
+                  {entered ? 'Now playing' : 'Click anywhere to play'}
+                </span>
+              </div>
+            </div>
+          ) : profile.music_url && profile.music_type && (
             <div className="profile-music-wrap" style={{ width: '100%', marginBottom: 14 }}>
               {profile.music_type === 'spotify' && profile.music_url.includes('spotify.com') ? (
                 <iframe
@@ -451,6 +691,9 @@ export default function ProfilePage() {
           {/* Badges: above-links position */}
           {badgePosition === 'above-links' && renderBadges()}
 
+          {/* Announcement: above-links position */}
+          {renderAnnouncement('above-links')}
+
           {/* Links */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%', marginBottom: 20 }}>
             {(profile.links || []).filter((l: ProfileLink) => l.visible !== false).map((link: ProfileLink, idx: number) => {
@@ -481,6 +724,9 @@ export default function ProfilePage() {
               )
             })}
           </div>
+
+          {/* Announcement: below-links position */}
+          {renderAnnouncement('below-links')}
 
           {/* Photo Gallery */}
           {profile.photo_gallery_enabled && profile.photo_gallery && profile.photo_gallery.length > 0 && (

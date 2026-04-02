@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   gradient_to text DEFAULT '',
   gradient_direction text DEFAULT '135',
   overlay_opacity integer DEFAULT 0,
-  animated_bg_style text DEFAULT 'mesh',      -- mesh | aurora | particles | waves
+  animated_bg_style text DEFAULT 'mesh',      -- mesh | aurora | particles | waves | matrix | starfield | gradient-shift | glitch | fireflies
 
   -- Colors & style
   accent_color text DEFAULT '#A397DD',
@@ -80,7 +80,8 @@ CREATE TABLE IF NOT EXISTS profiles (
 
   -- Music
   music_url text DEFAULT '',
-  music_type text DEFAULT '',                 -- spotify | youtube | soundcloud | apple-music | null
+  music_type text DEFAULT '',                 -- spotify | youtube | soundcloud | apple-music | upload | null
+  music_file_url text DEFAULT '',             -- stores uploaded audio URL
   music_autoplay boolean DEFAULT false,
   music_loop boolean DEFAULT false,
   music_volume integer DEFAULT 80,
@@ -102,6 +103,11 @@ CREATE TABLE IF NOT EXISTS profiles (
   announcement_enabled boolean DEFAULT false,
   announcement_color text DEFAULT 'purple',
   announcement_icon text DEFAULT 'info',
+  announcement_font_size text DEFAULT 'medium',   -- small | medium | large | xl
+  announcement_border text DEFAULT 'none',        -- none | solid | dashed | glowing
+  announcement_position text DEFAULT 'top',       -- top | above-links | below-links
+  announcement_dismissable boolean DEFAULT false,
+  announcement_expiry timestamptz DEFAULT null,
   countdown_date text DEFAULT '',
   countdown_label text DEFAULT '',
   countdown_enabled boolean DEFAULT false,
@@ -327,6 +333,47 @@ CREATE POLICY "Users can read own link clicks"
   ON link_clicks FOR SELECT
   TO authenticated
   USING (profile_id = auth.uid());
+
+-- ═══════════════════════════════════════════════════════════════
+-- STORAGE BUCKETS
+-- ═══════════════════════════════════════════════════════════════
+
+-- Create public media bucket for file uploads
+INSERT INTO storage.buckets (id, name, public) VALUES ('media', 'media', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Allow authenticated users to upload to their own folder
+CREATE POLICY "Users can upload to own folder"
+  ON storage.objects FOR INSERT
+  TO authenticated
+  WITH CHECK (
+    bucket_id = 'media'
+    AND (storage.foldername(name))[1] IN ('avatars', 'banners', 'gallery', 'backgrounds', 'audio')
+    AND (storage.foldername(name))[2] = auth.uid()::text
+  );
+
+-- Allow authenticated users to update/overwrite their own files
+CREATE POLICY "Users can update own files"
+  ON storage.objects FOR UPDATE
+  TO authenticated
+  USING (
+    bucket_id = 'media'
+    AND (storage.foldername(name))[2] = auth.uid()::text
+  );
+
+-- Allow authenticated users to delete their own files
+CREATE POLICY "Users can delete own files"
+  ON storage.objects FOR DELETE
+  TO authenticated
+  USING (
+    bucket_id = 'media'
+    AND (storage.foldername(name))[2] = auth.uid()::text
+  );
+
+-- Anyone can read files in the public media bucket
+CREATE POLICY "Public read access for media"
+  ON storage.objects FOR SELECT
+  USING (bucket_id = 'media');
 
 -- ═══════════════════════════════════════════════════════════════
 -- DONE

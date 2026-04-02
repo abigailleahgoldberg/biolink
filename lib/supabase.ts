@@ -19,7 +19,7 @@ export type Profile = {
   links: Link[]
   badges: string[]
   music_url: string
-  music_type: 'spotify' | 'youtube' | 'soundcloud' | 'apple-music' | null
+  music_type: 'spotify' | 'youtube' | 'soundcloud' | 'apple-music' | 'upload' | null
   music_volume: number
   views: number
   view_count: number
@@ -51,7 +51,7 @@ export type Profile = {
   avatar_glow: boolean
   avatar_size: 'small' | 'medium' | 'large'
   animation_type: 'none' | 'fade-in' | 'slide-up' | 'scale'
-  animated_bg_style: 'mesh' | 'aurora' | 'particles' | 'waves'
+  animated_bg_style: 'mesh' | 'aurora' | 'particles' | 'waves' | 'matrix' | 'starfield' | 'gradient-shift' | 'glitch' | 'fireflies'
   custom_cursor: string
   layout_mode: 'centered' | 'left' | 'wide'
   hover_effect: 'lift' | 'glow' | 'slide' | 'none'
@@ -80,6 +80,12 @@ export type Profile = {
   announcement_enabled: boolean
   announcement_color: string
   announcement_icon: string
+  announcement_font_size: 'small' | 'medium' | 'large' | 'xl'
+  announcement_border: 'none' | 'solid' | 'dashed' | 'glowing'
+  announcement_position: 'top' | 'above-links' | 'below-links'
+  announcement_dismissable: boolean
+  announcement_expiry: string | null
+  music_file_url: string
   countdown_date: string
   countdown_label: string
   countdown_enabled: boolean

@@ -95,3 +95,63 @@ CREATE POLICY "admins can manage blacklist" ON blacklisted_usernames
   FOR ALL USING (
     EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND is_admin = true)
   );
+
+-- ═══════════════════════════════════════════════════════════════
+-- V2 MIGRATION — File uploads, audio, new animations, announcement upgrades
+-- ═══════════════════════════════════════════════════════════════
+
+-- ── MUSIC FILE UPLOAD ───────────────────────────────────────────
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS music_file_url text DEFAULT '';
+
+-- ── ANNOUNCEMENT UPGRADES ───────────────────────────────────────
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS announcement_font_size text DEFAULT 'medium';
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS announcement_border text DEFAULT 'none';
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS announcement_position text DEFAULT 'top';
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS announcement_dismissable boolean DEFAULT false;
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS announcement_expiry timestamptz DEFAULT null;
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS announcement_icon text DEFAULT 'info';
+
+-- ── STORAGE BUCKET ──────────────────────────────────────────────
+INSERT INTO storage.buckets (id, name, public) VALUES ('media', 'media', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Storage policies (safe to run multiple times due to IF NOT EXISTS pattern)
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Users can upload to own folder' AND tablename = 'objects') THEN
+    CREATE POLICY "Users can upload to own folder"
+      ON storage.objects FOR INSERT
+      TO authenticated
+      WITH CHECK (
+        bucket_id = 'media'
+        AND (storage.foldername(name))[1] IN ('avatars', 'banners', 'gallery', 'backgrounds', 'audio')
+        AND (storage.foldername(name))[2] = auth.uid()::text
+      );
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Users can update own files' AND tablename = 'objects') THEN
+    CREATE POLICY "Users can update own files"
+      ON storage.objects FOR UPDATE
+      TO authenticated
+      USING (
+        bucket_id = 'media'
+        AND (storage.foldername(name))[2] = auth.uid()::text
+      );
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Users can delete own files' AND tablename = 'objects') THEN
+    CREATE POLICY "Users can delete own files"
+      ON storage.objects FOR DELETE
+      TO authenticated
+      USING (
+        bucket_id = 'media'
+        AND (storage.foldername(name))[2] = auth.uid()::text
+      );
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Public read access for media' AND tablename = 'objects') THEN
+    CREATE POLICY "Public read access for media"
+      ON storage.objects FOR SELECT
+      USING (bucket_id = 'media');
+  END IF;
+END $$;
