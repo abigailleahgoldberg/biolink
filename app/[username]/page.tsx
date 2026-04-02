@@ -166,7 +166,7 @@ export default function ProfilePage() {
   }, [username])
 
   // Determine if click-to-enter overlay is needed (uploaded audio)
-  const hasUploadedAudio = profile?.music_type === 'upload' && (profile?.music_file_url || profile?.music_url)
+  const hasUploadedAudio = profile?.music_type === 'upload' && !!profile?.music_file_url
   const needsOverlay = hasUploadedAudio && !entered
 
   // Handle click-to-enter

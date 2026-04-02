@@ -375,9 +375,12 @@ export default function Dashboard() {
       announcement_dismissable: announcementDismissable,
       announcement_expiry: announcementExpiry || null,
       music_file_url: musicFileUrl,
+      badge_monochrome: monoChrome,
     }
-    await supabase.from('profiles').update(payload).eq('id', profile.id)
-    setSaving(false); setSaved(true); setTimeout(()=>setSaved(false),2000)
+    const { error } = await supabase.from('profiles').update(payload).eq('id', profile.id)
+    setSaving(false)
+    if (error) { flash('Save failed: ' + error.message); return }
+    setSaved(true); setTimeout(()=>setSaved(false),2000)
   }
 
   async function saveSetting(field: string, value: string) {
@@ -695,9 +698,9 @@ export default function Dashboard() {
                   {showCoverPreview ? 'Hide Preview' : 'Preview'}
                 </button>
               </label>
-              <FileUpload bucket="media" path={`banners/${profile?.id}`} accept="image/*" maxSizeMB={5}
+              {profile && <FileUpload bucket="media" path={`banners/${profile.id}`} accept="image/*" maxSizeMB={5}
                 label="Upload Cover Banner (1200x400 recommended)" preview={showCoverPreview && coverBanner ? coverBanner : ''} previewType="image"
-                onUpload={(url) => setCoverBanner(url)} />
+                onUpload={(url) => setCoverBanner(url)} />}
               <div className="db-sfield" style={{marginTop:6}}>
                 <label>Or paste URL</label>
                 <input className="db-sinput" value={coverBanner} onChange={e=>setCoverBanner(e.target.value)} placeholder="https://... (recommended 1200x400)"/>
@@ -708,8 +711,8 @@ export default function Dashboard() {
                 {avatarUrl?<img src={avatarUrl} alt="" style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%'}}/>:<User size={22} style={{opacity:0.4}}/>}
               </div>
               <div style={{flex:1}}>
-                <FileUpload bucket="media" path={`avatars/${profile?.id}`} accept="image/*" maxSizeMB={2}
-                  label="Upload Avatar" onUpload={(url) => setAvatarUrl(url)} />
+                {profile && <FileUpload bucket="media" path={`avatars/${profile.id}`} accept="image/*" maxSizeMB={2}
+                  label="Upload Avatar" onUpload={(url) => setAvatarUrl(url)} />}
                 <div className="db-sfield" style={{marginTop:6}}>
                   <label>Or paste URL</label>
                   <input className="db-sinput" value={avatarUrl} onChange={e=>setAvatarUrl(e.target.value)} placeholder="https://..."/>
@@ -936,9 +939,9 @@ export default function Dashboard() {
             ) : bgType==='image' ? (
               <>
                 <div style={{marginBottom:12}}>
-                  <FileUpload bucket="media" path={`backgrounds/${profile?.id}`} accept="image/*" maxSizeMB={5}
+                  {profile && <FileUpload bucket="media" path={`backgrounds/${profile.id}`} accept="image/*" maxSizeMB={5}
                     label="Upload Background Image" preview={bgValue.startsWith('http') ? bgValue : ''} previewType="image"
-                    onUpload={(url) => setBgValue(url)} />
+                    onUpload={(url) => setBgValue(url)} />}
                   <div className="db-sfield" style={{marginTop:8}}>
                     <label>Or paste URL</label>
                     <input className="db-sinput" value={bgValue} onChange={e=>setBgValue(e.target.value)} placeholder="https://..."/>
@@ -1186,9 +1189,9 @@ export default function Dashboard() {
             )}
             {musicType === 'upload' && (
               <div style={{marginTop:8}}>
-                <FileUpload
+                {profile && <FileUpload
                   bucket="media"
-                  path={`audio/${profile?.id}`}
+                  path={`audio/${profile.id}`}
                   accept="audio/mpeg,audio/wav,audio/ogg,audio/mp3"
                   maxSizeMB={15}
                   maxDurationSec={300}
@@ -1196,7 +1199,7 @@ export default function Dashboard() {
                   preview={musicFileUrl}
                   previewType="audio"
                   onUpload={(url) => { setMusicFileUrl(url); setMusicUrl(url) }}
-                />
+                />}
               </div>
             )}
             {musicType === 'spotify' && musicUrl && musicUrl.includes('spotify.com') && (
@@ -1561,10 +1564,10 @@ export default function Dashboard() {
                 </div>
                 {photoGallery.length < 10 && (
                   <>
-                    <FileUpload bucket="media" path={`gallery/${profile?.id}`} accept="image/*" maxSizeMB={5}
+                    {profile && <FileUpload bucket="media" path={`gallery/${profile.id}`} accept="image/*" maxSizeMB={5}
                       label="Upload Photos" multiple maxFiles={10 - photoGallery.length}
                       onUpload={(url) => setPhotoGallery(g=>[...g, url])}
-                      onMultiUpload={(urls) => setPhotoGallery(g=>[...g, ...urls].slice(0, 10))} />
+                      onMultiUpload={(urls) => setPhotoGallery(g=>[...g, ...urls].slice(0, 10))} />}
                     <div style={{display:'flex',gap:8,marginTop:8}}>
                       <input id="photo-url-input" className="db-sinput" value={newPhotoUrl} onChange={e=>setNewPhotoUrl(e.target.value)} placeholder="Or paste image URL..." onKeyDown={e=>e.key==='Enter'&&addPhoto()}/>
                       <button className="db-outline-btn" onClick={addPhoto} style={{flexShrink:0}}>Add</button>
