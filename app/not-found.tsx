@@ -28,11 +28,6 @@ export default function NotFound() {
         <div className="landing-bg" />
         <div className="landing-grid" />
 
-        <div className="landing-badge">
-          <span className="landing-badge-dot" style={{ background: '#e91e8c' }} />
-          404 · page not found
-        </div>
-
         <h1 className="landing-h1" style={{ fontSize: 'clamp(64px, 14vw, 140px)', letterSpacing: '-4px' }}>
           404
         </h1>
