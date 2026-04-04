@@ -67,7 +67,7 @@ export default function Signup() {
     <div className="auth-page">
       <div className="auth-card">
         <Link href="/" className="auth-brand">
-          <Image src="/needle-logo.png" alt="fentanyl.best" width={52} height={52} style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 14px rgba(163,151,221,0.55))' }} />
+          <Image src="/needle-logo.png" alt="obsidian.best" width={52} height={52} style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 14px rgba(163,151,221,0.55))' }} />
         </Link>
 
         {step === 'invite' ? (
@@ -113,7 +113,7 @@ export default function Signup() {
                 />
                 {username && (
                   <span style={{ fontSize: 11, color: 'var(--accent)', marginTop: 2 }}>
-                    fentanyl.best/{username.toLowerCase()}
+                    obsidian.best/{username.toLowerCase()}
                   </span>
                 )}
               </div>

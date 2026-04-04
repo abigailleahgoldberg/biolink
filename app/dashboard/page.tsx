@@ -723,7 +723,7 @@ export default function Dashboard() {
         {/* Logo */}
         <Link href="/" className="hg-logo">
           <Image src="/needle-logo.png" alt="" width={24} height={24} style={{objectFit:'contain',filter:'brightness(1.2)'}}/>
-          <span className="hg-logo-text">biolink</span>
+          <span className="hg-logo-text">obsidian</span>
         </Link>
 
         {/* Search */}
@@ -1864,12 +1864,12 @@ export default function Dashboard() {
 
             <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16,marginTop:20}}>
               {[
-                { name:'Midnight Glow', author:'biolink', uses:234, premium:false },
-                { name:'Neon Dreams', author:'biolink', uses:189, premium:true },
-                { name:'Soft Pastel', author:'biolink', uses:156, premium:false },
-                { name:'Dark Matter', author:'biolink', uses:312, premium:true },
-                { name:'Cyber Punk', author:'biolink', uses:98, premium:false },
-                { name:'Aurora Borealis', author:'biolink', uses:267, premium:true },
+                { name:'Midnight Glow', author:'obsidian', uses:234, premium:false },
+                { name:'Neon Dreams', author:'obsidian', uses:189, premium:true },
+                { name:'Soft Pastel', author:'obsidian', uses:156, premium:false },
+                { name:'Dark Matter', author:'obsidian', uses:312, premium:true },
+                { name:'Cyber Punk', author:'obsidian', uses:98, premium:false },
+                { name:'Aurora Borealis', author:'obsidian', uses:267, premium:true },
               ].map((t,i) => (
                 <div key={i} className="hg-template-card">
                   <div style={{width:'100%',height:140,borderRadius:8,background:`linear-gradient(135deg, ${['#e91e8c20','#60a5fa20','#34d39920','#a78bfa20','#22d3ee20','#f472b620'][i]}, #110d10)`,marginBottom:12,display:'flex',alignItems:'center',justifyContent:'center'}}>

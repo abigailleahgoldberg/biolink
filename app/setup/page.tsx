@@ -32,7 +32,7 @@ export default function SetupPage() {
       <div className="auth-card" style={{ maxWidth: 480 }}>
         <Link href="/" className="auth-brand">
           <Image src="/needle-logo.png" alt="" width={26} height={26} style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 6px rgba(163,151,221,0.6))' }} />
-          <span>fentanyl<em>.best</em></span>
+          <span>obsidian<em>.best</em></span>
         </Link>
 
         <div className="auth-title">Owner Setup</div>

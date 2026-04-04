@@ -8,8 +8,8 @@ export default function NotFound() {
       <header className="cnav-host">
         <nav className="cnav">
           <Link href="/" className="cnav-logo">
-            <Image src="/needle-logo.png" alt="fentanyl.best" width={28} height={28} style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 6px rgba(163,151,221,0.6))' }} />
-            <span className="cnav-logo-text">fentanyl<em>.best</em></span>
+            <Image src="/needle-logo.png" alt="obsidian.best" width={28} height={28} style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 6px rgba(163,151,221,0.6))' }} />
+            <span className="cnav-logo-text">obsidian<em>.best</em></span>
           </Link>
           <div className="cnav-links">
             <Link href="#" className="cnav-link">Features</Link>

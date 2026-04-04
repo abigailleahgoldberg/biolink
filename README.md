@@ -1,6 +1,6 @@
-# BioLink — Personal Profile Platform
+# Obsidian — Personal Profile Platform
 
-Fully customizable biolink profiles with invite-only auth, real-time dashboard, and public profile pages.
+Fully customizable obsidian profiles with invite-only auth, real-time dashboard, and public profile pages.
 
 ## Features
 

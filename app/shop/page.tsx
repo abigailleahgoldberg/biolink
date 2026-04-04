@@ -183,7 +183,7 @@ const FAQ = [
   {
     icon: Icons.package,
     q: 'How do I receive and run it?',
-    a: 'After purchase a license key lands in your fentanyl.best dashboard instantly. Download the external client, enter your key, launch your game — the AI starts reading your screen and assisting your aim. No driver installs, no admin access required.',
+    a: 'After purchase a license key lands in your obsidian.best dashboard instantly. Download the external client, enter your key, launch your game — the AI starts reading your screen and assisting your aim. No driver installs, no admin access required.',
   },
   {
     icon: Icons.sliders,
@@ -240,9 +240,9 @@ export default function ShopPage() {
       <header className="cnav-host">
         <nav className="cnav">
           <Link href="/" className="cnav-logo">
-            <Image src="/needle-logo.png" alt="fentanyl.best" width={28} height={28}
+            <Image src="/needle-logo.png" alt="obsidian.best" width={28} height={28}
               style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 6px rgba(163,151,221,0.6))' }} />
-            <span className="cnav-logo-text">fentanyl<em>.best</em></span>
+            <span className="cnav-logo-text">obsidian<em>.best</em></span>
           </Link>
           <div className="cnav-links">
             <Link href="/"     className="cnav-link">Home</Link>
@@ -308,7 +308,7 @@ export default function ShopPage() {
           </div>
 
           <h1 className="landing-h1" style={{ position: 'relative', zIndex: 1, marginBottom: 16 }}>
-            fentanyl<em>.best</em>
+            obsidian<em>.best</em>
           </h1>
           <p className="landing-p" style={{ margin: '0 auto 20px', position: 'relative', zIndex: 1, maxWidth: 500, textAlign: 'center' }}>
             AI powered external cheat built for OG Fortnite emulators.<br />
@@ -612,7 +612,7 @@ export default function ShopPage() {
                 <Image src="/needle-logo.png" alt="" width={22} height={22}
                   style={{ objectFit: 'contain', opacity: .55, filter: 'drop-shadow(0 0 4px rgba(163,151,221,0.4))' }} />
                 <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: '-.3px', color: 'rgba(254,254,255,0.35)' }}>
-                  fentanyl<em style={{ fontStyle: 'normal', color: 'rgba(163,151,221,0.45)' }}>.best</em>
+                  obsidian<em style={{ fontStyle: 'normal', color: 'rgba(163,151,221,0.45)' }}>.best</em>
                 </span>
               </Link>
               <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
@@ -620,7 +620,7 @@ export default function ShopPage() {
                 <Link href="/shop"  style={{ fontSize: 13, color: 'var(--muted)', textDecoration: 'none' }}>Shop</Link>
                 <Link href="/login" style={{ fontSize: 13, color: 'var(--faint)', textDecoration: 'none' }}>Sign in</Link>
               </div>
-              <span style={{ fontSize: 12, color: 'var(--faint)' }}>© 2025 fentanyl.best</span>
+              <span style={{ fontSize: 12, color: 'var(--faint)' }}>© 2025 obsidian.best</span>
             </div>
           </div>
         </section>

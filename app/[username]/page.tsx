@@ -772,7 +772,7 @@ export default function ProfilePage() {
             {(profile.show_view_count !== false) && (
               <span className="profile-views"><Eye size={12} /> {(profile.views || profile.view_count || 0).toLocaleString()} views</span>
             )}
-            <span className="profile-brand">made with <a href="https://fentanyl.best">fentanyl.best</a></span>
+            <span className="profile-brand">made with <a href="https://obsidian.best">obsidian.best</a></span>
           </div>
         </div>
       </div>
