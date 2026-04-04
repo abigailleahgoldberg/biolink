@@ -1,5 +1,5 @@
 -- ============================================================
--- fentanyl.best — Full Migration
+-- obsidian.best — Full Migration
 -- Run this in your Supabase SQL editor (Dashboard → SQL Editor)
 -- Safe to run multiple times (uses ALTER TABLE IF NOT EXISTS pattern)
 -- ============================================================

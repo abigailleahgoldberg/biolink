@@ -81,7 +81,7 @@ export default function Signup() {
                   className="input"
                   value={invite}
                   onChange={e => setInvite(e.target.value.toUpperCase())}
-                  placeholder="FENT-XXXX-0000"
+                  placeholder="OBSD-XXXX-0000"
                   style={{ textTransform: 'uppercase', letterSpacing: 3, fontFamily: 'monospace', fontSize: 15, textAlign: 'center' }}
                   onKeyDown={e => e.key === 'Enter' && checkInvite()}
                 />

@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════
--- fentanyl.best — COMPLETE DATABASE SCHEMA
+-- obsidian.best — COMPLETE DATABASE SCHEMA
 -- Run this once on a fresh Supabase project to set up everything.
 -- ═══════════════════════════════════════════════════════════════
 

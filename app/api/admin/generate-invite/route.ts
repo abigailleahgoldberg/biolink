@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     // Generate code
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
     const rand = Array.from({ length: 12 }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
-    const code = `FENT-${rand.slice(0,4)}-${rand.slice(4,8)}`
+    const code = `OBSD-${rand.slice(0,4)}-${rand.slice(4,8)}`
 
     const { data, error } = await admin.from('invite_codes').insert({
       code,
