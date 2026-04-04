@@ -38,7 +38,7 @@ export default function Landing() {
         </h1>
 
         <p className="landing-p">
-          the cleanest obsidian out. your socials, your music, your whole thing — one link, no noise.
+          the cleanest biolink out. your socials, your music, your whole thing — one link, no noise.
         </p>
 
         <div className="landing-actions">
